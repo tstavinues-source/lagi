@@ -513,13 +513,13 @@ function bindHomeEvents() {
 
 function renderSetPicker() {
   els.setPicker.innerHTML = "";
-  Object.keys(state.allSets).forEach((key, i) => {
+  Object.keys(state.allSets).forEach((key) => {
     const set = state.allSets[key];
     const card = document.createElement("label");
     card.className = "set-card";
     card.innerHTML = `
       <input type="checkbox" class="set-check" data-key="${key}" />
-      <span class="set-card-inner" style="--set-color:${colorForIndex(i)}">
+      <span class="set-card-inner">
         <span class="set-key">${key}</span>
         <span class="set-title">${set.title}</span>
         <span class="set-count">${set.questions.length} soal</span>
