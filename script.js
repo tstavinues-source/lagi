@@ -340,19 +340,33 @@ function cacheEls() {
    PALET WARNA (untuk kartu set & efek)
    ============================================================ */
 
+/* Warna untuk kartu Set A-G — teal & tomato sengaja TIDAK dipakai di sini
+   karena keduanya sudah jadi warna semantik khusus tombol Benar/Salah. */
+const SET_PALETTE = [
+  "#80B0E8", // Airplane View (biru)
+  "#FFC0C0", // Peony Bundle (pink)
+  "#D9CBEA", // Autumn Lavender
+  "#D6D35F", // Limeade
+  "#F4D242", // Pure Sun
+  "#898E46", // Monet Ponds (olive)
+  "#F29CC3", // Bubble Gum
+];
+
+/* Palet lengkap (dipakai untuk glitter & efek lain) */
 const PALETTE = [
-  "#F2E9D8", // Cream
-  "#59718A", // Slate Blue
-  "#2F6F6D", // Teal
-  "#E07A47", // Terracotta
-  "#D4A72C", // Mustard
-  "#8FA68F", // Sage Green
-  "#C47C8A", // Dusty Rose
-  "#5B3A62", // Deep Plum
+  "#80B0E8", // Airplane View
+  "#FFC0C0", // Peony Bundle
+  "#008471", // Tropical Rain (teal)
+  "#D9CBEA", // Autumn Lavender
+  "#D6D35F", // Limeade
+  "#C45F3F", // Tomato Jam
+  "#F4D242", // Pure Sun
+  "#898E46", // Monet Ponds
+  "#F29CC3", // Bubble Gum
 ];
 
 function colorForIndex(i) {
-  return PALETTE[i % PALETTE.length];
+  return SET_PALETTE[i % SET_PALETTE.length];
 }
 
 /* ============================================================
@@ -403,8 +417,8 @@ function playIncorrectSound() {
 function spawnGlitter(isCorrect) {
   if (!els.glitterLayer) return;
   const colors = isCorrect
-    ? [PALETTE[2], PALETTE[5], PALETTE[0], PALETTE[4]] // teal, sage, cream, mustard
-    : [PALETTE[3], PALETTE[6], PALETTE[7], PALETTE[0]]; // terracotta, rose, plum, cream
+    ? ["#008471", "#898E46", "#F4D242", "#80B0E8"] // teal, olive, sun, blue
+    : ["#C45F3F", "#F29CC3", "#FFC0C0", "#F4D242"]; // tomato, bubblegum, peony, sun
 
   const rect = els.glitterLayer.getBoundingClientRect();
   const originX = rect.width / 2;
@@ -440,7 +454,7 @@ function spawnGlitter(isCorrect) {
   if (els.cyberFlash) {
     els.cyberFlash.style.setProperty(
       "--flash-color",
-      isCorrect ? "var(--teal)" : "var(--terracotta)"
+      isCorrect ? "var(--teal)" : "var(--tomato)"
     );
     els.cyberFlash.classList.remove("play");
     void els.cyberFlash.offsetWidth; // restart animasi
@@ -513,13 +527,13 @@ function bindHomeEvents() {
 
 function renderSetPicker() {
   els.setPicker.innerHTML = "";
-  Object.keys(state.allSets).forEach((key) => {
+  Object.keys(state.allSets).forEach((key, i) => {
     const set = state.allSets[key];
     const card = document.createElement("label");
     card.className = "set-card";
     card.innerHTML = `
       <input type="checkbox" class="set-check" data-key="${key}" />
-      <span class="set-card-inner">
+      <span class="set-card-inner" style="--set-color:${colorForIndex(i)}">
         <span class="set-key">${key}</span>
         <span class="set-title">${set.title}</span>
         <span class="set-count">${set.questions.length} soal</span>
