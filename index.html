@@ -9,15 +9,34 @@
     --bg-0:#0a0e17;
     --bg-1:#0f1524;
     --bg-2:#161d30;
-    --emerald:#12b886;
-    --emerald-dark:#0a7a5c;
-    --emerald-glow:#34d3a3;
+
+    /* ---- Palet warna baru ---- */
+    --cream:#F2E9D8;
+    --slate:#59718A;
+    --teal:#2F6F6D;
+    --terracotta:#E07A47;
+    --mustard:#D4A72C;
+    --sage:#8FA68F;
+    --rose:#C47C8A;
+    --plum:#5B3A62;
+
+    --teal-glow: color-mix(in srgb, var(--teal) 55%, white 45%);
+    --teal-dark: color-mix(in srgb, var(--teal) 60%, black 40%);
+    --terracotta-glow: color-mix(in srgb, var(--terracotta) 70%, white 30%);
+    --terracotta-dark: color-mix(in srgb, var(--terracotta) 60%, black 40%);
+    --mustard-glow: color-mix(in srgb, var(--mustard) 70%, white 30%);
+    --plum-dark: color-mix(in srgb, var(--plum) 65%, black 35%);
+
+    /* alias lama supaya seluruh style di bawah otomatis ikut warna baru */
+    --emerald: var(--teal);
+    --emerald-dark: var(--teal-dark);
+    --emerald-glow: var(--teal-glow);
     --silver:#aab4c8;
     --silver-dim:#6b7690;
     --text-hi:#eef1f7;
     --text-mid:#c3cadb;
-    --danger:#e5566b;
-    --danger-glow:#ff7d8f;
+    --danger: var(--terracotta);
+    --danger-glow: var(--terracotta-glow);
     --card-grad: linear-gradient(160deg,#1b2439 0%, #131a2c 55%, #0e1424 100%);
     --pill-grad: linear-gradient(160deg,#1e2a44 0%, #121a2c 100%);
     --shadow-deep: 0 18px 40px -12px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.03) inset;
@@ -25,6 +44,37 @@
     --radius-oval: 999px;
     --radius-card: 28px;
   }
+
+  /* ---------- Efek glossy universal untuk semua blok ---------- */
+  .panel, .pill-btn, .ans-btn, .set-card-inner, .q-badge, .toggle-row,
+  .fb-status, .wrong-item, .q-indonesian, .result-ring, .prompt-box textarea,
+  .file-drop, .status-msg{
+    position:relative;overflow:hidden;
+  }
+  .panel::after, .pill-btn::after, .ans-btn::after, .set-card-inner::after,
+  .q-badge::after, .toggle-row::after, .fb-status::after, .wrong-item::after,
+  .result-ring::after{
+    content:"";position:absolute;top:-45%;left:-8%;width:65%;height:80%;
+    background:radial-gradient(ellipse at center, rgba(255,255,255,.5), rgba(255,255,255,0) 68%);
+    transform:rotate(-18deg);pointer-events:none;mix-blend-mode:soft-light;
+    opacity:.85;
+  }
+  .panel::before, .pill-btn::before, .ans-btn::before, .set-card-inner::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(200deg, rgba(255,255,255,.09), rgba(255,255,255,0) 35%);
+  }
+
+  /* ---------- Cyberpunk scanline ambient overlay ---------- */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:repeating-linear-gradient(
+      to bottom, rgba(143,166,143,0) 0px, rgba(143,166,143,0) 2px,
+      rgba(47,111,109,.035) 3px, rgba(47,111,109,0) 4px
+    );
+    animation:scanmove 9s linear infinite;
+  }
+  @keyframes scanmove{0%{background-position-y:0;}100%{background-position-y:200px;}}
+  .wrap{position:relative;z-index:1;}
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -50,7 +100,7 @@
   }
   .app-header h1{
     font-size:28px;margin:0 0 6px;font-weight:700;letter-spacing:.01em;
-    background:linear-gradient(120deg,#f2f5fb,#c9d3e6 45%,#8fe3c7);
+    background:linear-gradient(120deg,var(--cream),var(--sage) 45%,var(--teal-glow));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
   .app-header p{margin:0;color:var(--text-mid);font-size:14px;}
@@ -98,27 +148,30 @@
   .set-card-inner{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:4px;padding:18px 10px;border-radius:26px;
-    background:var(--pill-grad);
-    box-shadow:var(--shadow-pill);
-    border:1px solid rgba(255,255,255,.06);
+    background:
+      linear-gradient(160deg, color-mix(in srgb, var(--set-color, var(--slate)) 85%, white 15%) 0%,
+        var(--set-color, var(--slate)) 55%,
+        color-mix(in srgb, var(--set-color, var(--slate)) 65%, black 35%) 100%);
+    box-shadow:var(--shadow-pill), 0 8px 20px -8px color-mix(in srgb, var(--set-color, var(--slate)) 60%, transparent);
+    border:1px solid rgba(255,255,255,.14);
     transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     min-height:96px;
   }
-  .set-card:hover .set-card-inner{transform:translateY(-3px);}
+  .set-card:hover .set-card-inner{transform:translateY(-3px) scale(1.02);}
   .set-card input:checked + .set-card-inner{
-    border-color:var(--emerald);
-    box-shadow:0 0 0 2px rgba(18,184,134,.35), var(--shadow-pill), 0 0 22px rgba(18,184,134,.25);
-    background:linear-gradient(160deg,#1a3b34,#101a24);
+    border-color:rgba(255,255,255,.55);
+    box-shadow:0 0 0 2px color-mix(in srgb, var(--set-color, var(--teal)) 70%, white 30%),
+      var(--shadow-pill), 0 0 26px color-mix(in srgb, var(--set-color, var(--teal)) 65%, transparent);
   }
   .set-key{
     width:36px;height:36px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:15px;color:#08110d;
-    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));
-    box-shadow:0 4px 10px rgba(18,184,134,.35), inset 0 1px 1px rgba(255,255,255,.4);
+    font-weight:700;font-size:15px;color:#0c0f0d;
+    background:linear-gradient(160deg, rgba(255,255,255,.92), rgba(255,255,255,.55));
+    box-shadow:0 4px 10px rgba(0,0,0,.35), inset 0 1px 1px rgba(255,255,255,.5);
   }
-  .set-title{font-size:11.5px;color:var(--text-mid);text-align:center;line-height:1.3;}
-  .set-count{font-size:10.5px;color:var(--silver-dim);}
+  .set-title{font-size:11.5px;color:rgba(255,255,255,.92);text-align:center;line-height:1.3;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.35);}
+  .set-count{font-size:10.5px;color:rgba(255,255,255,.75);}
 
   /* ---------- Buttons: 3D oval pills ---------- */
   .pill-btn{
@@ -195,6 +248,17 @@
   .q-japanese{
     font-size:21px;line-height:1.65;color:var(--text-hi);margin:0 0 16px;font-weight:500;
   }
+  .q-image-wrap{
+    display:none;justify-content:center;margin-bottom:18px;
+    border-radius:20px;overflow:hidden;background:rgba(255,255,255,.03);
+    border:1px solid rgba(170,180,200,.16);padding:12px;
+  }
+  .q-image-wrap.visible{display:flex;}
+  .q-image{
+    max-width:100%;max-height:280px;border-radius:12px;
+    box-shadow:0 10px 24px -10px rgba(0,0,0,.6);
+  }
+
   .q-indonesian-wrap{
     max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease, opacity .3s ease;
   }
@@ -212,22 +276,46 @@
     box-shadow:var(--shadow-pill);
     transition:transform .12s ease, box-shadow .12s ease, background .2s ease;
   }
-  .ans-btn.true-btn{background:linear-gradient(160deg,#1c3b49,#101f28);border:1px solid rgba(93,200,220,.25);}
-  .ans-btn.false-btn{background:linear-gradient(160deg,#3b1c2a,#1f1017);border:1px solid rgba(220,93,130,.25);}
+  .ans-btn.true-btn{background:linear-gradient(160deg, color-mix(in srgb, var(--teal) 55%, #16302f) , #0d211f);border:1px solid color-mix(in srgb, var(--teal) 60%, transparent);}
+  .ans-btn.false-btn{background:linear-gradient(160deg, color-mix(in srgb, var(--terracotta) 45%, #3a1f10), #24140b);border:1px solid color-mix(in srgb, var(--terracotta) 55%, transparent);}
   .ans-btn:active{transform:translateY(2px) scale(.98);}
   .ans-btn:disabled{cursor:default;opacity:.65;}
   .ans-btn.correct{
-    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));color:#06140f;
-    box-shadow:0 0 0 2px rgba(52,211,163,.5), var(--shadow-pill);
+    background:linear-gradient(160deg,var(--teal-glow),var(--teal-dark));color:#052018;
+    box-shadow:0 0 0 2px color-mix(in srgb, var(--teal) 70%, white 20%), var(--shadow-pill), 0 0 26px color-mix(in srgb, var(--teal) 60%, transparent);
   }
   .ans-btn.incorrect{
-    background:linear-gradient(160deg,var(--danger-glow),var(--danger));color:#210a0e;
-    box-shadow:0 0 0 2px rgba(255,125,143,.5), var(--shadow-pill);
+    background:linear-gradient(160deg,var(--terracotta-glow),var(--terracotta-dark));color:#2a1206;
+    box-shadow:0 0 0 2px color-mix(in srgb, var(--terracotta) 70%, white 20%), var(--shadow-pill), 0 0 26px color-mix(in srgb, var(--terracotta) 60%, transparent);
   }
 
   .feedback{min-height:20px;margin-top:16px;font-size:13.5px;font-weight:600;text-align:center;}
-  .feedback.ok{color:var(--emerald-glow);}
-  .feedback.bad{color:var(--danger-glow);}
+  .feedback.ok{color:var(--teal-glow);text-shadow:0 0 12px color-mix(in srgb, var(--teal) 70%, transparent);}
+  .feedback.bad{color:var(--terracotta-glow);text-shadow:0 0 12px color-mix(in srgb, var(--terracotta) 70%, transparent);}
+
+  /* ---------- Glitter cyberpunk burst ---------- */
+  .glitter-layer{
+    position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:5;
+  }
+  .glitter-layer::after,.glitter-layer::before{content:none;} /* no glossy sheen here */
+  .glitter-piece{
+    position:absolute;border-radius:2px;opacity:0;
+    animation:glitter-fly .9s ease-out forwards;
+  }
+  @keyframes glitter-fly{
+    0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1);}
+    100%{opacity:0;transform:translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(.4);}
+  }
+  .cyber-flash{
+    position:absolute;inset:0;border-radius:var(--radius-card);pointer-events:none;z-index:4;
+    opacity:0;
+  }
+  .cyber-flash.play{animation:cyberflash .55s ease-out;}
+  @keyframes cyberflash{
+    0%{opacity:0;box-shadow:inset 0 0 0 2px transparent;}
+    15%{opacity:1;box-shadow:inset 0 0 40px 6px var(--flash-color, var(--teal));}
+    100%{opacity:0;box-shadow:inset 0 0 0 2px transparent;}
+  }
 
   #btn-next{display:none;margin-top:18px;}
   #btn-next.show{display:block;}
@@ -315,6 +403,8 @@
     <!-- ============ QUIZ SCREEN ============ -->
     <section id="screen-quiz" class="screen">
       <div class="panel">
+        <div id="glitter-layer" class="glitter-layer"></div>
+        <div id="cyber-flash" class="cyber-flash"></div>
         <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
         <div class="progress-meta">
           <span id="progress-label">Soal 1 / 20</span>
@@ -323,6 +413,10 @@
 
         <span id="q-set-badge" class="q-badge">Set A · No. 1</span>
         <p id="q-japanese" class="q-japanese"></p>
+
+        <div id="q-image-wrap" class="q-image-wrap">
+          <img id="q-image" class="q-image" alt="Diagram soal" />
+        </div>
 
         <div id="q-indonesian-wrap" class="q-indonesian-wrap">
           <div id="q-indonesian" class="q-indonesian"></div>
@@ -374,4 +468,3 @@
   <script type="module" src="script.js"></script>
 </body>
 </html>
-
