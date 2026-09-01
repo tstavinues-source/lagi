@@ -38,9 +38,11 @@ try {
 }
 
 /* ---------- Folder gambar soal ---------- */
-/* Taruh file gambar di folder ini (relatif terhadap index.html), contoh: images/A-4.jpg
-   Nama file mengikuti pola "<SetKey>-<NomorSoal>.jpg" — lihat field "img" pada tiap soal di bawah. */
-const IMAGE_FOLDER = "images/";
+/* File gambar diletakkan SEJAJAR dengan index.html & script.js (folder yang sama),
+   dengan nama mengikuti pola "<SetKey>-<NomorSoal>.jpg", contoh: A-4.jpg
+   Jika kamu memindahkan gambar ke dalam subfolder (misal "images/"), ubah nilai di bawah
+   ini menjadi "images/" (jangan lupa slash di akhir). */
+const IMAGE_FOLDER = "";
 
 /* ---------- Data soal bawaan (Set A - G) ---------- */
 /* answer: true = pernyataan ini BENAR (tadashii / 正しい)
@@ -582,6 +584,7 @@ function renderQuestion() {
     els.qImage.src = IMAGE_FOLDER + current.img;
     els.qImageWrap.classList.add("visible");
     els.qImage.onerror = () => {
+      console.warn(`Gambar tidak ditemukan: ${IMAGE_FOLDER + current.img} (Set ${current.setKey} No. ${current.no})`);
       els.qImageWrap.classList.remove("visible");
     };
   } else {
