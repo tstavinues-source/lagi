@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Kuis Metal Press — Latihan JP ⇄ ID</title>
+<style>
+  :root{
+    --bg-0:#0a0e17;
+    --bg-1:#0f1524;
+    --bg-2:#161d30;
+    --emerald:#12b886;
+    --emerald-dark:#0a7a5c;
+    --emerald-glow:#34d3a3;
+    --silver:#aab4c8;
+    --silver-dim:#6b7690;
+    --text-hi:#eef1f7;
+    --text-mid:#c3cadb;
+    --danger:#e5566b;
+    --danger-glow:#ff7d8f;
+    --card-grad: linear-gradient(160deg,#1b2439 0%, #131a2c 55%, #0e1424 100%);
+    --pill-grad: linear-gradient(160deg,#1e2a44 0%, #121a2c 100%);
+    --shadow-deep: 0 18px 40px -12px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.03) inset;
+    --shadow-pill: 0 10px 22px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -6px 14px rgba(0,0,0,.35);
+    --radius-oval: 999px;
+    --radius-card: 28px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    font-family:'Segoe UI', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    color:var(--text-hi);
+    background:
+      radial-gradient(circle at 15% -10%, rgba(18,184,134,.14), transparent 45%),
+      radial-gradient(circle at 100% 0%, rgba(170,180,200,.08), transparent 40%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 40%, var(--bg-2));
+    background-attachment:fixed;
+    padding:28px 16px 60px;
+  }
+
+  .wrap{max-width:760px;margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  .app-header{text-align:center;margin-bottom:26px;}
+  .app-header .eyebrow{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--emerald-glow);font-weight:600;margin-bottom:6px;
+  }
+  .app-header h1{
+    font-size:28px;margin:0 0 6px;font-weight:700;letter-spacing:.01em;
+    background:linear-gradient(120deg,#f2f5fb,#c9d3e6 45%,#8fe3c7);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .app-header p{margin:0;color:var(--text-mid);font-size:14px;}
+
+  .fb-status{
+    display:inline-block;margin-top:12px;padding:6px 16px;border-radius:var(--radius-oval);
+    font-size:12px;background:var(--pill-grad);box-shadow:var(--shadow-pill);color:var(--silver-dim);
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .fb-status.ok{color:var(--emerald-glow);}
+  .fb-status.warn{color:#e8b96b;}
+
+  /* ---------- Screens ---------- */
+  .screen{display:none;animation:fadeUp .45s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- Cards (3D oval-ish) ---------- */
+  .panel{
+    background:var(--card-grad);
+    border-radius:var(--radius-card);
+    padding:26px;
+    box-shadow:var(--shadow-deep);
+    border:1px solid rgba(255,255,255,.05);
+    position:relative;
+    overflow:hidden;
+  }
+  .panel::before{
+    content:"";position:absolute;top:0;left:8%;right:8%;height:1px;
+    background:linear-gradient(90deg,transparent, rgba(255,255,255,.18), transparent);
+  }
+
+  .section-title{
+    font-size:13px;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--silver);margin:0 0 14px;font-weight:600;
+  }
+
+  /* ---------- Set picker (oval 3D blocks) ---------- */
+  #set-picker{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:14px;margin-bottom:22px;
+  }
+  .set-card{display:block;cursor:pointer;}
+  .set-card input{position:absolute;opacity:0;pointer-events:none;}
+  .set-card-inner{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;padding:18px 10px;border-radius:26px;
+    background:var(--pill-grad);
+    box-shadow:var(--shadow-pill);
+    border:1px solid rgba(255,255,255,.06);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    min-height:96px;
+  }
+  .set-card:hover .set-card-inner{transform:translateY(-3px);}
+  .set-card input:checked + .set-card-inner{
+    border-color:var(--emerald);
+    box-shadow:0 0 0 2px rgba(18,184,134,.35), var(--shadow-pill), 0 0 22px rgba(18,184,134,.25);
+    background:linear-gradient(160deg,#1a3b34,#101a24);
+  }
+  .set-key{
+    width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:15px;color:#08110d;
+    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));
+    box-shadow:0 4px 10px rgba(18,184,134,.35), inset 0 1px 1px rgba(255,255,255,.4);
+  }
+  .set-title{font-size:11.5px;color:var(--text-mid);text-align:center;line-height:1.3;}
+  .set-count{font-size:10.5px;color:var(--silver-dim);}
+
+  /* ---------- Buttons: 3D oval pills ---------- */
+  .pill-btn{
+    appearance:none;border:none;cursor:pointer;
+    border-radius:var(--radius-oval);
+    padding:16px 26px;
+    font-size:15px;font-weight:600;letter-spacing:.01em;
+    color:var(--text-hi);
+    background:var(--pill-grad);
+    box-shadow:var(--shadow-pill);
+    border:1px solid rgba(255,255,255,.07);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .pill-btn:active{transform:translateY(2px) scale(.99);
+    box-shadow:0 4px 10px -4px rgba(0,0,0,.6), inset 0 2px 6px rgba(0,0,0,.4);}
+  .pill-btn.primary{
+    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));
+    color:#06120d;box-shadow:0 12px 24px -8px rgba(18,184,134,.5), inset 0 1px 1px rgba(255,255,255,.35);
+  }
+  .pill-btn.ghost{
+    background:transparent;box-shadow:none;border:1px solid rgba(170,180,200,.28);color:var(--silver);
+  }
+  .pill-btn.block{width:100%;text-align:center;}
+  .pill-btn.hidden{display:none;}
+  .pill-btn.shake{animation:shake .4s;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+
+  .actions-row{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;}
+  .actions-row .pill-btn{flex:1;min-width:150px;}
+
+  /* ---------- Study toggle ---------- */
+  .toggle-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin:18px 0 20px;padding:14px 18px;border-radius:var(--radius-oval);
+    background:var(--pill-grad);box-shadow:var(--shadow-pill);
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .toggle-row span{font-size:13px;color:var(--text-mid);}
+  .switch{position:relative;width:46px;height:26px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{
+    position:absolute;inset:0;border-radius:999px;cursor:pointer;
+    background:#232d45;transition:.2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5);
+  }
+  .slider::before{
+    content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;
+    background:linear-gradient(160deg,#f5f7fb,#ccd3e0);transition:.2s;
+    box-shadow:0 2px 4px rgba(0,0,0,.4);
+  }
+  .switch input:checked + .slider{background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));}
+  .switch input:checked + .slider::before{transform:translateX(20px);}
+
+  /* ---------- Quiz screen ---------- */
+  .progress-bar{
+    height:8px;border-radius:999px;background:#1a2236;overflow:hidden;
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.5);margin-bottom:8px;
+  }
+  .progress-fill{
+    height:100%;border-radius:999px;width:0%;
+    background:linear-gradient(90deg,var(--emerald-dark),var(--emerald-glow));
+    transition:width .35s ease;
+  }
+  .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--silver-dim);margin-bottom:20px;}
+
+  .q-badge{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:11.5px;
+    background:linear-gradient(160deg,#1e3b33,#12211c);color:var(--emerald-glow);
+    border:1px solid rgba(18,184,134,.3);margin-bottom:16px;font-weight:600;letter-spacing:.04em;
+  }
+  .q-japanese{
+    font-size:21px;line-height:1.65;color:var(--text-hi);margin:0 0 16px;font-weight:500;
+  }
+  .q-indonesian-wrap{
+    max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease, opacity .3s ease;
+  }
+  .q-indonesian-wrap.visible{max-height:200px;opacity:1;margin-bottom:18px;}
+  .q-indonesian{
+    font-size:14px;color:var(--text-mid);padding:14px 16px;border-radius:16px;
+    background:rgba(255,255,255,.03);border:1px dashed rgba(170,180,200,.25);
+  }
+
+  .answer-row{display:flex;gap:14px;margin-top:6px;}
+  .ans-btn{
+    flex:1;padding:20px 12px;border-radius:28px;text-align:center;
+    font-size:16px;font-weight:700;letter-spacing:.02em;cursor:pointer;border:none;
+    color:var(--text-hi);
+    box-shadow:var(--shadow-pill);
+    transition:transform .12s ease, box-shadow .12s ease, background .2s ease;
+  }
+  .ans-btn.true-btn{background:linear-gradient(160deg,#1c3b49,#101f28);border:1px solid rgba(93,200,220,.25);}
+  .ans-btn.false-btn{background:linear-gradient(160deg,#3b1c2a,#1f1017);border:1px solid rgba(220,93,130,.25);}
+  .ans-btn:active{transform:translateY(2px) scale(.98);}
+  .ans-btn:disabled{cursor:default;opacity:.65;}
+  .ans-btn.correct{
+    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));color:#06140f;
+    box-shadow:0 0 0 2px rgba(52,211,163,.5), var(--shadow-pill);
+  }
+  .ans-btn.incorrect{
+    background:linear-gradient(160deg,var(--danger-glow),var(--danger));color:#210a0e;
+    box-shadow:0 0 0 2px rgba(255,125,143,.5), var(--shadow-pill);
+  }
+
+  .feedback{min-height:20px;margin-top:16px;font-size:13.5px;font-weight:600;text-align:center;}
+  .feedback.ok{color:var(--emerald-glow);}
+  .feedback.bad{color:var(--danger-glow);}
+
+  #btn-next{display:none;margin-top:18px;}
+  #btn-next.show{display:block;}
+
+  .quiz-footer-row{display:flex;justify-content:center;margin-top:16px;}
+
+  /* ---------- Result screen ---------- */
+  .result-hero{display:flex;flex-direction:column;align-items:center;margin-bottom:24px;}
+  .result-ring{
+    --pct:0;
+    width:150px;height:150px;border-radius:50%;
+    background:
+      radial-gradient(circle, var(--bg-1) 62%, transparent 63%),
+      conic-gradient(var(--emerald-glow) calc(var(--pct)*1%), #1c2438 0);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-deep);margin-bottom:14px;
+  }
+  .result-ring-inner{text-align:center;}
+  #result-percent{font-size:26px;font-weight:800;color:var(--text-hi);display:block;}
+  .result-sub{font-size:12px;color:var(--silver-dim);}
+  .result-score-line{font-size:14px;color:var(--text-mid);}
+  .result-score-line b{color:var(--emerald-glow);font-size:18px;}
+
+  .wrong-list-wrap{margin-top:22px;}
+  #wrong-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .wrong-item{
+    padding:16px;border-radius:20px;background:var(--pill-grad);
+    box-shadow:var(--shadow-pill);border:1px solid rgba(255,255,255,.06);
+  }
+  .wrong-badge{font-size:10.5px;color:var(--emerald-glow);font-weight:700;margin-bottom:6px;letter-spacing:.04em;}
+  .wrong-ja{font-size:14px;color:var(--text-hi);margin-bottom:6px;line-height:1.5;}
+  .wrong-id{font-size:12.5px;color:var(--text-mid);margin-bottom:8px;line-height:1.5;}
+  .wrong-answer{font-size:12px;color:var(--silver-dim);}
+  .wrong-answer b{color:var(--emerald-glow);}
+  .wrong-empty{list-style:none;text-align:center;color:var(--text-mid);padding:20px;}
+
+  .hidden{display:none !important;}
+
+  footer.linkfoot{text-align:center;margin-top:30px;}
+  footer.linkfoot a{
+    color:var(--silver-dim);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--silver-dim);
+  }
+  footer.linkfoot a:hover{color:var(--emerald-glow);border-color:var(--emerald-glow);}
+
+  @media (max-width:480px){
+    .q-japanese{font-size:18px;}
+    .answer-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="app-header">
+      <div class="eyebrow">金属プレス加工 · Metal Press Working</div>
+      <h1>Kuis Latihan Metal Press</h1>
+      <p>Uji pemahamanmu soal Benar / Salah — Bahasa Jepang &amp; Indonesia</p>
+      <div id="firebase-status" class="fb-status">Menghubungkan ke Firebase…</div>
+    </header>
+
+    <!-- ============ HOME SCREEN ============ -->
+    <section id="screen-home" class="screen active">
+      <div class="panel">
+        <p class="section-title">Pilih Set Soal</p>
+        <div id="set-picker"></div>
+
+        <div class="toggle-row">
+          <span>Mode Belajar — tampilkan terjemahan sebelum menjawab</span>
+          <label class="switch">
+            <input type="checkbox" id="toggle-study" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <button id="btn-start-selected" class="pill-btn primary">Mulai Set Terpilih</button>
+          <button id="btn-start-all" class="pill-btn ghost">Latihan Semua Soal</button>
+        </div>
+      </div>
+
+      <footer class="linkfoot">
+        <a href="upload.html">+ Tambah soal baru (upload.html)</a>
+      </footer>
+    </section>
+
+    <!-- ============ QUIZ SCREEN ============ -->
+    <section id="screen-quiz" class="screen">
+      <div class="panel">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <div class="progress-meta">
+          <span id="progress-label">Soal 1 / 20</span>
+          <span id="score-label">Skor: 0</span>
+        </div>
+
+        <span id="q-set-badge" class="q-badge">Set A · No. 1</span>
+        <p id="q-japanese" class="q-japanese"></p>
+
+        <div id="q-indonesian-wrap" class="q-indonesian-wrap">
+          <div id="q-indonesian" class="q-indonesian"></div>
+        </div>
+
+        <div class="answer-row">
+          <button id="btn-true" class="ans-btn true-btn">✓ BENAR</button>
+          <button id="btn-false" class="ans-btn false-btn">✗ SALAH</button>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+        <button id="btn-next" class="pill-btn primary block">Soal Berikutnya →</button>
+
+        <div class="quiz-footer-row">
+          <button id="btn-quit-quiz" class="pill-btn ghost">Keluar dari Kuis</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RESULT SCREEN ============ -->
+    <section id="screen-result" class="screen">
+      <div class="panel">
+        <p class="section-title">Hasil Latihan</p>
+        <div class="result-hero">
+          <div id="result-ring" class="result-ring">
+            <div class="result-ring-inner">
+              <span id="result-percent">0%</span>
+              <span class="result-sub">akurasi</span>
+            </div>
+          </div>
+          <div class="result-score-line">
+            Skor kamu: <b id="result-score">0</b> / <span id="result-total">0</span>
+          </div>
+        </div>
+
+        <div class="actions-row">
+          <button id="btn-retry-wrong" class="pill-btn primary">Ulangi Soal yang Salah</button>
+          <button id="btn-back-home" class="pill-btn ghost">Kembali ke Menu</button>
+        </div>
+
+        <div class="wrong-list-wrap">
+          <p class="section-title">Soal yang Perlu Diulang</p>
+          <ul id="wrong-list"></ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
+
