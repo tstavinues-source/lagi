@@ -6,41 +6,47 @@
 <title>Kuis Metal Press — Latihan JP ⇄ ID</title>
 <style>
   :root{
-    --bg-0:#0a0e17;
-    --bg-1:#0f1524;
-    --bg-2:#161d30;
+    /* ---- Latar hangat (bukan dark mode lagi) ---- */
+    --cream:#FBF3E7;
+    --cream-2:#F5EAD6;
+    --cream-3:#EFDFC4;
+    --ink:#2E2620;
+    --ink-soft:#7A6F5D;
+    --white:#FFFFFF;
 
-    /* ---- Palet warna baru ---- */
-    --cream:#F2E9D8;
-    --slate:#59718A;
-    --teal:#2F6F6D;
-    --terracotta:#E07A47;
-    --mustard:#D4A72C;
-    --sage:#8FA68F;
-    --rose:#C47C8A;
-    --plum:#5B3A62;
+    /* ---- Palet vivid (referensi warna) ---- */
+    --blue:#80B0E8;
+    --pink:#FFC0C0;
+    --teal:#008471;
+    --lavender:#D9CBEA;
+    --limeade:#D6D35F;
+    --tomato:#C45F3F;
+    --sun:#F4D242;
+    --olive:#898E46;
+    --bubblegum:#F29CC3;
 
-    --teal-glow: color-mix(in srgb, var(--teal) 55%, white 45%);
-    --teal-dark: color-mix(in srgb, var(--teal) 60%, black 40%);
-    --terracotta-glow: color-mix(in srgb, var(--terracotta) 70%, white 30%);
-    --terracotta-dark: color-mix(in srgb, var(--terracotta) 60%, black 40%);
-    --mustard-glow: color-mix(in srgb, var(--mustard) 70%, white 30%);
-    --plum-dark: color-mix(in srgb, var(--plum) 65%, black 35%);
+    --teal-dark: color-mix(in srgb, var(--teal) 72%, black 28%);
+    --teal-light: color-mix(in srgb, var(--teal) 55%, white 45%);
+    --tomato-dark: color-mix(in srgb, var(--tomato) 78%, black 22%);
+    --tomato-light: color-mix(in srgb, var(--tomato) 55%, white 45%);
 
-    /* alias lama supaya seluruh style di bawah otomatis ikut warna baru */
+    /* alias supaya seluruh style di bawah konsisten */
+    --bg-0: var(--cream);
+    --bg-1: var(--cream-2);
+    --bg-2: var(--cream-3);
     --emerald: var(--teal);
     --emerald-dark: var(--teal-dark);
-    --emerald-glow: var(--teal-glow);
-    --silver:#aab4c8;
-    --silver-dim:#6b7690;
-    --text-hi:#eef1f7;
-    --text-mid:#c3cadb;
-    --danger: var(--terracotta);
-    --danger-glow: var(--terracotta-glow);
-    --card-grad: linear-gradient(160deg,#1b2439 0%, #131a2c 55%, #0e1424 100%);
-    --pill-grad: linear-gradient(160deg,#1e2a44 0%, #121a2c 100%);
-    --shadow-deep: 0 18px 40px -12px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.03) inset;
-    --shadow-pill: 0 10px 22px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -6px 14px rgba(0,0,0,.35);
+    --emerald-glow: var(--teal);
+    --silver: var(--ink-soft);
+    --silver-dim: color-mix(in srgb, var(--ink) 42%, var(--cream) 58%);
+    --text-hi: var(--ink);
+    --text-mid: var(--ink-soft);
+    --danger: var(--tomato);
+    --danger-glow: var(--tomato-dark);
+    --card-grad: linear-gradient(160deg,#FFFFFF 0%, #FBF3E4 100%);
+    --pill-grad: linear-gradient(160deg,#FFFFFF 0%, #F6ECD9 100%);
+    --shadow-deep: 0 18px 36px -16px rgba(70,50,25,.22), 0 1px 0 rgba(255,255,255,.7) inset;
+    --shadow-pill: 0 10px 18px -10px rgba(70,50,25,.18), inset 0 1px 0 rgba(255,255,255,.85), inset 0 -3px 8px rgba(70,50,25,.05);
     --radius-oval: 999px;
     --radius-card: 28px;
   }
@@ -55,26 +61,45 @@
   .q-badge::after, .toggle-row::after, .fb-status::after, .wrong-item::after,
   .result-ring::after{
     content:"";position:absolute;top:-50%;left:-10%;width:55%;height:75%;
-    background:radial-gradient(ellipse at center, rgba(255,255,255,.22), rgba(255,255,255,0) 72%);
+    background:radial-gradient(ellipse at center, rgba(255,255,255,.75), rgba(255,255,255,0) 72%);
     transform:rotate(-18deg);pointer-events:none;mix-blend-mode:soft-light;
-    opacity:.7;
+    opacity:.8;
   }
   .panel::before, .pill-btn::before, .ans-btn::before, .set-card-inner::before{
     content:"";position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(200deg, rgba(255,255,255,.045), rgba(255,255,255,0) 40%);
+    background:linear-gradient(200deg, rgba(255,255,255,.35), rgba(255,255,255,0) 40%);
   }
 
-  /* ---------- Cyberpunk scanline ambient overlay ---------- */
+  /* ---------- Dekorasi nature Japan: motif ombak (seigaiha) ---------- */
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-    background:repeating-linear-gradient(
-      to bottom, rgba(143,166,143,0) 0px, rgba(143,166,143,0) 2px,
-      rgba(47,111,109,.035) 3px, rgba(47,111,109,0) 4px
-    );
-    animation:scanmove 9s linear infinite;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='30' viewBox='0 0 60 30'%3E%3Cpath d='M0 30a30 30 0 0 1 60 0' fill='none' stroke='%23008471' stroke-opacity='0.09' stroke-width='1.4'/%3E%3Cpath d='M-15 30a30 30 0 0 1 60 0' fill='none' stroke='%23008471' stroke-opacity='0.06' stroke-width='1.4'/%3E%3Cpath d='M15 30a30 30 0 0 1 60 0' fill='none' stroke='%23008471' stroke-opacity='0.06' stroke-width='1.4'/%3E%3C/svg%3E");
+    background-repeat:repeat;
+    opacity:.9;
   }
-  @keyframes scanmove{0%{background-position-y:0;}100%{background-position-y:200px;}}
   .wrap{position:relative;z-index:1;}
+
+  /* ---------- Dekorasi nature Japan: kelopak sakura jatuh ---------- */
+  .sakura-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .sakura-petal{
+    position:absolute;top:-8vh;width:14px;height:14px;
+    background:linear-gradient(135deg, var(--pink), var(--bubblegum));
+    border-radius:0 50% 50% 50%;
+    opacity:.6;filter:drop-shadow(0 2px 3px rgba(150,80,90,.25));
+    animation:sakura-fall linear infinite;
+  }
+  @keyframes sakura-fall{
+    0%{transform:translate(0,0) rotate(0deg);}
+    50%{transform:translate(24px, 55vh) rotate(160deg);}
+    100%{transform:translate(-18px, 115vh) rotate(340deg);}
+  }
+  .sakura-petal:nth-child(1){left:6%; width:12px;height:12px; animation-duration:14s; animation-delay:0s;}
+  .sakura-petal:nth-child(2){left:18%; width:16px;height:16px; animation-duration:18s; animation-delay:2s;}
+  .sakura-petal:nth-child(3){left:32%; width:10px;height:10px; animation-duration:12s; animation-delay:5s;}
+  .sakura-petal:nth-child(4){left:52%; width:15px;height:15px; animation-duration:20s; animation-delay:1s;}
+  .sakura-petal:nth-child(5){left:68%; width:11px;height:11px; animation-duration:16s; animation-delay:4s;}
+  .sakura-petal:nth-child(6){left:82%; width:17px;height:17px; animation-duration:22s; animation-delay:7s;}
+  .sakura-petal:nth-child(7){left:92%; width:12px;height:12px; animation-duration:15s; animation-delay:3s;}
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -83,10 +108,10 @@
     font-family:'Segoe UI', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
     color:var(--text-hi);
     background:
-      radial-gradient(circle at 12% -8%, color-mix(in srgb, var(--teal) 22%, transparent), transparent 48%),
-      radial-gradient(circle at 100% 10%, color-mix(in srgb, var(--plum) 20%, transparent), transparent 42%),
-      radial-gradient(circle at 50% 115%, color-mix(in srgb, var(--slate) 16%, transparent), transparent 50%),
-      linear-gradient(180deg, var(--bg-0), var(--bg-1) 42%, var(--bg-2));
+      radial-gradient(circle at 10% -6%, color-mix(in srgb, var(--blue) 30%, transparent), transparent 46%),
+      radial-gradient(circle at 100% 6%, color-mix(in srgb, var(--pink) 32%, transparent), transparent 42%),
+      radial-gradient(circle at 50% 118%, color-mix(in srgb, var(--sun) 26%, transparent), transparent 50%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
     background-attachment:fixed;
     padding:28px 16px 60px;
   }
@@ -97,11 +122,11 @@
   .app-header{text-align:center;margin-bottom:26px;}
   .app-header .eyebrow{
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--emerald-glow);font-weight:600;margin-bottom:6px;
+    color:var(--teal);font-weight:700;margin-bottom:6px;
   }
   .app-header h1{
-    font-size:28px;margin:0 0 6px;font-weight:700;letter-spacing:.01em;
-    background:linear-gradient(120deg,var(--cream),var(--sage) 45%,var(--teal-glow));
+    font-size:29px;margin:0 0 6px;font-weight:800;letter-spacing:.01em;
+    background:linear-gradient(120deg,var(--teal) 0%, var(--blue) 55%, var(--bubblegum) 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
   .app-header p{margin:0;color:var(--text-mid);font-size:14px;}
@@ -109,37 +134,37 @@
   .fb-status{
     display:inline-block;margin-top:12px;padding:6px 16px;border-radius:var(--radius-oval);
     font-size:12px;background:var(--pill-grad);box-shadow:var(--shadow-pill);color:var(--silver-dim);
-    border:1px solid rgba(255,255,255,.05);
+    border:1px solid rgba(70,50,25,.08);
   }
-  .fb-status.ok{color:var(--emerald-glow);}
-  .fb-status.warn{color:#e8b96b;}
+  .fb-status.ok{color:var(--teal);}
+  .fb-status.warn{color:#a6721f;}
 
   /* ---------- Screens ---------- */
   .screen{display:none;animation:fadeUp .45s ease;}
   .screen.active{display:block;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-  /* ---------- Cards (3D oval-ish) ---------- */
+  /* ---------- Cards ---------- */
   .panel{
     background:var(--card-grad);
     border-radius:var(--radius-card);
     padding:26px;
     box-shadow:var(--shadow-deep);
-    border:1px solid rgba(255,255,255,.05);
+    border:1px solid rgba(70,50,25,.06);
     position:relative;
     overflow:hidden;
   }
   .panel::before{
     content:"";position:absolute;top:0;left:8%;right:8%;height:1px;
-    background:linear-gradient(90deg,transparent, rgba(255,255,255,.18), transparent);
+    background:linear-gradient(90deg,transparent, rgba(255,255,255,.9), transparent);
   }
 
   .section-title{
     font-size:13px;text-transform:uppercase;letter-spacing:.14em;
-    color:var(--silver);margin:0 0 14px;font-weight:600;
+    color:var(--ink-soft);margin:0 0 14px;font-weight:700;
   }
 
-  /* ---------- Set picker: satu gaya kartu konsisten, bukan rainbow ---------- */
+  /* ---------- Set picker: tiap set warna vivid berbeda ---------- */
   #set-picker{
     display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
     gap:14px;margin-bottom:22px;
@@ -148,54 +173,58 @@
   .set-card input{position:absolute;opacity:0;pointer-events:none;}
   .set-card-inner{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:5px;padding:20px 12px;border-radius:24px;
-    background:linear-gradient(165deg,#1c2740 0%, #131c30 55%, #0e1626 100%);
-    box-shadow:var(--shadow-pill);
-    border:1px solid rgba(255,255,255,.07);
-    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .2s ease;
-    min-height:100px;
+    gap:5px;padding:20px 12px;border-radius:26px;
+    background:
+      linear-gradient(165deg, color-mix(in srgb, var(--set-color, var(--blue)) 92%, white 8%) 0%,
+        var(--set-color, var(--blue)) 60%,
+        color-mix(in srgb, var(--set-color, var(--blue)) 82%, black 18%) 100%);
+    box-shadow:var(--shadow-pill), 0 10px 22px -10px color-mix(in srgb, var(--set-color, var(--blue)) 65%, transparent);
+    border:1px solid rgba(255,255,255,.5);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    min-height:104px;
   }
   .set-card:hover .set-card-inner{
-    transform:translateY(-3px);
-    border-color:rgba(255,255,255,.14);
+    transform:translateY(-4px) scale(1.015);
+    box-shadow:var(--shadow-pill), 0 14px 26px -10px color-mix(in srgb, var(--set-color, var(--blue)) 75%, transparent);
   }
   .set-card input:checked + .set-card-inner{
-    background:linear-gradient(165deg, color-mix(in srgb, var(--teal) 22%, #1c2740) 0%, #131c30 60%, #0e1626 100%);
-    border-color:color-mix(in srgb, var(--teal) 65%, transparent);
-    box-shadow:var(--shadow-pill), 0 0 0 1.5px color-mix(in srgb, var(--teal) 55%, transparent),
-      0 0 22px -4px color-mix(in srgb, var(--teal) 55%, transparent);
+    border-color:var(--teal);
+    box-shadow:var(--shadow-pill), 0 0 0 2.5px var(--teal),
+      0 12px 26px -8px color-mix(in srgb, var(--set-color, var(--blue)) 70%, transparent);
   }
   .set-key{
     width:34px;height:34px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:14px;color:#e8fbf5;
-    background:linear-gradient(160deg, color-mix(in srgb, var(--teal) 85%, white 15%), var(--teal-dark));
-    box-shadow:0 4px 10px -2px color-mix(in srgb, var(--teal) 55%, transparent), inset 0 1px 1px rgba(255,255,255,.3);
+    font-weight:800;font-size:14px;
+    color:color-mix(in srgb, var(--set-color, var(--blue)) 78%, black 40%);
+    background:linear-gradient(160deg, #FFFFFF, #F3EBDA);
+    box-shadow:0 4px 8px -2px rgba(60,40,20,.3), inset 0 1px 1px rgba(255,255,255,.9);
   }
-  .set-title{font-size:11.5px;color:var(--text-mid);text-align:center;line-height:1.3;font-weight:600;}
-  .set-count{font-size:10.5px;color:var(--silver-dim);}
+  .set-title{font-size:11.5px;color:var(--ink);text-align:center;line-height:1.3;font-weight:700;}
+  .set-count{font-size:10.5px;color:color-mix(in srgb, var(--ink) 55%, transparent);}
 
   /* ---------- Buttons: 3D oval pills ---------- */
   .pill-btn{
     appearance:none;border:none;cursor:pointer;
     border-radius:var(--radius-oval);
     padding:16px 26px;
-    font-size:15px;font-weight:600;letter-spacing:.01em;
+    font-size:15px;font-weight:700;letter-spacing:.01em;
     color:var(--text-hi);
     background:var(--pill-grad);
     box-shadow:var(--shadow-pill);
-    border:1px solid rgba(255,255,255,.07);
+    border:1px solid rgba(70,50,25,.07);
     transition:transform .12s ease, box-shadow .12s ease;
   }
   .pill-btn:active{transform:translateY(2px) scale(.99);
-    box-shadow:0 4px 10px -4px rgba(0,0,0,.6), inset 0 2px 6px rgba(0,0,0,.4);}
+    box-shadow:0 4px 10px -6px rgba(70,50,25,.4), inset 0 2px 6px rgba(70,50,25,.12);}
   .pill-btn.primary{
-    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));
-    color:#06120d;box-shadow:0 12px 24px -8px rgba(18,184,134,.5), inset 0 1px 1px rgba(255,255,255,.35);
+    background:linear-gradient(160deg,var(--teal-light),var(--teal));
+    color:#04241d;box-shadow:0 12px 22px -8px color-mix(in srgb, var(--teal) 55%, transparent), inset 0 1px 1px rgba(255,255,255,.5);
   }
   .pill-btn.ghost{
-    background:transparent;box-shadow:none;border:1px solid rgba(170,180,200,.28);color:var(--silver);
+    background:transparent;box-shadow:none;border:1.5px solid color-mix(in srgb, var(--ink) 25%, transparent);color:var(--ink-soft);
   }
+  .pill-btn.ghost::after,.pill-btn.ghost::before{content:none;}
   .pill-btn.block{width:100%;text-align:center;}
   .pill-btn.hidden{display:none;}
   .pill-btn.shake{animation:shake .4s;}
@@ -213,52 +242,52 @@
     display:flex;align-items:center;justify-content:space-between;gap:12px;
     margin:18px 0 20px;padding:14px 18px;border-radius:var(--radius-oval);
     background:var(--pill-grad);box-shadow:var(--shadow-pill);
-    border:1px solid rgba(255,255,255,.06);
+    border:1px solid rgba(70,50,25,.06);
   }
   .toggle-row span{font-size:13px;color:var(--text-mid);}
   .switch{position:relative;width:46px;height:26px;flex-shrink:0;}
   .switch input{opacity:0;width:0;height:0;}
   .slider{
     position:absolute;inset:0;border-radius:999px;cursor:pointer;
-    background:#232d45;transition:.2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5);
+    background:#E4D8C0;transition:.2s;box-shadow:inset 0 2px 4px rgba(70,50,25,.25);
   }
   .slider::before{
     content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;
-    background:linear-gradient(160deg,#f5f7fb,#ccd3e0);transition:.2s;
-    box-shadow:0 2px 4px rgba(0,0,0,.4);
+    background:linear-gradient(160deg,#ffffff,#f0e6d4);transition:.2s;
+    box-shadow:0 2px 4px rgba(70,50,25,.3);
   }
-  .switch input:checked + .slider{background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));}
+  .switch input:checked + .slider{background:linear-gradient(160deg,var(--teal-light),var(--teal));}
   .switch input:checked + .slider::before{transform:translateX(20px);}
 
   /* ---------- Quiz screen ---------- */
   .progress-bar{
-    height:8px;border-radius:999px;background:#1a2236;overflow:hidden;
-    box-shadow:inset 0 2px 4px rgba(0,0,0,.5);margin-bottom:8px;
+    height:8px;border-radius:999px;background:#EADBBE;overflow:hidden;
+    box-shadow:inset 0 2px 4px rgba(70,50,25,.2);margin-bottom:8px;
   }
   .progress-fill{
     height:100%;border-radius:999px;width:0%;
-    background:linear-gradient(90deg,var(--emerald-dark),var(--emerald-glow));
+    background:linear-gradient(90deg,var(--teal-dark),var(--teal-light));
     transition:width .35s ease;
   }
   .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--silver-dim);margin-bottom:20px;}
 
   .q-badge{
     display:inline-block;padding:5px 14px;border-radius:999px;font-size:11.5px;
-    background:linear-gradient(160deg,#1e3b33,#12211c);color:var(--emerald-glow);
-    border:1px solid rgba(18,184,134,.3);margin-bottom:16px;font-weight:600;letter-spacing:.04em;
+    background:linear-gradient(160deg,#e3f3ee,#cfe9e0);color:var(--teal-dark);
+    border:1px solid color-mix(in srgb, var(--teal) 35%, transparent);margin-bottom:16px;font-weight:700;letter-spacing:.04em;
   }
   .q-japanese{
-    font-size:21px;line-height:1.65;color:var(--text-hi);margin:0 0 16px;font-weight:500;
+    font-size:21px;line-height:1.65;color:var(--text-hi);margin:0 0 16px;font-weight:600;
   }
   .q-image-wrap{
     display:none;justify-content:center;margin-bottom:18px;
-    border-radius:20px;overflow:hidden;background:rgba(255,255,255,.03);
-    border:1px solid rgba(170,180,200,.16);padding:12px;
+    border-radius:20px;overflow:hidden;background:#FFFFFF;
+    border:1px solid rgba(70,50,25,.1);padding:12px;
   }
   .q-image-wrap.visible{display:flex;}
   .q-image{
     max-width:100%;max-height:280px;border-radius:12px;
-    box-shadow:0 10px 24px -10px rgba(0,0,0,.6);
+    box-shadow:0 10px 20px -12px rgba(70,50,25,.35);
   }
 
   .q-indonesian-wrap{
@@ -267,39 +296,39 @@
   .q-indonesian-wrap.visible{max-height:200px;opacity:1;margin-bottom:18px;}
   .q-indonesian{
     font-size:14px;color:var(--text-mid);padding:14px 16px;border-radius:16px;
-    background:rgba(255,255,255,.03);border:1px dashed rgba(170,180,200,.25);
+    background:#FBF6EB;border:1px dashed color-mix(in srgb, var(--ink) 22%, transparent);
   }
 
   .answer-row{display:flex;gap:14px;margin-top:6px;}
   .ans-btn{
     flex:1;padding:20px 12px;border-radius:28px;text-align:center;
-    font-size:16px;font-weight:700;letter-spacing:.02em;cursor:pointer;border:none;
-    color:var(--text-hi);
+    font-size:16px;font-weight:800;letter-spacing:.02em;cursor:pointer;border:none;
+    color:#fff;
     box-shadow:var(--shadow-pill);
     transition:transform .12s ease, box-shadow .12s ease, background .2s ease;
   }
-  .ans-btn.true-btn{background:linear-gradient(160deg, color-mix(in srgb, var(--teal) 55%, #16302f) , #0d211f);border:1px solid color-mix(in srgb, var(--teal) 60%, transparent);}
-  .ans-btn.false-btn{background:linear-gradient(160deg, color-mix(in srgb, var(--terracotta) 45%, #3a1f10), #24140b);border:1px solid color-mix(in srgb, var(--terracotta) 55%, transparent);}
+  .ans-btn.true-btn{background:linear-gradient(160deg, var(--teal-light), var(--teal));}
+  .ans-btn.false-btn{background:linear-gradient(160deg, var(--tomato-light), var(--tomato));}
   .ans-btn:active{transform:translateY(2px) scale(.98);}
   .ans-btn:disabled{cursor:default;opacity:.65;}
   .ans-btn.correct{
-    background:linear-gradient(160deg,var(--teal-glow),var(--teal-dark));color:#052018;
-    box-shadow:0 0 0 2px color-mix(in srgb, var(--teal) 70%, white 20%), var(--shadow-pill), 0 0 26px color-mix(in srgb, var(--teal) 60%, transparent);
+    background:linear-gradient(160deg,var(--teal-light),var(--teal));
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--teal) 55%, white 10%), var(--shadow-pill), 0 8px 20px -6px color-mix(in srgb, var(--teal) 55%, transparent);
   }
   .ans-btn.incorrect{
-    background:linear-gradient(160deg,var(--terracotta-glow),var(--terracotta-dark));color:#2a1206;
-    box-shadow:0 0 0 2px color-mix(in srgb, var(--terracotta) 70%, white 20%), var(--shadow-pill), 0 0 26px color-mix(in srgb, var(--terracotta) 60%, transparent);
+    background:linear-gradient(160deg,var(--tomato-light),var(--tomato));
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--tomato) 55%, white 10%), var(--shadow-pill), 0 8px 20px -6px color-mix(in srgb, var(--tomato) 55%, transparent);
   }
 
-  .feedback{min-height:20px;margin-top:16px;font-size:13.5px;font-weight:600;text-align:center;}
-  .feedback.ok{color:var(--teal-glow);text-shadow:0 0 12px color-mix(in srgb, var(--teal) 70%, transparent);}
-  .feedback.bad{color:var(--terracotta-glow);text-shadow:0 0 12px color-mix(in srgb, var(--terracotta) 70%, transparent);}
+  .feedback{min-height:20px;margin-top:16px;font-size:13.5px;font-weight:700;text-align:center;}
+  .feedback.ok{color:var(--teal-dark);}
+  .feedback.bad{color:var(--tomato-dark);}
 
-  /* ---------- Glitter cyberpunk burst ---------- */
+  /* ---------- Glitter burst ---------- */
   .glitter-layer{
     position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:5;
   }
-  .glitter-layer::after,.glitter-layer::before{content:none;} /* no glossy sheen here */
+  .glitter-layer::after,.glitter-layer::before{content:none;}
   .glitter-piece{
     position:absolute;border-radius:2px;opacity:0;
     animation:glitter-fly .9s ease-out forwards;
@@ -330,8 +359,8 @@
     --pct:0;
     width:150px;height:150px;border-radius:50%;
     background:
-      radial-gradient(circle, var(--bg-1) 62%, transparent 63%),
-      conic-gradient(var(--emerald-glow) calc(var(--pct)*1%), #1c2438 0);
+      radial-gradient(circle, var(--cream) 62%, transparent 63%),
+      conic-gradient(var(--teal) calc(var(--pct)*1%), #E7D9BC 0);
     display:flex;align-items:center;justify-content:center;
     box-shadow:var(--shadow-deep);margin-bottom:14px;
   }
@@ -339,28 +368,29 @@
   #result-percent{font-size:26px;font-weight:800;color:var(--text-hi);display:block;}
   .result-sub{font-size:12px;color:var(--silver-dim);}
   .result-score-line{font-size:14px;color:var(--text-mid);}
-  .result-score-line b{color:var(--emerald-glow);font-size:18px;}
+  .result-score-line b{color:var(--teal-dark);font-size:18px;}
 
   .wrong-list-wrap{margin-top:22px;}
   #wrong-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
   .wrong-item{
     padding:16px;border-radius:20px;background:var(--pill-grad);
-    box-shadow:var(--shadow-pill);border:1px solid rgba(255,255,255,.06);
+    box-shadow:var(--shadow-pill);border:1px solid rgba(70,50,25,.07);
+    border-left:4px solid var(--tomato);
   }
-  .wrong-badge{font-size:10.5px;color:var(--emerald-glow);font-weight:700;margin-bottom:6px;letter-spacing:.04em;}
+  .wrong-badge{font-size:10.5px;color:var(--teal-dark);font-weight:800;margin-bottom:6px;letter-spacing:.04em;}
   .wrong-ja{font-size:14px;color:var(--text-hi);margin-bottom:6px;line-height:1.5;}
   .wrong-id{font-size:12.5px;color:var(--text-mid);margin-bottom:8px;line-height:1.5;}
   .wrong-answer{font-size:12px;color:var(--silver-dim);}
-  .wrong-answer b{color:var(--emerald-glow);}
+  .wrong-answer b{color:var(--teal-dark);}
   .wrong-empty{list-style:none;text-align:center;color:var(--text-mid);padding:20px;}
 
   .hidden{display:none !important;}
 
   footer.linkfoot{text-align:center;margin-top:30px;}
   footer.linkfoot a{
-    color:var(--silver-dim);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--silver-dim);
+    color:var(--ink-soft);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--ink-soft);
   }
-  footer.linkfoot a:hover{color:var(--emerald-glow);border-color:var(--emerald-glow);}
+  footer.linkfoot a:hover{color:var(--teal);border-color:var(--teal);}
 
   @media (max-width:480px){
     .q-japanese{font-size:18px;}
@@ -369,6 +399,16 @@
 </style>
 </head>
 <body>
+  <div class="sakura-layer" aria-hidden="true">
+    <div class="sakura-petal"></div>
+    <div class="sakura-petal"></div>
+    <div class="sakura-petal"></div>
+    <div class="sakura-petal"></div>
+    <div class="sakura-petal"></div>
+    <div class="sakura-petal"></div>
+    <div class="sakura-petal"></div>
+  </div>
+
   <div class="wrap">
     <header class="app-header">
       <div class="eyebrow">金属プレス加工 · Metal Press Working</div>
