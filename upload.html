@@ -7,14 +7,25 @@
 <style>
   :root{
     --bg-0:#0a0e17; --bg-1:#0f1524; --bg-2:#161d30;
-    --emerald:#12b886; --emerald-dark:#0a7a5c; --emerald-glow:#34d3a3;
+    --cream:#F2E9D8; --slate:#59718A; --teal:#2F6F6D; --terracotta:#E07A47;
+    --mustard:#D4A72C; --sage:#8FA68F; --rose:#C47C8A; --plum:#5B3A62;
+    --teal-glow: color-mix(in srgb, var(--teal) 55%, white 45%);
+    --teal-dark: color-mix(in srgb, var(--teal) 60%, black 40%);
+    --terracotta-glow: color-mix(in srgb, var(--terracotta) 70%, white 30%);
+    --emerald: var(--teal); --emerald-dark: var(--teal-dark); --emerald-glow: var(--teal-glow);
     --silver:#aab4c8; --silver-dim:#6b7690; --text-hi:#eef1f7; --text-mid:#c3cadb;
-    --danger:#e5566b; --danger-glow:#ff7d8f;
+    --danger: var(--terracotta); --danger-glow: var(--terracotta-glow);
     --card-grad: linear-gradient(160deg,#1b2439 0%, #131a2c 55%, #0e1424 100%);
     --pill-grad: linear-gradient(160deg,#1e2a44 0%, #121a2c 100%);
     --shadow-deep: 0 18px 40px -12px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.03) inset;
     --shadow-pill: 0 10px 22px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -6px 14px rgba(0,0,0,.35);
     --radius-oval:999px; --radius-card:28px;
+  }
+  .panel, .pill-btn, .file-drop, .status-msg{position:relative;overflow:hidden;}
+  .panel::after, .pill-btn::after{
+    content:"";position:absolute;top:-45%;left:-8%;width:65%;height:80%;
+    background:radial-gradient(ellipse at center, rgba(255,255,255,.5), rgba(255,255,255,0) 68%);
+    transform:rotate(-18deg);pointer-events:none;mix-blend-mode:soft-light;opacity:.85;
   }
   *{box-sizing:border-box;}
   body{
@@ -199,16 +210,15 @@ const GEMINI_PROMPT = `Kamu akan membantu saya mengubah foto lembar soal ujian t
 ATURAN PENTING:
 1. Baca setiap nomor soal pada foto beserta tanda centang/lingkaran di kolom "ただしい" (benar) atau "あやまり" (salah).
 2. Untuk setiap soal, hasilkan satu object dengan struktur PERSIS seperti ini:
-   { "no": <nomor soal>, "ja": "<teks soal asli berbahasa Jepang>", "id": "<terjemahan Indonesia yang akurat dan mudah dipahami>", "answer": <true jika jawaban BENAR/tadashii, false jika jawaban SALAH/ayamari> }
-3. Jika soal disertai gambar/diagram yang tidak bisa dituliskan, tambahkan keterangan singkat di akhir teks "ja", contoh: "(disertai gambar diagram)".
-4. Terjemahan Indonesia harus menyampaikan makna teknis dengan tepat, bukan terjemahan kata per kata yang kaku.
-5. Jangan mengubah, menambah, atau menghilangkan soal. Urutkan sesuai nomor asli.
-6. Balas HANYA dengan JSON array yang valid, tanpa teks pembuka, tanpa penjelasan, tanpa markdown code fence (tanpa \`\`\`).
+   { "no": <nomor soal>, "ja": "<teks soal asli berbahasa Jepang>", "id": "<terjemahan Indonesia yang akurat dan mudah dipahami>", "answer": <true jika jawaban BENAR/tadashii, false jika jawaban SALAH/ayamari>, "hasImage": <true jika soal ini disertai gambar/diagram pada lembar soal, false jika soal ini teks murni tanpa gambar> }
+3. Terjemahan Indonesia harus menyampaikan makna teknis dengan tepat, bukan terjemahan kata per kata yang kaku.
+4. Jangan mengubah, menambah, atau menghilangkan soal. Urutkan sesuai nomor asli.
+5. Balas HANYA dengan JSON array yang valid, tanpa teks pembuka, tanpa penjelasan, tanpa markdown code fence (tanpa \`\`\`).
 
 Format keluaran akhir HARUS seperti ini (array JSON murni):
 [
-  { "no": 1, "ja": "...", "id": "...", "answer": true },
-  { "no": 2, "ja": "...", "id": "...", "answer": false }
+  { "no": 1, "ja": "...", "id": "...", "answer": true, "hasImage": false },
+  { "no": 2, "ja": "...", "id": "...", "answer": false, "hasImage": true }
 ]
 
 Sekarang baca foto soal yang saya lampirkan dan hasilkan JSON sesuai aturan di atas.`;
@@ -248,16 +258,35 @@ function parseQuestions() {
     if (typeof q.ja !== "string" || !q.ja.trim()) throw new Error(`Soal ke-${i + 1}: field "ja" wajib diisi.`);
     if (typeof q.id !== "string" || !q.id.trim()) throw new Error(`Soal ke-${i + 1}: field "id" wajib diisi.`);
     if (typeof q.answer !== "boolean") throw new Error(`Soal ke-${i + 1}: field "answer" harus true/false.`);
+    if (q.hasImage !== undefined && typeof q.hasImage !== "boolean") {
+      throw new Error(`Soal ke-${i + 1}: field "hasImage" harus true/false.`);
+    }
   });
   return data;
 }
 
+/* Ubah hasImage -> img dengan nama file mengikuti konvensi "<SetKey>-<No>.jpg",
+   supaya konsisten dengan gambar yang kamu taruh sendiri di folder images/. */
+function attachImageFilenames(questions, setKey) {
+  return questions.map((q) => {
+    const clean = { no: q.no, ja: q.ja, id: q.id, answer: q.answer };
+    if (q.hasImage) clean.img = `${setKey}-${q.no}.jpg`;
+    return clean;
+  });
+}
+
 document.getElementById("btn-validate").addEventListener("click", () => {
   const preview = document.getElementById("json-preview");
+  const setKeyRaw = document.getElementById("set-name").value.trim().replace(/\s+/g, "-") || "<ISI-NAMA-SET>";
   try {
     const data = parseQuestions();
+    const withImg = attachImageFilenames(data, setKeyRaw);
+    const imgCount = withImg.filter((q) => q.img).length;
     preview.style.display = "block";
-    preview.textContent = `✓ Valid — ${data.length} soal terdeteksi.\n\n` + JSON.stringify(data, null, 2);
+    preview.textContent =
+      `✓ Valid — ${data.length} soal terdeteksi` +
+      (imgCount ? `, ${imgCount} di antaranya butuh gambar (siapkan file di folder images/).` : ".") +
+      `\n\n` + JSON.stringify(withImg, null, 2);
   } catch (e) {
     preview.style.display = "block";
     preview.textContent = "✗ " + e.message;
@@ -278,14 +307,14 @@ document.getElementById("btn-upload").addEventListener("click", async () => {
   if (!db) return showStatus("Firebase tidak tersedia. Periksa koneksi/konfigurasi.", "err");
   if (!setKeyRaw) return showStatus("Isi nama/kode set terlebih dahulu (contoh: H).", "err");
 
+  const setKey = setKeyRaw.replace(/\s+/g, "-");
   let questions;
   try {
-    questions = parseQuestions();
+    questions = attachImageFilenames(parseQuestions(), setKey);
   } catch (e) {
     return showStatus("✗ " + e.message, "err");
   }
-
-  const setKey = setKeyRaw.replace(/\s+/g, "-");
+  const imgCount = questions.filter((q) => q.img).length;
   const btn = document.getElementById("btn-upload");
   btn.disabled = true;
   btn.textContent = "Menyimpan…";
@@ -296,7 +325,10 @@ document.getElementById("btn-upload").addEventListener("click", async () => {
       questions,
       updatedAt: new Date().toISOString(),
     });
-    showStatus(`✓ Berhasil! ${questions.length} soal tersimpan sebagai set "${setKey}". Buka kembali halaman kuis untuk melihatnya.`, "ok");
+    const imgNote = imgCount
+      ? ` Jangan lupa taruh ${imgCount} file gambar (pola nama "${setKey}-<no>.jpg") di folder images/.`
+      : "";
+    showStatus(`✓ Berhasil! ${questions.length} soal tersimpan sebagai set "${setKey}". Buka kembali halaman kuis untuk melihatnya.${imgNote}`, "ok");
   } catch (e) {
     console.error(e);
     showStatus("✗ Gagal menyimpan ke Firebase: " + e.message + " — periksa aturan keamanan (rules) Firestore.", "err");
