@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Upload Soal Baru — Kuis Metal Press</title>
+<style>
+  :root{
+    --bg-0:#0a0e17; --bg-1:#0f1524; --bg-2:#161d30;
+    --emerald:#12b886; --emerald-dark:#0a7a5c; --emerald-glow:#34d3a3;
+    --silver:#aab4c8; --silver-dim:#6b7690; --text-hi:#eef1f7; --text-mid:#c3cadb;
+    --danger:#e5566b; --danger-glow:#ff7d8f;
+    --card-grad: linear-gradient(160deg,#1b2439 0%, #131a2c 55%, #0e1424 100%);
+    --pill-grad: linear-gradient(160deg,#1e2a44 0%, #121a2c 100%);
+    --shadow-deep: 0 18px 40px -12px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.03) inset;
+    --shadow-pill: 0 10px 22px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -6px 14px rgba(0,0,0,.35);
+    --radius-oval:999px; --radius-card:28px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;min-height:100vh;padding:28px 16px 60px;
+    font-family:'Segoe UI','Noto Sans JP',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--text-hi);
+    background:
+      radial-gradient(circle at 15% -10%, rgba(18,184,134,.14), transparent 45%),
+      radial-gradient(circle at 100% 0%, rgba(170,180,200,.08), transparent 40%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 40%, var(--bg-2));
+    background-attachment:fixed;
+  }
+  .wrap{max-width:720px;margin:0 auto;}
+  header{text-align:center;margin-bottom:24px;}
+  .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--emerald-glow);font-weight:600;margin-bottom:6px;}
+  h1{font-size:24px;margin:0 0 6px;font-weight:700;
+    background:linear-gradient(120deg,#f2f5fb,#c9d3e6 45%,#8fe3c7);
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  header p{margin:0;color:var(--text-mid);font-size:13.5px;}
+
+  .panel{
+    background:var(--card-grad);border-radius:var(--radius-card);padding:26px;
+    box-shadow:var(--shadow-deep);border:1px solid rgba(255,255,255,.05);margin-bottom:22px;
+    position:relative;overflow:hidden;
+  }
+  .panel::before{content:"";position:absolute;top:0;left:8%;right:8%;height:1px;
+    background:linear-gradient(90deg,transparent, rgba(255,255,255,.18), transparent);}
+
+  .section-title{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--silver);margin:0 0 6px;font-weight:600;}
+  .section-desc{font-size:12.5px;color:var(--text-mid);margin:0 0 16px;line-height:1.6;}
+  .step-num{
+    display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+    background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));color:#06140f;font-weight:800;
+    font-size:13px;margin-right:8px;box-shadow:0 4px 10px rgba(18,184,134,.35);
+  }
+
+  textarea, input[type=text]{
+    width:100%;border-radius:18px;border:1px solid rgba(255,255,255,.08);
+    background:#0d1220;color:var(--text-hi);padding:14px 16px;font-size:13px;
+    font-family:'Consolas','Courier New',monospace;resize:vertical;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.5);
+  }
+  input[type=text]{font-family:inherit;}
+  textarea:focus, input:focus{outline:none;border-color:var(--emerald);}
+
+  .prompt-box{position:relative;}
+  .prompt-box textarea{min-height:260px;padding-right:100px;color:var(--text-mid);}
+
+  .pill-btn{
+    appearance:none;border:none;cursor:pointer;border-radius:var(--radius-oval);
+    padding:13px 22px;font-size:14px;font-weight:600;color:var(--text-hi);
+    background:var(--pill-grad);box-shadow:var(--shadow-pill);border:1px solid rgba(255,255,255,.07);
+    transition:transform .12s ease;
+  }
+  .pill-btn:active{transform:translateY(2px) scale(.98);}
+  .pill-btn.primary{background:linear-gradient(160deg,var(--emerald-glow),var(--emerald-dark));color:#06120d;
+    box-shadow:0 12px 24px -8px rgba(18,184,134,.5), inset 0 1px 1px rgba(255,255,255,.35);}
+  .pill-btn.small{padding:9px 16px;font-size:12.5px;}
+  .pill-btn.block{width:100%;}
+  .pill-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .copy-btn{position:absolute;top:14px;right:14px;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:12.5px;color:var(--silver);margin-bottom:8px;font-weight:600;}
+
+  .file-drop{
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;
+    border:1.5px dashed rgba(170,180,200,.3);border-radius:20px;padding:26px;cursor:pointer;
+    background:rgba(255,255,255,.02);transition:border-color .2s;
+  }
+  .file-drop:hover{border-color:var(--emerald);}
+  .file-drop input{display:none;}
+  .file-drop span{font-size:12.5px;color:var(--text-mid);}
+  #preview-img{max-width:100%;max-height:220px;border-radius:14px;margin-top:12px;display:none;}
+
+  .status-msg{margin-top:14px;padding:12px 16px;border-radius:16px;font-size:12.5px;display:none;}
+  .status-msg.show{display:block;}
+  .status-msg.ok{background:rgba(18,184,134,.12);color:var(--emerald-glow);border:1px solid rgba(18,184,134,.3);}
+  .status-msg.err{background:rgba(229,86,107,.12);color:var(--danger-glow);border:1px solid rgba(229,86,107,.3);}
+  .status-msg.info{background:rgba(170,180,200,.08);color:var(--text-mid);border:1px solid rgba(170,180,200,.2);}
+
+  .json-preview{max-height:220px;overflow:auto;margin-top:10px;padding:12px 14px;border-radius:14px;
+    background:#0d1220;font-size:11.5px;font-family:'Consolas','Courier New',monospace;color:var(--text-mid);
+    border:1px solid rgba(255,255,255,.06);white-space:pre-wrap;}
+
+  footer.linkfoot{text-align:center;}
+  footer.linkfoot a{color:var(--silver-dim);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--silver-dim);}
+  footer.linkfoot a:hover{color:var(--emerald-glow);border-color:var(--emerald-glow);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Admin Tool</div>
+    <h1>Upload Soal Baru</h1>
+    <p>Foto soal → Gemini bikin JSON → tempel di sini → tersimpan ke Firebase</p>
+  </header>
+
+  <!-- STEP 1 -->
+  <div class="panel">
+    <p class="section-title"><span class="step-num">1</span>Foto Soal (opsional, untuk kamu sendiri)</p>
+    <p class="section-desc">Unggah foto lembar soal di sini hanya untuk pratinjau lokal — foto ini <b>tidak</b> diunggah ke Firebase, hanya untuk membantu kamu saat menyalin ke Gemini.</p>
+    <label class="file-drop">
+      <input type="file" id="photo-input" accept="image/*" />
+      <span>📷 Klik untuk memilih foto soal</span>
+      <img id="preview-img" alt="pratinjau" />
+    </label>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel">
+    <p class="section-title"><span class="step-num">2</span>Prompt untuk Gemini</p>
+    <p class="section-desc">Salin prompt di bawah ini, tempel ke Gemini bersama foto soal barumu. Gemini akan membalas dengan JSON siap pakai.</p>
+    <div class="prompt-box">
+      <textarea id="gemini-prompt" readonly></textarea>
+      <button class="pill-btn small copy-btn" id="btn-copy-prompt">Salin Prompt</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="panel">
+    <p class="section-title"><span class="step-num">3</span>Tempel JSON dari Gemini &amp; Simpan</p>
+
+    <div class="field">
+      <label for="set-name">Nama / Kode Set (contoh: H, I, atau "Ulangan-2")</label>
+      <input type="text" id="set-name" placeholder="H" />
+    </div>
+    <div class="field">
+      <label for="set-title">Judul Set (contoh: Set H — Tambahan Materi Baru)</label>
+      <input type="text" id="set-title" placeholder="Set H — Tambahan Materi Baru" />
+    </div>
+    <div class="field">
+      <label for="json-input">Tempel JSON hasil Gemini di sini</label>
+      <textarea id="json-input" rows="10" placeholder='[
+  { "no": 1, "ja": "...", "id": "...", "answer": true },
+  { "no": 2, "ja": "...", "id": "...", "answer": false }
+]'></textarea>
+    </div>
+
+    <button id="btn-validate" class="pill-btn small">Periksa JSON</button>
+    <div id="json-preview" class="json-preview" style="display:none;"></div>
+
+    <button id="btn-upload" class="pill-btn primary block" style="margin-top:16px;">Simpan ke Firebase</button>
+    <div id="status-msg" class="status-msg"></div>
+  </div>
+
+  <footer class="linkfoot"><a href="index.html">← Kembali ke Kuis</a></footer>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import {
+  getFirestore, doc, setDoc,
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import {
+  getAuth, signInAnonymously,
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAX6oiukr0SAe2W7btRMe3e3aXqLZoGdXk",
+  authDomain: "studio-4638697066-ac0a1.firebaseapp.com",
+  projectId: "studio-4638697066-ac0a1",
+  storageBucket: "studio-4638697066-ac0a1.firebasestorage.app",
+  messagingSenderId: "722291749123",
+  appId: "1:722291749123:web:af0aa30fde91fa54673936",
+};
+
+let db = null;
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  const auth = getAuth(app);
+  signInAnonymously(auth).catch((e) => console.warn("Anon auth gagal:", e));
+} catch (e) {
+  console.error("Firebase init gagal:", e);
+}
+
+/* ---------- Prompt Gemini ---------- */
+const GEMINI_PROMPT = `Kamu akan membantu saya mengubah foto lembar soal ujian teknik "Metal Press Working" (soal Benar/Salah berbahasa Jepang) menjadi format JSON.
+
+ATURAN PENTING:
+1. Baca setiap nomor soal pada foto beserta tanda centang/lingkaran di kolom "ただしい" (benar) atau "あやまり" (salah).
+2. Untuk setiap soal, hasilkan satu object dengan struktur PERSIS seperti ini:
+   { "no": <nomor soal>, "ja": "<teks soal asli berbahasa Jepang>", "id": "<terjemahan Indonesia yang akurat dan mudah dipahami>", "answer": <true jika jawaban BENAR/tadashii, false jika jawaban SALAH/ayamari> }
+3. Jika soal disertai gambar/diagram yang tidak bisa dituliskan, tambahkan keterangan singkat di akhir teks "ja", contoh: "(disertai gambar diagram)".
+4. Terjemahan Indonesia harus menyampaikan makna teknis dengan tepat, bukan terjemahan kata per kata yang kaku.
+5. Jangan mengubah, menambah, atau menghilangkan soal. Urutkan sesuai nomor asli.
+6. Balas HANYA dengan JSON array yang valid, tanpa teks pembuka, tanpa penjelasan, tanpa markdown code fence (tanpa \`\`\`).
+
+Format keluaran akhir HARUS seperti ini (array JSON murni):
+[
+  { "no": 1, "ja": "...", "id": "...", "answer": true },
+  { "no": 2, "ja": "...", "id": "...", "answer": false }
+]
+
+Sekarang baca foto soal yang saya lampirkan dan hasilkan JSON sesuai aturan di atas.`;
+
+document.getElementById("gemini-prompt").value = GEMINI_PROMPT;
+
+document.getElementById("btn-copy-prompt").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(GEMINI_PROMPT);
+  const btn = document.getElementById("btn-copy-prompt");
+  const old = btn.textContent;
+  btn.textContent = "Tersalin ✓";
+  setTimeout(() => (btn.textContent = old), 1500);
+});
+
+/* ---------- Preview foto lokal (tidak diupload) ---------- */
+document.getElementById("photo-input").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = document.getElementById("preview-img");
+  img.src = URL.createObjectURL(file);
+  img.style.display = "block";
+});
+
+/* ---------- Validasi JSON ---------- */
+function parseQuestions() {
+  const raw = document.getElementById("json-input").value.trim();
+  if (!raw) throw new Error("Kolom JSON masih kosong.");
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (e) {
+    throw new Error("JSON tidak valid: " + e.message);
+  }
+  if (!Array.isArray(data)) throw new Error("JSON harus berupa array [ ... ].");
+  data.forEach((q, i) => {
+    if (typeof q.no !== "number") throw new Error(`Soal ke-${i + 1}: field "no" harus angka.`);
+    if (typeof q.ja !== "string" || !q.ja.trim()) throw new Error(`Soal ke-${i + 1}: field "ja" wajib diisi.`);
+    if (typeof q.id !== "string" || !q.id.trim()) throw new Error(`Soal ke-${i + 1}: field "id" wajib diisi.`);
+    if (typeof q.answer !== "boolean") throw new Error(`Soal ke-${i + 1}: field "answer" harus true/false.`);
+  });
+  return data;
+}
+
+document.getElementById("btn-validate").addEventListener("click", () => {
+  const preview = document.getElementById("json-preview");
+  try {
+    const data = parseQuestions();
+    preview.style.display = "block";
+    preview.textContent = `✓ Valid — ${data.length} soal terdeteksi.\n\n` + JSON.stringify(data, null, 2);
+  } catch (e) {
+    preview.style.display = "block";
+    preview.textContent = "✗ " + e.message;
+  }
+});
+
+/* ---------- Upload ke Firestore ---------- */
+document.getElementById("btn-upload").addEventListener("click", async () => {
+  const statusEl = document.getElementById("status-msg");
+  const setKeyRaw = document.getElementById("set-name").value.trim();
+  const setTitle = document.getElementById("set-title").value.trim();
+
+  const showStatus = (text, kind) => {
+    statusEl.textContent = text;
+    statusEl.className = "status-msg show " + kind;
+  };
+
+  if (!db) return showStatus("Firebase tidak tersedia. Periksa koneksi/konfigurasi.", "err");
+  if (!setKeyRaw) return showStatus("Isi nama/kode set terlebih dahulu (contoh: H).", "err");
+
+  let questions;
+  try {
+    questions = parseQuestions();
+  } catch (e) {
+    return showStatus("✗ " + e.message, "err");
+  }
+
+  const setKey = setKeyRaw.replace(/\s+/g, "-");
+  const btn = document.getElementById("btn-upload");
+  btn.disabled = true;
+  btn.textContent = "Menyimpan…";
+
+  try {
+    await setDoc(doc(db, "customQuestionSets", setKey), {
+      title: setTitle || `Set ${setKey} (Tambahan)`,
+      questions,
+      updatedAt: new Date().toISOString(),
+    });
+    showStatus(`✓ Berhasil! ${questions.length} soal tersimpan sebagai set "${setKey}". Buka kembali halaman kuis untuk melihatnya.`, "ok");
+  } catch (e) {
+    console.error(e);
+    showStatus("✗ Gagal menyimpan ke Firebase: " + e.message + " — periksa aturan keamanan (rules) Firestore.", "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Simpan ke Firebase";
+  }
+});
+</script>
+</body>
+</html>
