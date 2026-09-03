@@ -283,6 +283,8 @@ const state = {
   score: 0,
   wrong: [],
   studyMode: false,    // true = terjemahan langsung tampil
+  keywordMode: false,  // true = kata kunci penanda langsung tampil
+  randomOrder: true,   // true = soal diacak, false = berurutan Set A -> G
   answered: false,
 };
 
@@ -311,6 +313,8 @@ function cacheEls() {
   els.btnStartAll = document.getElementById("btn-start-all");
   els.btnStartSelected = document.getElementById("btn-start-selected");
   els.toggleStudy = document.getElementById("toggle-study");
+  els.toggleKeywords = document.getElementById("toggle-keywords");
+  els.toggleRandom = document.getElementById("toggle-random");
   els.firebaseStatus = document.getElementById("firebase-status");
 
   els.progressFill = document.getElementById("progress-fill");
@@ -517,6 +521,12 @@ function bindHomeEvents() {
   els.toggleStudy.addEventListener("change", (e) => {
     state.studyMode = e.target.checked;
   });
+  els.toggleKeywords.addEventListener("change", (e) => {
+    state.keywordMode = e.target.checked;
+  });
+  els.toggleRandom.addEventListener("change", (e) => {
+    state.randomOrder = e.target.checked;
+  });
   els.btnQuitQuiz.addEventListener("click", () => showScreen("home"));
   els.btnBackHome.addEventListener("click", () => showScreen("home"));
   els.btnNext.addEventListener("click", nextQuestion);
@@ -565,7 +575,7 @@ function startQuiz(setKeys) {
       items.push({ setKey: key, ...q });
     });
   });
-  shuffle(items);
+  if (state.randomOrder) shuffle(items); // kalau dimatikan, biarkan urut Set A -> G
   beginSession(items);
 }
 
@@ -596,7 +606,7 @@ function renderQuestion() {
   els.scoreLabel.textContent = `Skor: ${state.score}`;
   els.qSetBadge.textContent = `Set ${current.setKey} · No. ${current.no}`;
   els.qJapanese.innerHTML = highlightKeywords(annotateJapanese(current.ja), current.setKey, current.no);
-  els.qJapanese.classList.toggle("kw-reveal", state.studyMode);
+  els.qJapanese.classList.toggle("kw-reveal", state.keywordMode);
   els.qIndonesian.textContent = current.id;
 
   if (current.img) {
