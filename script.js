@@ -6,6 +6,7 @@
 
 /* ---------- Kamus kosakata klik (file terpisah, lihat vocab.js) ---------- */
 import { annotateJapanese } from "./vocab.js";
+import { highlightKeywords, showExplanation, hideExplanation } from "./explain.js";
 
 /* ---------- Firebase (modular v10, via CDN) ---------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -594,7 +595,8 @@ function renderQuestion() {
   els.progressLabel.textContent = `Soal ${state.index + 1} / ${total}`;
   els.scoreLabel.textContent = `Skor: ${state.score}`;
   els.qSetBadge.textContent = `Set ${current.setKey} · No. ${current.no}`;
-  els.qJapanese.innerHTML = annotateJapanese(current.ja);
+  els.qJapanese.innerHTML = highlightKeywords(annotateJapanese(current.ja), current.setKey, current.no);
+  els.qJapanese.classList.toggle("kw-reveal", state.studyMode);
   els.qIndonesian.textContent = current.id;
 
   if (current.img) {
@@ -610,6 +612,7 @@ function renderQuestion() {
   }
 
   els.qIndonesianWrap.classList.toggle("visible", state.studyMode);
+  hideExplanation();
   els.feedback.className = "feedback";
   els.feedback.textContent = "";
   els.btnNext.classList.remove("show");
@@ -626,6 +629,7 @@ function answer(userSaysTrue) {
   const isCorrect = userSaysTrue === current.answer;
 
   els.qIndonesianWrap.classList.add("visible");
+  els.qJapanese.classList.add("kw-reveal");
   els.btnTrue.disabled = true;
   els.btnFalse.disabled = true;
 
@@ -652,6 +656,7 @@ function answer(userSaysTrue) {
   }
 
   els.scoreLabel.textContent = `Skor: ${state.score}`;
+  showExplanation(current.setKey, current.no, current.answer);
   els.btnNext.classList.add("show");
   els.btnNext.textContent =
     state.index + 1 < state.queue.length ? "Soal Berikutnya →" : "Lihat Hasil →";
