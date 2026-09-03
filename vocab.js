@@ -298,6 +298,9 @@ const VOCAB = {
   "すんぽう": { base: "すんぽう (寸法)", pos: "benda", id: "dimensi / ukuran" },
   "ショックマーク": { base: "ショックマーク", pos: "benda", id: "shock mark" },
   "リングマーク": { base: "リングマーク", pos: "benda", id: "ring mark" },
+  "たいしょくせい": { base: "たいしょくせい (耐食性)", pos: "benda", id: "ketahanan korosi (corrosion resistance)" },
+  "しぎょうまえてんけん": { base: "しぎょうまえてんけん (始業前点検)", pos: "benda", id: "pemeriksaan sebelum mulai bekerja (pre-operation check)" },
+  "四角": { base: "しかく (四角)", pos: "benda", id: "persegi / segi empat" },
 
   /* ---------- Kata sifat-na & lainnya ---------- */
   "じゅうよう": { base: "じゅうよう (重要)", pos: "sifat-na", id: "penting" },
