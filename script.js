@@ -4,6 +4,9 @@
    Data soal bawaan + soal tambahan dari Firebase Firestore
    ============================================================ */
 
+/* ---------- Kamus kosakata klik (file terpisah, lihat vocab.js) ---------- */
+import { annotateJapanese } from "./vocab.js";
+
 /* ---------- Firebase (modular v10, via CDN) ---------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
@@ -591,7 +594,7 @@ function renderQuestion() {
   els.progressLabel.textContent = `Soal ${state.index + 1} / ${total}`;
   els.scoreLabel.textContent = `Skor: ${state.score}`;
   els.qSetBadge.textContent = `Set ${current.setKey} · No. ${current.no}`;
-  els.qJapanese.textContent = current.ja;
+  els.qJapanese.innerHTML = annotateJapanese(current.ja);
   els.qIndonesian.textContent = current.id;
 
   if (current.img) {
