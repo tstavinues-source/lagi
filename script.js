@@ -284,7 +284,7 @@ const state = {
   wrong: [],
   studyMode: false,    // true = terjemahan langsung tampil
   keywordMode: false,  // true = kata kunci penanda langsung tampil
-  randomOrder: true,   // true = soal diacak, false = berurutan Set A -> G
+  randomOrder: false,  // true = soal diacak, false (default) = berurutan Set A -> G
   answered: false,
 };
 
