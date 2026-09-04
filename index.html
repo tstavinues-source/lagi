@@ -29,6 +29,8 @@
     --teal-light: color-mix(in srgb, var(--teal) 55%, white 45%);
     --tomato-dark: color-mix(in srgb, var(--tomato) 78%, black 22%);
     --tomato-light: color-mix(in srgb, var(--tomato) 55%, white 45%);
+    --on-green:#2FAE60;
+    --off-red:#E5484D;
 
     /* alias supaya seluruh style di bawah konsisten */
     --bg-0: var(--cream);
@@ -259,6 +261,53 @@
   .switch input:checked + .slider{background:linear-gradient(160deg,var(--teal-light),var(--teal));}
   .switch input:checked + .slider::before{transform:translateX(20px);}
 
+  /* ---------- Fitur Tambahan: blok satu-klik, warna soft hijau/merah ---------- */
+  .feature-title{margin-top:20px;}
+  .feature-grid{
+    display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"study keywords" "order order";
+    gap:12px;margin-bottom:22px;
+  }
+  #toggle-study{grid-area:study;}
+  #toggle-keywords{grid-area:keywords;}
+  #toggle-order{grid-area:order;}
+
+  .feature-toggle{
+    appearance:none;cursor:pointer;text-align:left;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:16px 16px;border-radius:18px;
+    background:color-mix(in srgb, var(--off-red, #E5484D) 12%, #FFFFFF);
+    box-shadow:var(--shadow-pill);
+    border:1.5px solid color-mix(in srgb, var(--off-red, #E5484D) 30%, transparent);
+    font-family:inherit;transition:background .22s ease, box-shadow .18s ease, border-color .18s ease, transform .12s ease;
+  }
+  .feature-toggle:active{transform:translateY(1px) scale(.99);}
+  .feature-toggle .dot{
+    width:11px;height:11px;border-radius:50%;flex-shrink:0;
+    background:radial-gradient(circle at 35% 30%, #ff8a80, var(--off-red, #E5484D));
+    box-shadow:0 0 0 3px rgba(229,72,77,.14);
+    transition:background .2s ease, box-shadow .2s ease;
+  }
+  .feature-toggle .label{
+    font-size:13px;font-weight:800;color:color-mix(in srgb, var(--off-red, #E5484D) 65%, var(--ink) 35%);
+    transition:color .2s ease;text-align:center;
+  }
+  .feature-toggle.active{
+    background:color-mix(in srgb, var(--on-green, #2FAE60) 14%, #FFFFFF);
+    border-color:color-mix(in srgb, var(--on-green, #2FAE60) 42%, transparent);
+    box-shadow:var(--shadow-pill), 0 0 16px -8px color-mix(in srgb, var(--on-green, #2FAE60) 55%, transparent);
+  }
+  .feature-toggle.active .dot{
+    background:radial-gradient(circle at 35% 30%, #7ee2a0, var(--on-green, #2FAE60));
+    box-shadow:0 0 0 3px rgba(47,174,96,.16);
+  }
+  .feature-toggle.active .label{color:color-mix(in srgb, var(--on-green, #2FAE60) 60%, var(--ink) 40%);}
+
+  #toggle-order .label{min-width:110px;}
+
+  @media (max-width:420px){
+    .feature-grid{grid-template-columns:1fr;grid-template-areas:"study" "keywords" "order";}
+  }
+
   /* ---------- Quiz screen ---------- */
   .progress-bar{
     height:8px;border-radius:999px;background:#EADBBE;overflow:hidden;
@@ -423,28 +472,20 @@
         <p class="section-title">Pilih Set Soal</p>
         <div id="set-picker"></div>
 
-        <div class="toggle-row">
-          <span>Mode Belajar — tampilkan terjemahan sebelum menjawab</span>
-          <label class="switch">
-            <input type="checkbox" id="toggle-study" />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <span>Tampilkan kata kunci penanda sebelum menjawab</span>
-          <label class="switch">
-            <input type="checkbox" id="toggle-keywords" />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <span>Acak urutan soal — mati berarti berurutan (Set A → G)</span>
-          <label class="switch">
-            <input type="checkbox" id="toggle-random" />
-            <span class="slider"></span>
-          </label>
+        <p class="section-title feature-title">Fitur Tambahan</p>
+        <div class="feature-grid">
+          <button type="button" class="feature-toggle" id="toggle-study" aria-pressed="false">
+            <span class="dot"></span>
+            <span class="label">Terjemahan Soal</span>
+          </button>
+          <button type="button" class="feature-toggle" id="toggle-keywords" aria-pressed="false">
+            <span class="dot"></span>
+            <span class="label">Kata Kunci Soal</span>
+          </button>
+          <button type="button" class="feature-toggle" id="toggle-order" aria-pressed="false">
+            <span class="dot"></span>
+            <span class="label" id="toggle-order-label">Soal Berurutan</span>
+          </button>
         </div>
 
         <div class="actions-row">
