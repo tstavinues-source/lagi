@@ -314,7 +314,8 @@ function cacheEls() {
   els.btnStartSelected = document.getElementById("btn-start-selected");
   els.toggleStudy = document.getElementById("toggle-study");
   els.toggleKeywords = document.getElementById("toggle-keywords");
-  els.toggleRandom = document.getElementById("toggle-random");
+  els.toggleOrder = document.getElementById("toggle-order");
+  els.toggleOrderLabel = document.getElementById("toggle-order-label");
   els.firebaseStatus = document.getElementById("firebase-status");
 
   els.progressFill = document.getElementById("progress-fill");
@@ -518,14 +519,14 @@ function bindHomeEvents() {
     }
     startQuiz(checked);
   });
-  els.toggleStudy.addEventListener("change", (e) => {
-    state.studyMode = e.target.checked;
+  els.toggleStudy.addEventListener("click", () => {
+    state.studyMode = toggleFeatureButton(els.toggleStudy);
   });
-  els.toggleKeywords.addEventListener("change", (e) => {
-    state.keywordMode = e.target.checked;
+  els.toggleKeywords.addEventListener("click", () => {
+    state.keywordMode = toggleFeatureButton(els.toggleKeywords);
   });
-  els.toggleRandom.addEventListener("change", (e) => {
-    state.randomOrder = e.target.checked;
+  els.toggleOrder.addEventListener("click", () => {
+    setOrderMode(!state.randomOrder);
   });
   els.btnQuitQuiz.addEventListener("click", () => showScreen("home"));
   els.btnBackHome.addEventListener("click", () => showScreen("home"));
@@ -560,6 +561,22 @@ function renderSetPicker() {
 function pulseWarn(el) {
   el.classList.add("shake");
   setTimeout(() => el.classList.remove("shake"), 450);
+}
+
+/** Membalik status aktif tombol fitur (dot hijau/merah) dan mengembalikan status barunya. */
+function toggleFeatureButton(btn) {
+  const nowActive = !btn.classList.contains("active");
+  btn.classList.toggle("active", nowActive);
+  btn.setAttribute("aria-pressed", String(nowActive));
+  return nowActive;
+}
+
+/** Satu tombol: klik untuk beralih antara Soal Acak <-> Soal Berurutan. */
+function setOrderMode(random) {
+  state.randomOrder = random;
+  els.toggleOrder.classList.toggle("active", random);
+  els.toggleOrder.setAttribute("aria-pressed", String(random));
+  els.toggleOrderLabel.textContent = random ? "Soal Acak" : "Soal Berurutan";
 }
 
 /* ============================================================
