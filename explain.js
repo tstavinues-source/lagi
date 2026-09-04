@@ -308,7 +308,6 @@ let panelEl = null;
 
 function ensureExplanationPanel() {
   if (panelEl) return panelEl;
-  injectExplainStyles();
   panelEl = document.createElement("div");
   panelEl.id = "explain-panel";
   panelEl.className = "explain-panel";
@@ -370,4 +369,13 @@ function injectExplainStyles() {
     }
   `;
   document.head.appendChild(style);
+}
+
+// Suntikkan CSS-nya SEKARANG JUGA (bukan menunggu user menjawab soal
+// pertama kali) — supaya highlight kata kunci sudah aktif sejak soal
+// pertama dimuat, bukan baru muncul setelah jawaban pertama dikirim.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", injectExplainStyles);
+} else {
+  injectExplainStyles();
 }
