@@ -91,10 +91,14 @@ function getOrCreateUid() {
   return uid;
 }
 
-async function loadUserData() {
+/** Bagian INSTAN — baca dari localStorage saja, tanpa sentuh jaringan sama sekali. */
+function loadLocalUserData() {
   state.uid = getOrCreateUid();
   state.name = localStorage.getItem(LS_NAME_KEY) || "";
+}
 
+/** Bagian LATAR BELAKANG — sinkron ke Firestore, tidak boleh memblokir tampilan awal. */
+async function syncFromFirestore() {
   if (!db) {
     state.loaded = true;
     return;
@@ -106,9 +110,11 @@ async function loadUserData() {
       if (data.name) {
         state.name = data.name;
         localStorage.setItem(LS_NAME_KEY, data.name);
+        updateCornerBadge();
       }
       if (data.bestScores && typeof data.bestScores === "object") {
         state.bestScores = data.bestScores;
+        refreshProgressBadges();
       }
     }
   } catch (e) {
@@ -425,15 +431,22 @@ function injectStyles() {
    INIT
    ============================================================ */
 
-async function init() {
+function init() {
   injectStyles();
-  await loadUserData();
-  renderCornerBadge();
-  watchSetPicker();
+  loadLocalUserData(); // instan, dari localStorage — tidak menunggu jaringan
+  renderCornerBadge(); // tampil LANGSUNG
+  watchSetPicker(); // badge progres langsung dirender (pakai data lokal / kosong dulu)
 
   if (!state.name) {
-    openNamePopup(true); // wajib isi nama — belum pernah diisi sebelumnya
+    // localStorage kosong -> ini jelas UID baru, tidak perlu tunggu Firestore
+    // untuk tahu bahwa user ini belum pernah isi nama.
+    openNamePopup(true);
   }
+
+  // Sinkron ke Firestore di LATAR BELAKANG — tidak memblokir apa pun di atas.
+  // Kalau ada data lebih baru (mis. nama/skor dari sesi lain), UI diperbarui
+  // diam-diam begitu responsnya datang, secepat atau selambat apa pun itu.
+  syncFromFirestore();
 }
 
 if (document.readyState === "loading") {
