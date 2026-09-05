@@ -7,6 +7,7 @@
 /* ---------- Kamus kosakata klik (file terpisah, lihat vocab.js) ---------- */
 import { annotateJapanese } from "./vocab.js";
 import { highlightKeywords, showExplanation, hideExplanation } from "./explain.js";
+import { recordSessionResult } from "./progress.js";
 
 /* ---------- Firebase (modular v10, via CDN) ---------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -701,6 +702,8 @@ function nextQuestion() {
 function finishQuiz() {
   const total = state.queue.length;
   const percent = total ? Math.round((state.score / total) * 100) : 0;
+
+  recordSessionResult(state.queue, state.wrong);
 
   els.resultScore.textContent = state.score;
   els.resultTotal.textContent = total;
