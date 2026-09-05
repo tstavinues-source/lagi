@@ -27,6 +27,8 @@
      "H-1": { keywords: ["kata1","kata2"], explanation: "penjelasan singkat" }
    ============================================================ */
 
+import { getKeywordHint } from "./keywordhints.js";
+
 const EXPLANATIONS = {
   /* ================= SET A ================= */
   "A-1": { keywords: ["スクリュープレス", "こうそくど"], explanation: "Screw press dipakai untuk proses tekan kecepatan RENDAH seperti coining/forging, bukan piercing kecepatan tinggi — itu tugas mechanical/crank press." },
@@ -279,9 +281,13 @@ export function showExplanation(setKey, no, correctAnswer) {
 
   const label = correctAnswer ? "BENAR" : "SALAH";
   const kwList = (entry.keywords || [])
-    .map((k, i) => {
+    .map((k) => {
       const word = typeof k === "string" ? k : k.word;
-      const why = typeof k === "string" ? entry.explanation : k.why || entry.explanation;
+      // Utamakan pemicu ingatan singkat dari keywordhints.js; kalau soal
+      // ini belum punya datanya (mis. soal custom baru), pakai penjelasan
+      // panjang yang sudah ada di explain.js sebagai cadangan.
+      const shortHint = getKeywordHint(setKey, no, word);
+      const why = shortHint || (typeof k === "string" ? entry.explanation : k.why || entry.explanation);
       return `<span class="expl-kw-wrap">
         <span class="expl-kw">${escapeHtml(word)}</span>
         <button type="button" class="expl-kw-info" data-why="${escapeHtml(why)}" data-word="${escapeHtml(
