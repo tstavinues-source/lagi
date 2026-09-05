@@ -274,12 +274,12 @@ function parseQuestions() {
   return data;
 }
 
-/* Ubah hasImage -> img dengan nama file mengikuti konvensi "<SetKey>-<No>.jpg",
+/* Ubah hasImage -> img dengan nama file mengikuti konvensi "<SetKey>-<No>.png",
    supaya konsisten dengan gambar yang kamu taruh sendiri sejajar dengan index.html. */
 function attachImageFilenames(questions, setKey) {
   return questions.map((q) => {
     const clean = { no: q.no, ja: q.ja, id: q.id, answer: q.answer };
-    if (q.hasImage) clean.img = `${setKey}-${q.no}.jpg`;
+    if (q.hasImage) clean.img = `${setKey}-${q.no}.png`;
     return clean;
   });
 }
@@ -335,7 +335,7 @@ document.getElementById("btn-upload").addEventListener("click", async () => {
       updatedAt: new Date().toISOString(),
     });
     const imgNote = imgCount
-      ? ` Jangan lupa taruh ${imgCount} file gambar (pola nama "${setKey}-<no>.jpg") sejajar dengan index.html/script.js.`
+      ? ` Jangan lupa taruh ${imgCount} file gambar (pola nama "${setKey}-<no>.png") sejajar dengan index.html/script.js.`
       : "";
     showStatus(`✓ Berhasil! ${questions.length} soal tersimpan sebagai set "${setKey}". Buka kembali halaman kuis untuk melihatnya.${imgNote}`, "ok");
   } catch (e) {
