@@ -279,7 +279,16 @@ export function showExplanation(setKey, no, correctAnswer) {
 
   const label = correctAnswer ? "BENAR" : "SALAH";
   const kwList = (entry.keywords || [])
-    .map((k) => `<span class="expl-kw">${escapeHtml(k)}</span>`)
+    .map((k, i) => {
+      const word = typeof k === "string" ? k : k.word;
+      const why = typeof k === "string" ? entry.explanation : k.why || entry.explanation;
+      return `<span class="expl-kw-wrap">
+        <span class="expl-kw">${escapeHtml(word)}</span>
+        <button type="button" class="expl-kw-info" data-why="${escapeHtml(why)}" data-word="${escapeHtml(
+        word
+      )}" aria-label="Kenapa kata ini jadi penanda?">!</button>
+      </span>`;
+    })
     .join(" ");
 
   panel.innerHTML = `
@@ -292,6 +301,69 @@ export function showExplanation(setKey, no, correctAnswer) {
   void panel.offsetWidth;
   panel.classList.add("show");
 }
+
+/* ---------- Popup "kenapa kata kunci ini dipilih" ---------- */
+
+let kwWhyPopupEl = null;
+
+function ensureKwWhyPopup() {
+  if (kwWhyPopupEl) return kwWhyPopupEl;
+  kwWhyPopupEl = document.createElement("div");
+  kwWhyPopupEl.className = "kw-why-popup";
+  document.body.appendChild(kwWhyPopupEl);
+  return kwWhyPopupEl;
+}
+
+function showKwWhyPopup(word, why, anchorRect) {
+  const popup = ensureKwWhyPopup();
+  popup.innerHTML = `
+    <span class="kw-why-close" data-close="1">✕</span>
+    <div class="kw-why-title">💡 Kenapa "<span>${escapeHtml(word)}</span>" jadi penanda?</div>
+    <div class="kw-why-body">${escapeHtml(why)}</div>
+  `;
+  popup.style.left = "-9999px";
+  popup.style.top = "-9999px";
+  popup.classList.add("show");
+
+  requestAnimationFrame(() => {
+    const pw = popup.offsetWidth;
+    const ph = popup.offsetHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = anchorRect.left + anchorRect.width / 2 - pw / 2;
+    left = Math.max(10, Math.min(left, vw - pw - 10));
+
+    let top = anchorRect.top - ph - 10;
+    if (top < 10) top = anchorRect.bottom + 10;
+    top = Math.max(10, Math.min(top, vh - ph - 10));
+
+    popup.style.left = `${left}px`;
+    popup.style.top = `${top}px`;
+  });
+}
+
+function hideKwWhyPopup() {
+  if (kwWhyPopupEl) kwWhyPopupEl.classList.remove("show");
+}
+
+document.addEventListener("click", (e) => {
+  const closeBtn = e.target.closest && e.target.closest(".kw-why-close");
+  if (closeBtn) {
+    hideKwWhyPopup();
+    return;
+  }
+  const infoBtn = e.target.closest && e.target.closest(".expl-kw-info");
+  if (infoBtn) {
+    e.stopPropagation();
+    const rect = infoBtn.getBoundingClientRect();
+    showKwWhyPopup(infoBtn.dataset.word, infoBtn.dataset.why, rect);
+    return;
+  }
+  if (kwWhyPopupEl && !kwWhyPopupEl.contains(e.target)) {
+    hideKwWhyPopup();
+  }
+});
 
 /** Sembunyikan & kosongkan panel penjelasan (dipanggil saat pindah soal). */
 export function hideExplanation() {
@@ -357,10 +429,45 @@ function injectExplainStyles() {
     .explain-panel .expl-kws{
       font-size:11.5px;color:var(--ink-soft, #7A6F5D);margin-bottom:8px;
     }
+    .expl-kw-wrap{
+      display:inline-flex;align-items:center;gap:3px;margin-right:6px;margin-bottom:4px;
+    }
     .explain-panel .expl-kw{
       display:inline-block;background:color-mix(in srgb, var(--sun, #F4D242) 35%, transparent);
-      border-radius:6px;padding:1px 7px;margin-right:4px;font-weight:700;color:var(--ink, #2E2620);
+      border-radius:6px;padding:1px 7px;font-weight:700;color:var(--ink, #2E2620);
     }
+    .expl-kw-info{
+      appearance:none;border:none;cursor:pointer;
+      width:16px;height:16px;border-radius:50%;flex-shrink:0;
+      background:var(--teal, #008471);color:#fff;
+      font-size:10px;font-weight:800;line-height:16px;padding:0;
+      display:inline-flex;align-items:center;justify-content:center;
+      box-shadow:0 2px 6px -2px color-mix(in srgb, var(--teal, #008471) 60%, transparent);
+      transition:transform .12s ease;
+    }
+    .expl-kw-info:hover{transform:scale(1.15);}
+    .expl-kw-info:active{transform:scale(.9);}
+
+    .kw-why-popup{
+      position:fixed;z-index:9999;max-width:270px;min-width:190px;
+      background:#FFFFFF;color:#2E2620;
+      border-radius:16px;padding:14px 16px;
+      box-shadow:0 16px 34px -12px rgba(50,35,15,.35), 0 0 0 1px rgba(50,35,15,.06);
+      font-family:'Segoe UI','Noto Sans JP',-apple-system,BlinkMacSystemFont,sans-serif;
+      opacity:0;transform:translateY(6px) scale(.97);
+      transition:opacity .15s ease, transform .15s ease;
+      pointer-events:none;
+    }
+    .kw-why-popup.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+    .kw-why-title{font-size:13px;font-weight:800;color:var(--ink, #2E2620);margin-bottom:6px;line-height:1.4;}
+    .kw-why-title span{color:var(--teal, #008471);}
+    .kw-why-body{font-size:12.5px;color:var(--ink-soft, #7A6F5D);line-height:1.55;}
+    .kw-why-close{
+      position:absolute;top:8px;right:10px;cursor:pointer;font-size:13px;color:#a89a82;
+      width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    }
+    .kw-why-close:hover{background:rgba(50,35,15,.08);color:#2E2620;}
+
     .explain-panel .expl-body{
       font-size:13px;line-height:1.6;color:var(--ink, #2E2620);
       background:#FFFFFF;border-left:3px solid var(--teal, #008471);
