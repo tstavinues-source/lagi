@@ -149,7 +149,7 @@ const QUIZ_SETS = {
   D: {
     title: "Set D — Rangka Mesin & Progressive Die",
     questions: [
-      { no: 1, ja: "こうせんしきあんぜんそうちとは てや ゆびが かながたなどに ちかづけば きゅうていし するものです", id: "Alat pengaman tipe sinar (photoelectric) adalah alat yang akan berhenti mendadak jika tangan atau jari mendekati cetakan.", answer: true },
+      { no: 1, ja: "こうせんしきあんぜんそうちとは てやゆびが かながたなどに ちかづけば きゅうていし するものです", id: "Alat pengaman tipe sinar (photoelectric) adalah alat yang akan berhenti mendadak jika tangan atau jari mendekati cetakan.", answer: true },
       { no: 2, ja: "ずのような りょうてそうさしきあんぜんそうちの おしボタンのかんかくAは 200mmです", id: "Pada alat pengaman kontrol dua tangan, jarak antar tombol tekan A adalah 200mm.", answer: false, img: "D-2.png" },
 
       { no: 3, ja: "ストレートサイドがた フレームプレスは Cがたフレームプレスより さぎょうせいが よいです", id: "Mesin press rangka tipe straight-side memiliki kemudahan kerja (workability) yang lebih baik dibandingkan mesin press rangka tipe C.", answer: false },
