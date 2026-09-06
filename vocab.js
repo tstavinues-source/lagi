@@ -100,7 +100,7 @@ const VOCAB = {
   "はりだしかこうすると": { base: "はりだしかこうする (張り出し加工する)", pos: "kerja", id: "kalau melakukan proses pembentukan tonjolan" },
   "なりたって": { base: "なりたつ (成り立つ)", pos: "kerja", id: "terdiri dari / terbentuk dari" },
   "とりつける": { base: "とりつける (取り付ける)", pos: "kerja", id: "memasang" },
-  "とりつけるとき": { base: "とりつける (取り付ける)", pos: "kerja", id: "saat memasang" },
+  "とき": { base: "とき (時)", pos: "benda", id: "waktu / saat" },
   "こていします": { base: "こていする (固定する)", pos: "kerja", id: "memfiksasi / mengunci" },
   "ひきはなす": { base: "ひきはなす (引き離す)", pos: "kerja", id: "melepaskan / memisahkan" },
   "ひきはなすための": { base: "ひきはなす (引き離す)", pos: "kerja", id: "untuk melepaskan" },
@@ -401,6 +401,38 @@ const VOCAB = {
   "消火器": { base: "しょうかき (消火器)", pos: "benda", id: "alat pemadam kebakaran" },
   "電源盤": { base: "でんげんばん (電源盤)", pos: "benda", id: "panel listrik" },
   "前": { base: "まえ (前)", pos: "benda", id: "sebelum / depan" },
+
+  /* ---------- Partikel gabungan (fusi 2 partikel jadi 1 unit makna) ----------
+     Ditambahkan setelah audit ketat: sebelumnya は/で/に/と dsb ke-detect
+     terpisah padahal seharusnya jadi SATU unit gabungan dengan arti sendiri. */
+  "とは": { base: "とは", pos: "partikel", id: "adalah (menandai definisi: 'yang dimaksud dengan X adalah...')" },
+  "では": { base: "では", pos: "partikel", id: "dalam hal ini / pada (topik) + di (tempat/kondisi)" },
+  "には": { base: "には", pos: "partikel", id: "di / pada / untuk (topik) — gabungan に + は" },
+  "とも": { base: "とも", pos: "partikel", id: "juga (dipakai di 'juga disebut' / '〜とも言う')" },
+  "として": { base: "として", pos: "partikel", id: "sebagai" },
+  "しても": { base: "しても", pos: "lainnya", id: "meskipun melakukan / walau begitu" },
+
+  /* ---------- Kata dasar tambahan hasil audit (sebelumnya ke-pecah oleh
+     partikel pendek yang kebetulan sama huruf awalnya) ---------- */
+  "もっとも": { base: "もっとも (最も)", pos: "lainnya", id: "paling / yang paling" },
+  "ひとつ": { base: "ひとつ (一つ)", pos: "benda", id: "satu / salah satu" },
+  "こと": { base: "こと (事)", pos: "benda", id: "hal / fakta (menjadikan kata kerja sebagai kata benda)" },
+  "もの": { base: "もの (物)", pos: "benda", id: "benda / hal / sesuatu" },
+  "して": { base: "する", pos: "kerja", id: "melakukan (bentuk -te)" },
+  "はやさ": { base: "はやさ (速さ)", pos: "benda", id: "kecepatan" },
+  "だいしゃ": { base: "だいしゃ (台車)", pos: "benda", id: "kereta dorong / trolley" },
+  "ていしせいのう": { base: "ていしせいのう (停止性能)", pos: "benda", id: "kemampuan berhenti" },
+  "しぼる": { base: "しぼる (絞る)", pos: "kerja", id: "menarik / mengecilkan (bentuk kamus dari proses drawing)" },
+  "よりも": { base: "よりも", pos: "partikel", id: "lebih dari (penekanan perbandingan)" },
+  "おもに": { base: "おもに (主に)", pos: "lainnya", id: "terutama / mayoritas" },
+  "おとします": { base: "おとす (落とす)", pos: "kerja", id: "menjatuhkan / melepaskan" },
+  "とりつけます": { base: "とりつける (取り付ける)", pos: "kerja", id: "memasang" },
+  "にもつ": { base: "にもつ (荷物)", pos: "benda", id: "muatan / barang bawaan" },
+  "ぬきかこうした": { base: "ぬきかこうする (抜き加工する)", pos: "kerja", id: "sudah melakukan proses pemotongan/pelubangan" },
+  "そざい": { base: "そざい (素材)", pos: "benda", id: "bahan mentah / material dasar" },
+  "円筒絞り": { base: "えんとうしぼり (円筒絞り)", pos: "benda", id: "penarikan silinder" },
+  "付き": { base: "つき (付き)", pos: "lainnya", id: "dengan / dilengkapi" },
+  "穴": { base: "あな (穴)", pos: "benda", id: "lubang" },
 };
 
 /* ============================================================
