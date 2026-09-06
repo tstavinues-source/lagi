@@ -24,6 +24,15 @@
    Identitas user disimpan sebagai ID acak permanen di localStorage
    (bukan nama itu sendiri) supaya kalau nama diganti, progres lama
    TIDAK hilang — nama hanya field yang bisa diubah-ubah.
+
+   PENTING (perbaikan bug "progres hilang setelah restart browser"):
+   Skor terbaik (bestScores) sekarang SELALU disimpan ke localStorage
+   juga, bukan cuma Firestore. localStorage inilah yang jadi sumber
+   utama saat halaman dibuka lagi — Firestore cuma "cadangan sinkron"
+   di latar belakang. Jadi walau Firestore lambat/gagal/browser
+   ditutup sebelum sinkron sempat selesai, progres di localStorage
+   tetap aman. Saat data Firestore memang berhasil didapat, ia
+   DIGABUNG (ambil yang tertinggi) dengan localStorage, bukan menimpa.
    ============================================================ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -52,17 +61,34 @@ const firebaseConfig = {
 // bentrok dengan instance Firebase lain yang mungkin sudah dibuat
 // oleh script.js — keduanya tetap terhubung ke proyek yang sama.
 let db = null;
+let authReadyPromise = Promise.resolve();
 try {
   const app = initializeApp(firebaseConfig, "quizProgressApp");
   db = getFirestore(app);
   const auth = getAuth(app);
-  signInAnonymously(auth).catch(() => {});
+  // PENTING: simpan promise-nya supaya operasi Firestore bisa MENUNGGU
+  // login anonim selesai dulu. Sebelumnya ini "fire-and-forget" (tidak
+  // ditunggu), yang berisiko race condition: kalau Firestore rules
+  // butuh auth, baca/tulis bisa gagal diam-diam kalau dilakukan SEBELUM
+  // login anonim selesai — ini salah satu penyebab progres "hilang".
+  authReadyPromise = signInAnonymously(auth).catch((e) => {
+    console.warn("Login anonim (progress) gagal:", e);
+  });
 } catch (e) {
   console.warn("Firebase (progress) gagal diinisialisasi:", e);
 }
 
+async function ensureAuthReady() {
+  try {
+    await authReadyPromise;
+  } catch (e) {
+    /* diabaikan — operasi Firestore tetap dicoba, biar error aslinya kelihatan di console */
+  }
+}
+
 const LS_UID_KEY = "pressquiz_uid";
 const LS_NAME_KEY = "pressquiz_username";
+const LS_SCORES_KEY = "pressquiz_bestscores";
 
 const state = {
   uid: null,
@@ -91,10 +117,42 @@ function getOrCreateUid() {
   return uid;
 }
 
-/** Bagian INSTAN — baca dari localStorage saja, tanpa sentuh jaringan sama sekali. */
+/** Baca objek JSON dari localStorage dengan aman (tidak pernah melempar error). */
+function readLocalScores() {
+  try {
+    const raw = localStorage.getItem(LS_SCORES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function writeLocalScores(scores) {
+  try {
+    localStorage.setItem(LS_SCORES_KEY, JSON.stringify(scores));
+  } catch (e) {
+    console.warn("Gagal menyimpan progres ke localStorage:", e);
+  }
+}
+
+/** Gabungkan dua peta skor, per set ambil yang PALING TINGGI — supaya
+ *  data lokal dan data Firestore tidak pernah saling menimpa dengan
+ *  nilai yang lebih rendah/lebih lama. */
+function mergeScoresTakeMax(a, b) {
+  const merged = { ...a };
+  Object.keys(b || {}).forEach((key) => {
+    merged[key] = Math.max(merged[key] || 0, b[key]);
+  });
+  return merged;
+}
+
+/** Bagian INSTAN — baca dari localStorage saja, tanpa sentuh jaringan sama sekali.
+ *  Ini SUMBER UTAMA progres yang tampil pertama kali — tidak bergantung
+ *  sama sekali pada Firestore berhasil dimuat atau tidak. */
 function loadLocalUserData() {
   state.uid = getOrCreateUid();
   state.name = localStorage.getItem(LS_NAME_KEY) || "";
+  state.bestScores = readLocalScores();
 }
 
 /** Bagian LATAR BELAKANG — sinkron ke Firestore, tidak boleh memblokir tampilan awal. */
@@ -103,6 +161,7 @@ async function syncFromFirestore() {
     state.loaded = true;
     return;
   }
+  await ensureAuthReady(); // tunggu login anonim dulu, baru baca Firestore
   try {
     const snap = await getDoc(doc(db, "users", state.uid));
     if (snap.exists()) {
@@ -113,7 +172,10 @@ async function syncFromFirestore() {
         updateCornerBadge();
       }
       if (data.bestScores && typeof data.bestScores === "object") {
-        state.bestScores = data.bestScores;
+        // GABUNGKAN, jangan timpa — data lokal yang lebih baru (mis. dari
+        // sesi yang belum sempat sinkron ke Firestore) tidak boleh hilang.
+        state.bestScores = mergeScoresTakeMax(state.bestScores, data.bestScores);
+        writeLocalScores(state.bestScores);
         refreshProgressBadges();
       }
     }
@@ -128,6 +190,7 @@ async function persistName(name) {
   localStorage.setItem(LS_NAME_KEY, name);
   updateCornerBadge();
   if (!db || !state.uid) return;
+  await ensureAuthReady();
   try {
     await setDoc(
       doc(db, "users", state.uid),
@@ -194,9 +257,12 @@ export async function recordSessionResult(queueItems, wrongItems) {
   });
 
   if (!changed) return;
+  writeLocalScores(state.bestScores); // simpan ke localStorage DULUAN — ini yang bikin progres
+                                        // tetap ada meski Firestore lambat/gagal/browser di-restart
   refreshProgressBadges();
 
   if (!db || !state.uid) return;
+  await ensureAuthReady(); // tunggu login anonim selesai sebelum menulis ke Firestore
   updates.updatedAt = new Date().toISOString();
   try {
     await updateDoc(doc(db, "users", state.uid), updates);
