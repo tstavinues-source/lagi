@@ -32,15 +32,29 @@ const firebaseConfig = {
 };
 
 let db = null;
+let authReadyPromise = Promise.resolve();
 try {
   const app = initializeApp(firebaseConfig);
   db = getFirestore(app);
   const auth = getAuth(app);
-  signInAnonymously(auth).catch(() => {
+  // Simpan promise-nya supaya operasi Firestore bisa MENUNGGU login anonim
+  // selesai dulu — sebelumnya "fire-and-forget" (tidak ditunggu), yang
+  // bikin getDocs() harus menunggu/retry di belakang layar kalau Firestore
+  // rules butuh auth, kadang sampai belasan detik. Ini penyebab utama
+  // tulisan "Menghubungkan ke Firebase..." terasa lama.
+  authReadyPromise = signInAnonymously(auth).catch(() => {
     /* Anonymous auth optional — kuis tetap jalan tanpa akses Firestore */
   });
 } catch (e) {
   console.warn("Firebase gagal diinisialisasi, memakai soal bawaan saja.", e);
+}
+
+async function ensureAuthReady() {
+  try {
+    await authReadyPromise;
+  } catch (e) {
+    /* diabaikan — biar error asli tetap kelihatan di operasi Firestore-nya */
+  }
 }
 
 /* ---------- Folder gambar soal ---------- */
@@ -300,9 +314,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   cacheEls();
   state.allSets = JSON.parse(JSON.stringify(QUIZ_SETS));
   bindHomeEvents();
-  renderSetPicker();
-  await loadCustomSetsFromFirestore();
-  renderSetPicker();
+  renderSetPicker(); // tampil LANGSUNG dengan soal bawaan, tidak menunggu Firebase
+
+  // Ambil soal tambahan di LATAR BELAKANG — tidak memblokir apa pun di atas.
+  // Cepat atau lambat jaringannya, halaman tetap bisa dipakai dari awal.
+  loadCustomSetsFromFirestore().then(() => {
+    renderSetPicker();
+  });
 });
 
 function cacheEls() {
@@ -479,6 +497,7 @@ function spawnGlitter(isCorrect) {
 
 async function loadCustomSetsFromFirestore() {
   if (!db) return;
+  await ensureAuthReady(); // tunggu login anonim selesai dulu, baru ambil data
   try {
     const snap = await getDocs(collection(db, "customQuestionSets"));
     snap.forEach((docSnap) => {
