@@ -8,6 +8,7 @@
 import { annotateJapanese } from "./vocab.js";
 import { highlightKeywords, showExplanation, hideExplanation } from "./explain.js";
 import { recordSessionResult } from "./progress.js";
+import { recordHistoryEntry } from "./history.js";
 
 /* ---------- Firebase (modular v10, via CDN) ---------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -704,6 +705,7 @@ function finishQuiz() {
   const percent = total ? Math.round((state.score / total) * 100) : 0;
 
   recordSessionResult(state.queue, state.wrong);
+  recordHistoryEntry(state.queue, state.wrong);
 
   els.resultScore.textContent = state.score;
   els.resultTotal.textContent = total;
