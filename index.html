@@ -81,27 +81,8 @@
   }
   .wrap{position:relative;z-index:1;}
 
-  /* ---------- Dekorasi nature Japan: kelopak sakura jatuh ---------- */
-  .sakura-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-  .sakura-petal{
-    position:absolute;top:-8vh;width:14px;height:14px;
-    background:linear-gradient(135deg, var(--pink), var(--bubblegum));
-    border-radius:0 50% 50% 50%;
-    opacity:.6;filter:drop-shadow(0 2px 3px rgba(150,80,90,.25));
-    animation:sakura-fall linear infinite;
-  }
-  @keyframes sakura-fall{
-    0%{transform:translate(0,0) rotate(0deg);}
-    50%{transform:translate(24px, 55vh) rotate(160deg);}
-    100%{transform:translate(-18px, 115vh) rotate(340deg);}
-  }
-  .sakura-petal:nth-child(1){left:6%; width:12px;height:12px; animation-duration:14s; animation-delay:0s;}
-  .sakura-petal:nth-child(2){left:18%; width:16px;height:16px; animation-duration:18s; animation-delay:2s;}
-  .sakura-petal:nth-child(3){left:32%; width:10px;height:10px; animation-duration:12s; animation-delay:5s;}
-  .sakura-petal:nth-child(4){left:52%; width:15px;height:15px; animation-duration:20s; animation-delay:1s;}
-  .sakura-petal:nth-child(5){left:68%; width:11px;height:11px; animation-duration:16s; animation-delay:4s;}
-  .sakura-petal:nth-child(6){left:82%; width:17px;height:17px; animation-duration:22s; animation-delay:7s;}
-  .sakura-petal:nth-child(7){left:92%; width:12px;height:12px; animation-duration:15s; animation-delay:3s;}
+  /* Dekorasi musim (sakura/kilau/daun/salju) sekarang ditangani
+     sepenuhnya oleh seasons.js — lihat file itu untuk detailnya. */
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -448,16 +429,6 @@
 </style>
 </head>
 <body>
-  <div class="sakura-layer" aria-hidden="true">
-    <div class="sakura-petal"></div>
-    <div class="sakura-petal"></div>
-    <div class="sakura-petal"></div>
-    <div class="sakura-petal"></div>
-    <div class="sakura-petal"></div>
-    <div class="sakura-petal"></div>
-    <div class="sakura-petal"></div>
-  </div>
-
   <div class="wrap">
     <header class="app-header">
       <div class="eyebrow">金属プレス加工 · Metal Press Working</div>
@@ -566,5 +537,6 @@
 
   <script type="module" src="script.js"></script>
   <script type="module" src="guide.js"></script>
+  <script type="module" src="seasons.js"></script>
 </body>
 </html>
