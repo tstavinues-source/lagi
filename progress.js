@@ -35,56 +35,18 @@
    DIGABUNG (ambil yang tertinggi) dengan localStorage, bukan menimpa.
    ============================================================ */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
-  getFirestore,
   doc,
   getDoc,
   setDoc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-import {
-  getAuth,
-  signInAnonymously,
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAX6oiukr0SAe2W7btRMe3e3aXqLZoGdXk",
-  authDomain: "studio-4638697066-ac0a1.firebaseapp.com",
-  projectId: "studio-4638697066-ac0a1",
-  storageBucket: "studio-4638697066-ac0a1.firebasestorage.app",
-  messagingSenderId: "722291749123",
-  appId: "1:722291749123:web:af0aa30fde91fa54673936",
-};
-
-// Nama app Firebase dibuat unik ("quizProgressApp") supaya tidak
-// bentrok dengan instance Firebase lain yang mungkin sudah dibuat
-// oleh script.js — keduanya tetap terhubung ke proyek yang sama.
-let db = null;
-let authReadyPromise = Promise.resolve();
-try {
-  const app = initializeApp(firebaseConfig, "quizProgressApp");
-  db = getFirestore(app);
-  const auth = getAuth(app);
-  // PENTING: simpan promise-nya supaya operasi Firestore bisa MENUNGGU
-  // login anonim selesai dulu. Sebelumnya ini "fire-and-forget" (tidak
-  // ditunggu), yang berisiko race condition: kalau Firestore rules
-  // butuh auth, baca/tulis bisa gagal diam-diam kalau dilakukan SEBELUM
-  // login anonim selesai — ini salah satu penyebab progres "hilang".
-  authReadyPromise = signInAnonymously(auth).catch((e) => {
-    console.warn("Login anonim (progress) gagal:", e);
-  });
-} catch (e) {
-  console.warn("Firebase (progress) gagal diinisialisasi:", e);
-}
-
-async function ensureAuthReady() {
-  try {
-    await authReadyPromise;
-  } catch (e) {
-    /* diabaikan — operasi Firestore tetap dicoba, biar error aslinya kelihatan di console */
-  }
-}
+import { db, ensureAuthReady } from "./firebase-shared.js";
+// ^ Koneksi Firebase sekarang BERSAMA (satu app, satu login anonim) —
+//   lihat firebase-shared.js. Sebelumnya file ini bikin app terpisah
+//   ("quizProgressApp") dengan login anonimnya sendiri, jadi ada 3 proses
+//   login paralel setiap buka halaman (bareng script.js & history.js) —
+//   itu salah satu penyebab utama pengambilan data terasa lama.
 
 const LS_UID_KEY = "pressquiz_uid";
 const LS_NAME_KEY = "pressquiz_username";
@@ -338,6 +300,20 @@ function updateCornerBadge() {
     state.name || "Tamu";
 }
 
+/** Wadah bersama pojok kiri atas — dipakai juga oleh guide.js, history.js,
+ *  theme.js. Idempotent lewat getElementById, jadi aman dipanggil dari
+ *  file mana pun tanpa peduli urutan loading. */
+function ensureToolbar() {
+  let bar = document.getElementById("top-toolbar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "top-toolbar";
+    bar.className = "top-toolbar";
+    document.body.appendChild(bar);
+  }
+  return bar;
+}
+
 function renderCornerBadge() {
   if (cornerBadgeEl) return updateCornerBadge();
   cornerBadgeEl = document.createElement("button");
@@ -349,7 +325,7 @@ function renderCornerBadge() {
     <span class="corner-badge-edit">✎</span>
   `;
   cornerBadgeEl.addEventListener("click", () => openNamePopup(false));
-  document.body.appendChild(cornerBadgeEl);
+  ensureToolbar().appendChild(cornerBadgeEl);
 }
 
 function escapeHtml(str) {
@@ -419,8 +395,18 @@ function injectStyles() {
   const style = document.createElement("style");
   style.id = "progress-style";
   style.textContent = `
-    .corner-badge{
+    /* Wadah bersama untuk semua tombol pojok kiri atas (badge nama,
+       lampu panduan, riwayat, dst) — dipakai bareng oleh progress.js,
+       guide.js, history.js, dan theme.js. Idempotent: siapa pun yang
+       load duluan yang menang, tidak akan didefinisikan dua kali
+       karena sudah dicek document.getElementById("progress-style"). */
+    .top-toolbar{
       position:fixed;top:14px;left:14px;z-index:500;
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+      max-width:calc(100vw - 28px);
+    }
+
+    .corner-badge{
       display:flex;align-items:center;gap:7px;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);
       border-radius:999px;padding:8px 14px 8px 10px;cursor:pointer;
