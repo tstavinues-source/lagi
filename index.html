@@ -53,6 +53,48 @@
     --radius-card: 28px;
   }
 
+  /* ============================================================
+     MODE NEON CYBERPUNK — opsional, diaktifkan lewat theme.js
+     ============================================================
+     Cukup override variabel DASAR di sini (bukan tiap komponen satu-
+     satu) — karena --teal-dark/--teal-light dkk dihitung dari var(--teal)
+     lewat color-mix(), begitu --teal berubah di sini, semua turunannya
+     otomatis ikut berubah ke seluruh halaman. */
+  .cyberpunk-mode{
+    --cream:#0a0e1a;
+    --cream-2:#0f1524;
+    --cream-3:#161d30;
+    --ink:#eaf6ff;
+    --ink-soft:#8fa8c4;
+    --teal:#05d9e8;      /* cyan neon menggantikan teal */
+    --tomato:#ff2a6d;    /* pink neon menggantikan terracotta */
+    --sun:#fcee0a;
+    --card-grad: linear-gradient(160deg, #131a30 0%, #0b0f1e 100%);
+    --pill-grad: linear-gradient(160deg, #161d34 0%, #0d1222 100%);
+    --shadow-deep: 0 0 34px -6px rgba(5,217,232,.28), 0 1px 0 rgba(255,255,255,.05) inset;
+    --shadow-pill: 0 0 18px -6px rgba(5,217,232,.22), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -3px 10px rgba(0,0,0,.5);
+  }
+  .cyberpunk-mode body{
+    background:
+      radial-gradient(circle at 10% -6%, rgba(5,217,232,.16), transparent 46%),
+      radial-gradient(circle at 100% 6%, rgba(255,42,109,.18), transparent 42%),
+      radial-gradient(circle at 50% 118%, rgba(252,238,10,.10), transparent 50%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+  }
+  .cyberpunk-mode .app-header h1{
+    background:linear-gradient(120deg, var(--teal), var(--tomato));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 10px rgba(5,217,232,.5));
+  }
+  .cyberpunk-mode .panel,
+  .cyberpunk-mode .pill-btn,
+  .cyberpunk-mode .set-card-inner,
+  .cyberpunk-mode .wrong-item{
+    border-color: rgba(5,217,232,.25) !important;
+  }
+  .cyberpunk-mode .q-japanese{color:var(--ink);}
+  .cyberpunk-mode .q-indonesian{background:rgba(5,217,232,.06);border-color:rgba(5,217,232,.3);}
+
   /* ---------- Efek glossy universal untuk semua blok ---------- */
   .panel, .pill-btn, .ans-btn, .set-card-inner, .q-badge, .toggle-row,
   .fb-status, .wrong-item, .q-indonesian, .result-ring, .prompt-box textarea,
@@ -102,7 +144,7 @@
   .wrap{max-width:760px;margin:0 auto;}
 
   /* ---------- Header ---------- */
-  .app-header{text-align:center;margin-bottom:26px;}
+  .app-header{text-align:center;margin-bottom:26px;margin-top:52px;}
   .app-header .eyebrow{
     font-size:12px;letter-spacing:.22em;text-transform:uppercase;
     color:var(--teal);font-weight:700;margin-bottom:6px;
@@ -538,5 +580,6 @@
   <script type="module" src="script.js"></script>
   <script type="module" src="guide.js"></script>
   <script type="module" src="seasons.js"></script>
+  <script type="module" src="theme.js"></script>
 </body>
 </html>
