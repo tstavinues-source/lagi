@@ -10,52 +10,16 @@ import { highlightKeywords, showExplanation, hideExplanation } from "./explain.j
 import { recordSessionResult } from "./progress.js";
 import { recordHistoryEntry } from "./history.js";
 
-/* ---------- Firebase (modular v10, via CDN) ---------- */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+/* ---------- Firebase — koneksi BERSAMA, lihat firebase-shared.js ----------
+   Sebelumnya file ini punya koneksi Firebase sendiri (app + login anonim
+   terpisah dari progress.js & history.js) — sekarang cuma satu koneksi
+   dipakai bersama, supaya tidak ada 3 proses login anonim paralel yang
+   bikin lambat. */
 import {
-  getFirestore,
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-import {
-  getAuth,
-  signInAnonymously,
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAX6oiukr0SAe2W7btRMe3e3aXqLZoGdXk",
-  authDomain: "studio-4638697066-ac0a1.firebaseapp.com",
-  projectId: "studio-4638697066-ac0a1",
-  storageBucket: "studio-4638697066-ac0a1.firebasestorage.app",
-  messagingSenderId: "722291749123",
-  appId: "1:722291749123:web:af0aa30fde91fa54673936",
-};
-
-let db = null;
-let authReadyPromise = Promise.resolve();
-try {
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  const auth = getAuth(app);
-  // Simpan promise-nya supaya operasi Firestore bisa MENUNGGU login anonim
-  // selesai dulu — sebelumnya "fire-and-forget" (tidak ditunggu), yang
-  // bikin getDocs() harus menunggu/retry di belakang layar kalau Firestore
-  // rules butuh auth, kadang sampai belasan detik. Ini penyebab utama
-  // tulisan "Menghubungkan ke Firebase..." terasa lama.
-  authReadyPromise = signInAnonymously(auth).catch(() => {
-    /* Anonymous auth optional — kuis tetap jalan tanpa akses Firestore */
-  });
-} catch (e) {
-  console.warn("Firebase gagal diinisialisasi, memakai soal bawaan saja.", e);
-}
-
-async function ensureAuthReady() {
-  try {
-    await authReadyPromise;
-  } catch (e) {
-    /* diabaikan — biar error asli tetap kelihatan di operasi Firestore-nya */
-  }
-}
+import { db, ensureAuthReady } from "./firebase-shared.js";
 
 /* ---------- Folder gambar soal ---------- */
 /* File gambar diletakkan SEJAJAR dengan index.html & script.js (folder yang sama),
