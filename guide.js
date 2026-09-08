@@ -231,17 +231,17 @@ function setGuideActive(active) {
   }
 }
 
-function positionLightbulb() {
-  if (!lightbulbEl) return;
-  const corner = document.querySelector(".corner-badge");
-  if (corner) {
-    const rect = corner.getBoundingClientRect();
-    lightbulbEl.style.top = `${rect.top}px`;
-    lightbulbEl.style.left = `${rect.right + 10}px`;
-  } else {
-    lightbulbEl.style.top = "14px";
-    lightbulbEl.style.left = "14px";
+/** Wadah bersama pojok kiri atas — dipakai juga oleh progress.js,
+ *  history.js, theme.js. Idempotent lewat getElementById. */
+function ensureToolbar() {
+  let bar = document.getElementById("top-toolbar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "top-toolbar";
+    bar.className = "top-toolbar";
+    document.body.appendChild(bar);
   }
+  return bar;
 }
 
 function renderLightbulb() {
@@ -252,8 +252,7 @@ function renderLightbulb() {
   lightbulbEl.setAttribute("aria-label", "Tampilkan / sembunyikan panduan fitur");
   lightbulbEl.innerHTML = `💡`;
   lightbulbEl.addEventListener("click", () => setGuideActive(!guideActive));
-  document.body.appendChild(lightbulbEl);
-  positionLightbulb();
+  ensureToolbar().appendChild(lightbulbEl);
 }
 
 /* ============================================================
@@ -269,32 +268,23 @@ function watchScreenChanges() {
   });
 }
 
-function watchSetPickerAndBadge(retries = 20) {
+function watchSetPicker(retries = 20) {
   const picker = document.getElementById("set-picker");
-  const corner = document.querySelector(".corner-badge");
-  if (!picker || !corner) {
+  if (!picker) {
     if (retries > 0) {
-      setTimeout(() => watchSetPickerAndBadge(retries - 1), 250);
+      setTimeout(() => watchSetPicker(retries - 1), 250);
       return;
     }
+    return;
   }
-  positionLightbulb();
   if (guideActive) renderBubblesForCurrentScreen();
-
-  if (picker) {
-    const obs1 = new MutationObserver(() => {
-      if (guideActive) renderBubblesForCurrentScreen();
-    });
-    obs1.observe(picker, { childList: true });
-  }
-  if (corner) {
-    const obs2 = new MutationObserver(() => positionLightbulb());
-    obs2.observe(corner, { childList: true, characterData: true, subtree: true });
-  }
+  const obs1 = new MutationObserver(() => {
+    if (guideActive) renderBubblesForCurrentScreen();
+  });
+  obs1.observe(picker, { childList: true });
 }
 
 window.addEventListener("resize", () => {
-  positionLightbulb();
   if (guideActive) renderBubblesForCurrentScreen();
 });
 
@@ -308,7 +298,7 @@ function injectStyles() {
   style.id = "guide-style";
   style.textContent = `
     .guide-lightbulb{
-      position:fixed;z-index:500;width:38px;height:38px;border-radius:50%;
+      width:38px;height:38px;border-radius:50%;flex-shrink:0;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);cursor:pointer;
       display:flex;align-items:center;justify-content:center;font-size:17px;
       box-shadow:0 10px 22px -10px rgba(70,50,25,.3);
@@ -366,7 +356,7 @@ function init() {
   injectStyles();
   renderLightbulb();
   watchScreenChanges();
-  watchSetPickerAndBadge();
+  watchSetPicker();
 
   const alreadySeen = localStorage.getItem(LS_GUIDE_SEEN_KEY);
   if (!alreadySeen) {
