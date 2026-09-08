@@ -27,49 +27,19 @@
    sama tanpa perlu koordinasi khusus antar file.
    ============================================================ */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
-  getFirestore,
   doc,
   getDoc,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-import {
-  getAuth,
-  signInAnonymously,
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAX6oiukr0SAe2W7btRMe3e3aXqLZoGdXk",
-  authDomain: "studio-4638697066-ac0a1.firebaseapp.com",
-  projectId: "studio-4638697066-ac0a1",
-  storageBucket: "studio-4638697066-ac0a1.firebasestorage.app",
-  messagingSenderId: "722291749123",
-  appId: "1:722291749123:web:af0aa30fde91fa54673936",
-};
+import { db, ensureAuthReady } from "./firebase-shared.js";
+// ^ Koneksi Firebase sekarang BERSAMA (satu app, satu login anonim) —
+//   lihat firebase-shared.js. Sebelumnya file ini bikin app terpisah
+//   ("quizHistoryApp") dengan login anonimnya sendiri (ini yang ketiga,
+//   bareng script.js & progress.js) — tiga proses login paralel setiap
+//   buka halaman itu salah satu penyebab utama data terasa lama diambil.
 
 const MAX_ENTRIES = 100; // batas jumlah riwayat yang disimpan (biar tidak membengkak)
-
-let db = null;
-let authReadyPromise = Promise.resolve();
-try {
-  const app = initializeApp(firebaseConfig, "quizHistoryApp");
-  db = getFirestore(app);
-  const auth = getAuth(app);
-  authReadyPromise = signInAnonymously(auth).catch((e) => {
-    console.warn("Login anonim (history) gagal:", e);
-  });
-} catch (e) {
-  console.warn("Firebase (history) gagal diinisialisasi:", e);
-}
-
-async function ensureAuthReady() {
-  try {
-    await authReadyPromise;
-  } catch (e) {
-    /* diabaikan, biar error asli tetap kelihatan di operasi Firestore-nya */
-  }
-}
 
 const LS_UID_KEY = "pressquiz_uid"; // SAMA dengan progress.js, sengaja disatukan
 const LS_HISTORY_KEY = "pressquiz_history";
@@ -245,26 +215,17 @@ let panelEl = null;
 let overlayEl = null;
 let panelOpen = false;
 
-function positionHistoryButton() {
-  if (!historyBtnEl) return;
-  const siblings = [
-    document.querySelector(".guide-lightbulb"),
-    document.querySelector(".corner-badge"),
-  ].filter(Boolean);
-
-  let anchor = null;
-  siblings.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    if (!anchor || rect.right > anchor.right) anchor = rect;
-  });
-
-  if (anchor) {
-    historyBtnEl.style.top = `${anchor.top}px`;
-    historyBtnEl.style.left = `${anchor.right + 10}px`;
-  } else {
-    historyBtnEl.style.top = "14px";
-    historyBtnEl.style.left = "14px";
+/** Wadah bersama pojok kiri atas — dipakai juga oleh progress.js,
+ *  guide.js, theme.js. Idempotent lewat getElementById. */
+function ensureToolbar() {
+  let bar = document.getElementById("top-toolbar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "top-toolbar";
+    bar.className = "top-toolbar";
+    document.body.appendChild(bar);
   }
+  return bar;
 }
 
 function renderHistoryButton() {
@@ -275,8 +236,7 @@ function renderHistoryButton() {
   historyBtnEl.setAttribute("aria-label", "Lihat riwayat latihan");
   historyBtnEl.innerHTML = "📊";
   historyBtnEl.addEventListener("click", openHistoryPanel);
-  document.body.appendChild(historyBtnEl);
-  positionHistoryButton();
+  ensureToolbar().appendChild(historyBtnEl);
 }
 
 function buildHistoryRows() {
@@ -365,22 +325,6 @@ function closeHistoryPanel() {
   if (panelEl) panelEl.classList.remove("show");
 }
 
-window.addEventListener("resize", positionHistoryButton);
-
-function watchSiblingButtons(retries = 20) {
-  const corner = document.querySelector(".corner-badge");
-  const bulb = document.querySelector(".guide-lightbulb");
-  positionHistoryButton();
-  if ((!corner && !bulb) && retries > 0) {
-    setTimeout(() => watchSiblingButtons(retries - 1), 250);
-    return;
-  }
-  [corner, bulb].filter(Boolean).forEach((el) => {
-    const obs = new MutationObserver(() => positionHistoryButton());
-    obs.observe(el, { childList: true, characterData: true, subtree: true, attributes: true });
-  });
-}
-
 /* ============================================================
    STYLE
    ============================================================ */
@@ -391,7 +335,7 @@ function injectStyles() {
   style.id = "history-style";
   style.textContent = `
     .history-btn{
-      position:fixed;z-index:500;width:38px;height:38px;border-radius:50%;
+      width:38px;height:38px;border-radius:50%;flex-shrink:0;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);cursor:pointer;
       display:flex;align-items:center;justify-content:center;font-size:16px;
       box-shadow:0 10px 22px -10px rgba(70,50,25,.3);
@@ -454,7 +398,6 @@ function init() {
   injectStyles();
   loadLocalHistory(); // instan dari localStorage
   renderHistoryButton();
-  watchSiblingButtons();
   syncFromFirestore(); // latar belakang, tidak memblokir apa pun
 }
 
