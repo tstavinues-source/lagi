@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 <title>Kuis Metal Press — Latihan JP ⇄ ID</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
     /* ---- Latar hangat (bukan dark mode lagi) ---- */
@@ -56,10 +59,15 @@
   /* ============================================================
      MODE NEON CYBERPUNK — opsional, diaktifkan lewat theme.js
      ============================================================
-     Cukup override variabel DASAR di sini (bukan tiap komponen satu-
-     satu) — karena --teal-dark/--teal-light dkk dihitung dari var(--teal)
-     lewat color-mix(), begitu --teal berubah di sini, semua turunannya
-     otomatis ikut berubah ke seluruh halaman. */
+     Transformasi MENYELURUH: font, bentuk blok, border, bayangan,
+     efek hover — bukan cuma ganti warna. Variabel dasar (--teal,
+     --tomato, --ink, dst) tetap dioverride juga supaya semua
+     turunan color-mix() otomatis ikut, TAPI di bawah ini tiap
+     komponen juga di-restyle strukturnya secara eksplisit karena
+     banyak background di file lain (progress.js, guide.js,
+     history.js, explain.js, vocab.js) ditulis warna solid
+     (#FFFFFF dkk), bukan lewat variabel, jadi tidak ikut otomatis. */
+
   .cyberpunk-mode{
     --cream:#0a0e1a;
     --cream-2:#0f1524;
@@ -69,31 +77,261 @@
     --teal:#05d9e8;      /* cyan neon menggantikan teal */
     --tomato:#ff2a6d;    /* pink neon menggantikan terracotta */
     --sun:#fcee0a;
-    --card-grad: linear-gradient(160deg, #131a30 0%, #0b0f1e 100%);
-    --pill-grad: linear-gradient(160deg, #161d34 0%, #0d1222 100%);
+    --card-grad: linear-gradient(160deg, rgba(18,24,44,.92) 0%, rgba(8,11,20,.95) 100%);
+    --pill-grad: linear-gradient(160deg, rgba(20,27,50,.9) 0%, rgba(10,14,24,.92) 100%);
     --shadow-deep: 0 0 34px -6px rgba(5,217,232,.28), 0 1px 0 rgba(255,255,255,.05) inset;
     --shadow-pill: 0 0 18px -6px rgba(5,217,232,.22), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -3px 10px rgba(0,0,0,.5);
+  }
+  .cyberpunk-mode, .cyberpunk-mode input, .cyberpunk-mode button, .cyberpunk-mode textarea{
+    font-family:'Share Tech Mono', 'Segoe UI', monospace !important;
   }
   .cyberpunk-mode body{
     background:
       radial-gradient(circle at 10% -6%, rgba(5,217,232,.16), transparent 46%),
       radial-gradient(circle at 100% 6%, rgba(255,42,109,.18), transparent 42%),
-      radial-gradient(circle at 50% 118%, rgba(252,238,10,.10), transparent 50%),
+      radial-gradient(circle at 50% 118%, rgba(252,238,10,.08), transparent 50%),
       linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
   }
+  /* Scanline CRT tipis di seluruh layar — ciri khas cyberpunk */
+  .cyberpunk-mode body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:2;
+    background:repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(5,217,232,.025) 3px, transparent 4px);
+  }
+  .cyberpunk-mode body::before{ opacity:0; } /* matikan pola ombak seigaiha, ganti nuansa */
+
+  /* ---------- Matikan efek glossy bawaan (bubble sheen) — tidak cocok untuk cyberpunk ---------- */
+  .cyberpunk-mode .panel::after, .cyberpunk-mode .pill-btn::after,
+  .cyberpunk-mode .ans-btn::after, .cyberpunk-mode .set-card-inner::after,
+  .cyberpunk-mode .q-badge::after, .cyberpunk-mode .toggle-row::after,
+  .cyberpunk-mode .fb-status::after, .cyberpunk-mode .wrong-item::after,
+  .cyberpunk-mode .result-ring::after,
+  .cyberpunk-mode .panel::before, .cyberpunk-mode .pill-btn::before,
+  .cyberpunk-mode .ans-btn::before, .cyberpunk-mode .set-card-inner::before{
+    opacity:0;
+  }
+
+  /* ---------- Header ---------- */
+  .cyberpunk-mode .app-header .eyebrow{
+    letter-spacing:.35em;text-transform:uppercase;color:var(--teal);
+    text-shadow:0 0 8px var(--teal), 0 0 16px var(--teal);
+  }
   .cyberpunk-mode .app-header h1{
+    text-transform:uppercase;letter-spacing:.04em;
     background:linear-gradient(120deg, var(--teal), var(--tomato));
     -webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 0 10px rgba(5,217,232,.5));
+    filter:drop-shadow(0 0 10px rgba(5,217,232,.6)) drop-shadow(0 0 20px rgba(255,42,109,.3));
   }
-  .cyberpunk-mode .panel,
-  .cyberpunk-mode .pill-btn,
-  .cyberpunk-mode .set-card-inner,
-  .cyberpunk-mode .wrong-item{
-    border-color: rgba(5,217,232,.25) !important;
+  .cyberpunk-mode .app-header p{
+    text-transform:uppercase;letter-spacing:.05em;font-size:11.5px;color:var(--ink-soft);
+  }
+
+  /* ---------- Panel utama: sudut tegas, border neon, glow ---------- */
+  .cyberpunk-mode .panel{
+    border-radius:10px;
+    border:2px solid var(--teal);
+    box-shadow:0 0 24px -6px var(--teal), inset 0 0 20px rgba(5,217,232,.06);
+  }
+  .cyberpunk-mode .section-title{
+    color:var(--teal);text-shadow:0 0 6px var(--teal);letter-spacing:.2em;
+  }
+
+  /* ---------- Set picker: dari blok warna solid -> panel kaca ber-glow ---------- */
+  .cyberpunk-mode .set-card-inner{
+    background:rgba(8,12,22,.75) !important;
+    border-radius:8px;
+    border:2px solid var(--set-color, var(--teal));
+    box-shadow:0 0 16px -2px var(--set-color, var(--teal)), inset 0 0 12px rgba(5,217,232,.05);
+  }
+  .cyberpunk-mode .set-card:hover .set-card-inner{
+    box-shadow:0 0 26px -2px var(--set-color, var(--teal)), inset 0 0 16px rgba(5,217,232,.08);
+  }
+  /* Efek sapuan cahaya saat hover — ciri khas cyberpunk */
+  .cyberpunk-mode .set-card-inner, .cyberpunk-mode .panel{position:relative;overflow:hidden;}
+  .cyberpunk-mode .set-card-inner::after, .cyberpunk-mode .panel::after{
+    content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;
+    background:linear-gradient(100deg, transparent, rgba(5,217,232,.18), transparent);
+    transform:skewX(-18deg);transition:left .5s ease;opacity:1 !important;pointer-events:none;
+  }
+  .cyberpunk-mode .set-card:hover .set-card-inner::after{left:130%;}
+  .cyberpunk-mode .set-key{
+    background:transparent;
+    border:1.5px solid var(--set-color, var(--teal));
+    color:var(--set-color, var(--teal)) !important;
+    box-shadow:0 0 10px var(--set-color, var(--teal));
+  }
+  .cyberpunk-mode .set-title{
+    color:#eaf6ff;text-transform:uppercase;letter-spacing:.04em;
+    text-shadow:0 0 6px rgba(234,246,255,.35);
+  }
+  .cyberpunk-mode .set-count{color:var(--ink-soft);}
+  .cyberpunk-mode .set-card input:checked + .set-card-inner{
+    border-color:var(--tomato);
+    box-shadow:0 0 22px -2px var(--tomato), inset 0 0 16px rgba(255,42,109,.1);
+  }
+
+  /* ---------- Tombol pill: outline neon, bukan gradient solid ---------- */
+  .cyberpunk-mode .pill-btn{
+    background:transparent;
+    border:2px solid var(--teal);
+    border-radius:6px;
+    color:var(--teal);
+    text-transform:uppercase;letter-spacing:.08em;
+    box-shadow:0 0 12px -3px var(--teal);
+  }
+  .cyberpunk-mode .pill-btn.primary{
+    background:var(--teal);color:#00131a;
+    box-shadow:0 0 22px -2px var(--teal);
+  }
+  .cyberpunk-mode .pill-btn.ghost{
+    border-color:var(--ink-soft);color:var(--ink-soft);box-shadow:none;
+  }
+  .cyberpunk-mode .pill-btn:active{transform:translateY(2px) scale(.98);}
+
+  /* ---------- Toggle Fitur Tambahan ---------- */
+  .cyberpunk-mode .feature-toggle{
+    background:rgba(8,12,22,.7) !important;
+    border:1.5px solid var(--tomato);
+    border-radius:6px;
+  }
+  .cyberpunk-mode .feature-toggle.active{
+    border-color:var(--teal);
+    box-shadow:0 0 16px -4px var(--teal);
+  }
+  .cyberpunk-mode .feature-toggle .label{text-transform:uppercase;letter-spacing:.03em;}
+  .cyberpunk-mode .feature-toggle .dot{box-shadow:0 0 8px currentColor;}
+
+  /* ---------- Soal & jawaban ---------- */
+  .cyberpunk-mode .q-badge{
+    background:rgba(5,217,232,.08);border:1px solid var(--teal);
+    color:var(--teal);border-radius:4px;text-shadow:0 0 6px var(--teal);
   }
   .cyberpunk-mode .q-japanese{color:var(--ink);}
-  .cyberpunk-mode .q-indonesian{background:rgba(5,217,232,.06);border-color:rgba(5,217,232,.3);}
+  .cyberpunk-mode .q-indonesian{
+    background:rgba(5,217,232,.06);border-color:var(--teal);border-style:solid;color:var(--ink);
+  }
+  .cyberpunk-mode .q-image-wrap{background:rgba(8,12,22,.6);border-color:var(--teal);}
+  .cyberpunk-mode .ans-btn{
+    border-radius:6px;background:transparent !important;
+    text-transform:uppercase;letter-spacing:.05em;
+  }
+  .cyberpunk-mode .ans-btn.true-btn{border:2px solid var(--teal);color:var(--teal);box-shadow:0 0 14px -3px var(--teal);}
+  .cyberpunk-mode .ans-btn.false-btn{border:2px solid var(--tomato);color:var(--tomato);box-shadow:0 0 14px -3px var(--tomato);}
+  .cyberpunk-mode .ans-btn.correct{background:var(--teal) !important;color:#00131a;box-shadow:0 0 26px var(--teal);}
+  .cyberpunk-mode .ans-btn.incorrect{background:var(--tomato) !important;color:#1a0008;box-shadow:0 0 26px var(--tomato);}
+  .cyberpunk-mode .feedback.ok{color:var(--teal);text-shadow:0 0 8px var(--teal);}
+  .cyberpunk-mode .feedback.bad{color:var(--tomato);text-shadow:0 0 8px var(--tomato);}
+  .cyberpunk-mode .progress-bar{background:rgba(5,217,232,.1);}
+  .cyberpunk-mode .progress-fill{background:linear-gradient(90deg, var(--tomato), var(--teal));box-shadow:0 0 8px var(--teal);}
+
+  /* ---------- Hasil ---------- */
+  .cyberpunk-mode .result-ring{
+    background:
+      radial-gradient(circle, var(--cream) 62%, transparent 63%),
+      conic-gradient(var(--teal) calc(var(--pct)*1%), rgba(5,217,232,.12) 0);
+    box-shadow:0 0 30px -4px var(--teal);
+  }
+  .cyberpunk-mode #result-percent{color:var(--teal);text-shadow:0 0 8px var(--teal);}
+  .cyberpunk-mode .wrong-item{
+    background:rgba(8,12,22,.7) !important;border:1px solid var(--tomato);
+    border-left:4px solid var(--tomato);border-radius:6px;
+  }
+  .cyberpunk-mode .wrong-badge, .cyberpunk-mode .wrong-answer b{color:var(--teal);}
+  .cyberpunk-mode .wrong-ja, .cyberpunk-mode .wrong-id{color:var(--ink);}
+
+  /* ---------- fb-status ---------- */
+  .cyberpunk-mode .fb-status{
+    background:rgba(8,12,22,.7);border:1px solid var(--ink-soft);color:var(--ink-soft);
+  }
+  .cyberpunk-mode .fb-status.ok{color:var(--teal);border-color:var(--teal);text-shadow:0 0 6px var(--teal);}
+  .cyberpunk-mode .fb-status.warn{color:var(--sun);border-color:var(--sun);}
+
+  /* ---------- Badge musim (seasons.js) ---------- */
+  .cyberpunk-mode .season-badge{
+    background:rgba(8,12,22,.7) !important;color:var(--ink-soft);
+    border-color:var(--season-color, var(--teal)) !important;
+  }
+  .cyberpunk-mode .season-badge span{
+    color:var(--season-color, var(--teal)) !important;
+    text-shadow:0 0 6px var(--season-color, var(--teal));
+  }
+
+  /* ---------- Tombol bulat wadah pojok kiri atas (progress/guide/history/theme) ---------- */
+  .cyberpunk-mode .corner-badge, .cyberpunk-mode .guide-lightbulb,
+  .cyberpunk-mode .history-btn, .cyberpunk-mode .theme-btn{
+    background:rgba(8,12,22,.85) !important;
+    border:1.5px solid var(--teal) !important;
+    box-shadow:0 0 12px -3px var(--teal) !important;
+    filter:none !important;
+  }
+  .cyberpunk-mode .guide-lightbulb.active, .cyberpunk-mode .theme-btn.active{
+    background:radial-gradient(circle at 35% 30%, rgba(5,217,232,.5), rgba(5,217,232,.15)) !important;
+    box-shadow:0 0 18px var(--teal) !important;
+  }
+  .cyberpunk-mode .corner-badge-name{color:var(--ink) !important;}
+  .cyberpunk-mode .corner-badge-edit{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .corner-badge-avatar{
+    background:transparent !important;border:1px solid var(--teal);box-shadow:0 0 6px var(--teal);
+  }
+
+  /* ---------- Popup nama (progress.js) ---------- */
+  .cyberpunk-mode .name-overlay, .cyberpunk-mode .history-overlay{background:rgba(2,4,10,.75) !important;}
+  .cyberpunk-mode .name-modal, .cyberpunk-mode .history-modal{
+    background:linear-gradient(160deg, rgba(18,24,44,.97), rgba(8,11,20,.98)) !important;
+    border:2px solid var(--teal) !important;border-radius:10px !important;
+    box-shadow:0 0 40px -6px var(--teal) !important;
+  }
+  .cyberpunk-mode .name-modal-title, .cyberpunk-mode .history-title{
+    color:var(--teal) !important;text-shadow:0 0 8px var(--teal);text-transform:uppercase;letter-spacing:.05em;
+  }
+  .cyberpunk-mode .name-modal-desc{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .name-modal-input{
+    background:rgba(5,217,232,.06) !important;border:1.5px solid var(--teal) !important;color:var(--ink) !important;
+  }
+  .cyberpunk-mode .name-modal-btn.primary{background:var(--teal) !important;color:#00131a !important;}
+  .cyberpunk-mode .name-modal-btn.ghost{border-color:var(--ink-soft) !important;color:var(--ink-soft) !important;}
+  .cyberpunk-mode .history-close{background:rgba(255,42,109,.15) !important;color:var(--tomato) !important;}
+
+  /* ---------- Riwayat (history.js) ---------- */
+  .cyberpunk-mode .history-summary-item{background:rgba(5,217,232,.06) !important;border:1px solid var(--teal);}
+  .cyberpunk-mode .history-summary-num{color:var(--teal) !important;text-shadow:0 0 6px var(--teal);}
+  .cyberpunk-mode .history-summary-label{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .history-row{background:rgba(8,12,22,.7) !important;border:1px solid var(--ink-soft);border-radius:6px;}
+  .cyberpunk-mode .history-row-sets{color:var(--ink) !important;}
+  .cyberpunk-mode .history-row-score{color:var(--teal) !important;}
+  .cyberpunk-mode .history-row-date{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .history-trend.up{color:var(--teal) !important;}
+  .cyberpunk-mode .history-trend.down{color:var(--tomato) !important;}
+
+  /* ---------- Balon panduan (guide.js) ---------- */
+  .cyberpunk-mode .guide-bubble{
+    background:rgba(5,217,232,.12) !important;border:1px solid var(--teal);color:var(--ink) !important;
+    box-shadow:0 0 14px -2px var(--teal);
+  }
+  .cyberpunk-mode .guide-bubble.arrow-top::after{border-bottom-color:rgba(5,217,232,.9) !important;}
+  .cyberpunk-mode .guide-bubble.arrow-bottom::after{border-top-color:rgba(5,217,232,.9) !important;}
+  .cyberpunk-mode .guide-highlight{
+    box-shadow:0 0 0 3px var(--teal), 0 0 20px -2px var(--teal) !important;
+  }
+
+  /* ---------- Kata kunci & popup vocab (vocab.js, explain.js, keywordhints.js) ---------- */
+  .cyberpunk-mode .vocab-word{border-bottom-color:var(--teal) !important;}
+  .cyberpunk-mode .vocab-word:hover{background:rgba(5,217,232,.15) !important;color:var(--teal) !important;}
+  .cyberpunk-mode .vocab-popup, .cyberpunk-mode .kw-why-popup{
+    background:linear-gradient(160deg, rgba(18,24,44,.97), rgba(8,11,20,.98)) !important;
+    border:1px solid var(--teal) !important;box-shadow:0 0 20px -4px var(--teal) !important;
+  }
+  .cyberpunk-mode .vp-word, .cyberpunk-mode .kw-why-title span{color:var(--teal) !important;}
+  .cyberpunk-mode .vp-pos{background:rgba(255,42,109,.15) !important;color:var(--tomato) !important;}
+  .cyberpunk-mode .vp-base, .cyberpunk-mode .vp-id, .cyberpunk-mode .kw-why-body{color:var(--ink) !important;}
+  .cyberpunk-mode .explain-panel .expl-body{
+    background:rgba(8,12,22,.7) !important;border-left-color:var(--teal) !important;color:var(--ink) !important;
+  }
+  .cyberpunk-mode .explain-panel .expl-head{color:var(--teal) !important;text-shadow:0 0 6px var(--teal);}
+  .cyberpunk-mode .explain-panel .expl-kw{background:rgba(255,42,109,.15) !important;color:var(--ink) !important;}
+  .cyberpunk-mode .expl-kw-info{background:var(--tomato) !important;box-shadow:0 0 8px var(--tomato) !important;}
+  .cyberpunk-mode mark.kw-mark, .cyberpunk-mode .vocab-word.kw-mark{
+    background:rgba(255,42,109,.25) !important;box-shadow:0 0 0 1px rgba(255,42,109,.5) !important;
+  }
 
   /* ---------- Efek glossy universal untuk semua blok ---------- */
   .panel, .pill-btn, .ans-btn, .set-card-inner, .q-badge, .toggle-row,
