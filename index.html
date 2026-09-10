@@ -85,19 +85,19 @@
   .cyberpunk-mode, .cyberpunk-mode input, .cyberpunk-mode button, .cyberpunk-mode textarea{
     font-family:'Share Tech Mono', 'Segoe UI', monospace !important;
   }
-  .cyberpunk-mode body{
+  body.cyberpunk-mode{
     background:
       radial-gradient(circle at 10% -6%, rgba(5,217,232,.16), transparent 46%),
       radial-gradient(circle at 100% 6%, rgba(255,42,109,.18), transparent 42%),
       radial-gradient(circle at 50% 118%, rgba(252,238,10,.08), transparent 50%),
-      linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2)) !important;
   }
   /* Scanline CRT tipis di seluruh layar — ciri khas cyberpunk */
-  .cyberpunk-mode body::after{
+  body.cyberpunk-mode::after{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:2;
     background:repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(5,217,232,.025) 3px, transparent 4px);
   }
-  .cyberpunk-mode body::before{ opacity:0; } /* matikan pola ombak seigaiha, ganti nuansa */
+  body.cyberpunk-mode::before{ opacity:0; } /* matikan pola ombak seigaiha, ganti nuansa */
 
   /* ---------- Matikan efek glossy bawaan (bubble sheen) — tidak cocok untuk cyberpunk ---------- */
   .cyberpunk-mode .panel::after, .cyberpunk-mode .pill-btn::after,
