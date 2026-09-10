@@ -69,16 +69,19 @@
      (#FFFFFF dkk), bukan lewat variabel, jadi tidak ikut otomatis. */
 
   .cyberpunk-mode{
-    --cream:#0a0e1a;
-    --cream-2:#0f1524;
-    --cream-3:#161d30;
+    --cream:#010114;      /* nyaris hitam, persis basis referensi #01012b */
+    --cream-2:#04041c;
+    --cream-3:#080826;
     --ink:#eaf6ff;
     --ink-soft:#8fa8c4;
     --teal:#05d9e8;      /* cyan neon menggantikan teal */
     --tomato:#ff2a6d;    /* pink neon menggantikan terracotta */
     --sun:#fcee0a;
-    --card-grad: linear-gradient(160deg, rgba(18,24,44,.92) 0%, rgba(8,11,20,.95) 100%);
-    --pill-grad: linear-gradient(160deg, rgba(20,27,50,.9) 0%, rgba(10,14,24,.92) 100%);
+    /* Blok SENGAJA semi-transparan (bukan solid) supaya dekorasi musim
+       yang berjatuhan di belakang tetap kelihatan menembus — persis
+       seperti rgba(10,10,32,0.7-0.85) di referensi. */
+    --card-grad: linear-gradient(160deg, rgba(14,18,36,.78) 0%, rgba(6,8,18,.82) 100%);
+    --pill-grad: linear-gradient(160deg, rgba(16,21,42,.75) 0%, rgba(8,11,20,.8) 100%);
     --shadow-deep: 0 0 34px -6px rgba(5,217,232,.28), 0 1px 0 rgba(255,255,255,.05) inset;
     --shadow-pill: 0 0 18px -6px rgba(5,217,232,.22), inset 0 1px 0 rgba(255,255,255,.06), inset 0 -3px 10px rgba(0,0,0,.5);
   }
@@ -87,10 +90,20 @@
   }
   body.cyberpunk-mode{
     background:
-      radial-gradient(circle at 10% -6%, rgba(5,217,232,.16), transparent 46%),
-      radial-gradient(circle at 100% 6%, rgba(255,42,109,.18), transparent 42%),
-      radial-gradient(circle at 50% 118%, rgba(252,238,10,.08), transparent 50%),
+      radial-gradient(circle at 10% -6%, rgba(5,217,232,.10), transparent 46%),
+      radial-gradient(circle at 100% 6%, rgba(255,42,109,.12), transparent 42%),
+      radial-gradient(circle at 50% 118%, rgba(252,238,10,.05), transparent 50%),
       linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2)) !important;
+  }
+  /* Blok yang transparan (panel, kartu, dsb) butuh blur belakang supaya
+     tulisan tetap kebaca jelas walau dekorasi menembus di baliknya. */
+  .cyberpunk-mode .panel, .cyberpunk-mode .set-card-inner,
+  .cyberpunk-mode .pill-btn, .cyberpunk-mode .wrong-item,
+  .cyberpunk-mode .q-indonesian, .cyberpunk-mode .q-badge,
+  .cyberpunk-mode .fb-status, .cyberpunk-mode .season-badge,
+  .cyberpunk-mode .feature-toggle{
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
   /* Scanline CRT tipis di seluruh layar — ciri khas cyberpunk */
   body.cyberpunk-mode::after{
@@ -137,7 +150,7 @@
 
   /* ---------- Set picker: dari blok warna solid -> panel kaca ber-glow ---------- */
   .cyberpunk-mode .set-card-inner{
-    background:rgba(8,12,22,.75) !important;
+    background:rgba(10,10,32,.7) !important;
     border-radius:8px;
     border:2px solid var(--set-color, var(--teal));
     box-shadow:0 0 16px -2px var(--set-color, var(--teal)), inset 0 0 12px rgba(5,217,232,.05);
