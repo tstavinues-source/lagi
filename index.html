@@ -346,8 +346,14 @@
   .cyberpunk-mode .explain-panel .expl-head{color:var(--teal) !important;text-shadow:0 0 6px var(--teal);}
   .cyberpunk-mode .explain-panel .expl-kw{background:rgba(255,42,109,.15) !important;color:var(--ink) !important;}
   .cyberpunk-mode .expl-kw-info{background:var(--tomato) !important;box-shadow:0 0 8px var(--tomato) !important;}
-  .cyberpunk-mode mark.kw-mark, .cyberpunk-mode .vocab-word.kw-mark{
+  .cyberpunk-mode .q-japanese.kw-reveal mark.kw-mark,
+  .cyberpunk-mode .q-japanese.kw-reveal .vocab-word.kw-mark{
     background:rgba(255,42,109,.25) !important;box-shadow:0 0 0 1px rgba(255,42,109,.5) !important;
+  }
+  /* Pastikan tetap tersembunyi di mode cyberpunk kalau kata kunci belum diaktifkan/belum dijawab */
+  .cyberpunk-mode .q-japanese:not(.kw-reveal) mark.kw-mark,
+  .cyberpunk-mode .q-japanese:not(.kw-reveal) .vocab-word.kw-mark{
+    background:transparent !important;box-shadow:none !important;
   }
 
   /* ---------- Efek glossy universal untuk semua blok ---------- */
