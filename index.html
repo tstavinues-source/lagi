@@ -356,6 +356,42 @@
     background:transparent !important;box-shadow:none !important;
   }
 
+  /* ---------- Kuis kosakata (vocabquiz.js) ---------- */
+  .cyberpunk-mode .vocabquiz-btn{
+    background:rgba(8,12,22,.85) !important;border:1.5px solid var(--teal) !important;
+    box-shadow:0 0 12px -3px var(--teal) !important;
+  }
+  .cyberpunk-mode .vq-overlay{background:rgba(2,4,10,.8) !important;}
+  .cyberpunk-mode .vq-modal{
+    background:linear-gradient(160deg, rgba(18,24,44,.97), rgba(8,11,20,.98)) !important;
+    border:2px solid var(--teal) !important;border-radius:10px !important;
+    box-shadow:0 0 40px -6px var(--teal) !important;
+  }
+  .cyberpunk-mode .vq-close{background:rgba(255,42,109,.15) !important;color:var(--tomato) !important;}
+  .cyberpunk-mode .vq-progress{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .vq-pos{background:rgba(255,42,109,.15) !important;color:var(--tomato) !important;}
+  .cyberpunk-mode .vq-word{color:var(--teal) !important;text-shadow:0 0 8px var(--teal);}
+  .cyberpunk-mode .vq-base{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .vq-base b, .cyberpunk-mode .vq-question-label{color:var(--ink) !important;}
+  .cyberpunk-mode .vq-option{
+    background:rgba(8,12,22,.7) !important;border:1.5px solid var(--ink-soft) !important;color:var(--ink) !important;
+  }
+  .cyberpunk-mode .vq-option:hover:not(:disabled){border-color:var(--teal) !important;}
+  .cyberpunk-mode .vq-option.correct{background:rgba(5,217,232,.18) !important;border-color:var(--teal) !important;}
+  .cyberpunk-mode .vq-option.incorrect{background:rgba(255,42,109,.18) !important;border-color:var(--tomato) !important;}
+  .cyberpunk-mode .vq-feedback.ok{color:var(--teal) !important;}
+  .cyberpunk-mode .vq-feedback.bad{color:var(--tomato) !important;}
+  .cyberpunk-mode .vq-next, .cyberpunk-mode .vq-restart{
+    background:var(--teal) !important;color:#00131a !important;box-shadow:0 0 14px -2px var(--teal) !important;
+  }
+  .cyberpunk-mode .vq-close-btn{border-color:var(--ink-soft) !important;color:var(--ink-soft) !important;}
+  .cyberpunk-mode .vq-result-title{color:var(--teal) !important;}
+  .cyberpunk-mode .vq-result-score{color:var(--teal) !important;text-shadow:0 0 8px var(--teal);}
+  .cyberpunk-mode .vq-result-score span, .cyberpunk-mode .vq-wrong-title{color:var(--ink-soft) !important;}
+  .cyberpunk-mode .vq-wrong-row{background:rgba(8,12,22,.7) !important;border-left-color:var(--tomato) !important;}
+  .cyberpunk-mode .vq-wrong-word{color:var(--ink) !important;}
+  .cyberpunk-mode .vq-wrong-meaning{color:var(--ink-soft) !important;}
+
   /* ---------- Efek glossy universal untuk semua blok ---------- */
   .panel, .pill-btn, .ans-btn, .set-card-inner, .q-badge, .toggle-row,
   .fb-status, .wrong-item, .q-indonesian, .result-ring, .prompt-box textarea,
@@ -842,5 +878,6 @@
   <script type="module" src="guide.js"></script>
   <script type="module" src="seasons.js"></script>
   <script type="module" src="theme.js"></script>
+  <script type="module" src="vocabquiz.js"></script>
 </body>
 </html>
