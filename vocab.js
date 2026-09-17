@@ -21,7 +21,7 @@
    - reading (opsional): cara baca hiragana, dipakai untuk kata berkanji
    ============================================================ */
 
-const VOCAB = {
+export const VOCAB = {
   /* ---------- Partikel (kata bantu) ---------- */
   "は": { base: "は", pos: "partikel", id: "penanda topik kalimat" },
   "が": { base: "が", pos: "partikel", id: "penanda subjek" },
@@ -429,6 +429,15 @@ const VOCAB = {
   "とりつけます": { base: "とりつける (取り付ける)", pos: "kerja", id: "memasang" },
   "にもつ": { base: "にもつ (荷物)", pos: "benda", id: "muatan / barang bawaan" },
   "ぬきかこうした": { base: "ぬきかこうする (抜き加工する)", pos: "kerja", id: "sudah melakukan proses pemotongan/pelubangan" },
+
+  /* ---------- Kata kunci yang belum sempat masuk kamus (audit vocabquiz.js) ---------- */
+  "安全靴": { base: "あんぜんぐつ (安全靴)", pos: "benda", id: "sepatu keselamatan" },
+  "あんぜんきょういく": { base: "あんぜんきょういく (安全教育)", pos: "benda", id: "pelatihan keselamatan" },
+  "急停止": { base: "きゅうていし (急停止)", pos: "benda", id: "berhenti mendadak (emergency stop)" },
+  "おおきくなる": { base: "おおきい (大きい)", pos: "sifat-i", id: "menjadi besar" },
+  "安全一工程": { base: "あんぜんいちこうてい (安全一工程)", pos: "benda", id: "mode operasi satu-siklus aman" },
+  "バラツキ": { base: "バラツキ", pos: "benda", id: "variasi / dispersi (sifat tidak seragam)" },
+  "ダレ": { base: "ダレ", pos: "benda", id: "bagian membulat di tepi hasil potong (rollover)" },
   "そざい": { base: "そざい (素材)", pos: "benda", id: "bahan mentah / material dasar" },
   "円筒絞り": { base: "えんとうしぼり (円筒絞り)", pos: "benda", id: "penarikan silinder" },
   "付き": { base: "つき (付き)", pos: "lainnya", id: "dengan / dilengkapi" },
