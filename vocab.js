@@ -455,7 +455,7 @@ export const VOCAB = {
   "クラッチ": { base: "クラッチ", pos: "benda", id: "clutch (kopling)" },
   "ポジティブ式": { base: "ポジティブしき (ポジティブ式)", pos: "benda", id: "tipe positif (positive)" },
   "フリクション式": { base: "フリクションしき (フリクション式)", pos: "benda", id: "tipe friksi / gesek" },
-  "噛動式": { base: "噛動式", pos: "benda", id: "tipe gigit/kait (padanan tipe positif)" },
+  "噛動式": { base: "かくどうしき (噛動式)", pos: "benda", id: "tipe positif / gigit (positive clutch)" },
   "摩擦式": { base: "まさつしき (摩擦式)", pos: "benda", id: "tipe gesek" },
   "作業開始": { base: "さぎょうかいし (作業開始)", pos: "benda", id: "mulai kerja" },
   "点検": { base: "てんけん (点検)", pos: "benda", id: "pemeriksaan / inspeksi" },
