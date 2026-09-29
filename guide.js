@@ -50,7 +50,7 @@ const GUIDE_STEPS = [
     screen: "screen-home",
     selector: "#toggle-order",
     placement: "top",
-    text: "Klik untuk memilih urutan soal: Berurutan (Set A → G) atau Acak.",
+    text: "Klik untuk memilih urutan soal: Berurutan (Set A → 12-4) atau Acak.",
   },
   {
     screen: "screen-home",
