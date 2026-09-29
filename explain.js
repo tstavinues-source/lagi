@@ -168,7 +168,7 @@ const EXPLANATIONS = {
   "G-3": { keywords: ["ナックルプレス", "潰し"], explanation: "Knuckle press punya mekanisme yang menghasilkan tonase besar di titik bawah, cocok untuk proses coining/penekanan padat." },
   "G-4": { keywords: ["スクリュープレス"], explanation: "Screw press dipakai untuk proses tekan kecepatan rendah (coining/forging), bukan piercing kecepatan tinggi." },
   "G-5": { keywords: ["肩幅", "板厚"], explanation: "Lebar bahu die tekuk memang harus jauh lebih besar dari tebal pelat (aturan umum sekitar 6-8x)." },
-  "G-6": { keywords: ["曲げ半径", "スプリングバック"], explanation: "Semakin besar radius tekuk, semakin sedikit deformasi plastis yang terjadi sehingga springback makin besar." },
+  "G-6": { keywords: ["曲げ半径", "スプリングバック"], explanation: "Menurut kunci lembar latihan (Set G dan lembar 12-4), pernyataan ini SALAH. Catatan: secara teori umum springback cenderung membesar jika radius tekuk makin besar, tetapi untuk ujian ikuti kunci jawaban lembar ini." },
   "G-7": { keywords: ["四角"], explanation: "Bentuk pada gambar adalah lingkaran, jadi harus dipotong pakai punch bulat, bukan punch persegi." },
   "G-8": { keywords: ["ダイラジアス"], explanation: "Ini memang istilah standar — R pada drawing die disebut die radius." },
   "G-9": { keywords: ["中心線", "一点鎖線"], explanation: "Ini aturan standar gambar teknik (JIS): garis sumbu memang digambar dengan garis putus-titik tipis." },
@@ -183,6 +183,24 @@ const EXPLANATIONS = {
   "G-18": { keywords: ["消火器", "電源盤"], explanation: "Area depan alat pemadam & panel listrik wajib bebas hambatan supaya bisa diakses cepat saat darurat." },
   "G-19": { keywords: ["安全靴"], explanation: "Sepatu keselamatan wajib dipakai saat bekerja dengan mesin press untuk melindungi kaki dari benda jatuh/tajam." },
   "G-20": { keywords: ["目の高さ"], explanation: "Muatan forklift seharusnya DI BAWAH ketinggian mata supaya pandangan ke depan tidak terhalang." },
+  /* ================= SET 12-x (soal baru dari lembar latihan) ================= */
+  "12-1-15": { keywords: ["せん断力", "クリアランス"], explanation: "Sesuai kunci lembar 12-1, pernyataan ini SALAH. Gaya potong dihitung dari panjang geser, tebal pelat, dan kekuatan geser material; clearance terutama memengaruhi bentuk permukaan geser, bukan rumus dasar gaya potong." },
+  "12-1-18": { keywords: ["ジュラルミン", "合金"], explanation: "Duralumin (paduan Al-Cu-Mg) adalah paduan aluminium berkekuatan tinggi, jadi pernyataan ini BENAR." },
+  "12-2-2": { keywords: ["ストローク", "自由に"], explanation: "Stroke crank press ditentukan oleh radius/eksentrisitas crank sehingga pada dasarnya tetap, tidak bisa diatur sebebas-bebasnya." },
+  "12-3-1": { keywords: ["ポジティブ式", "フリクション式"], explanation: "Clutch mesin press mekanis memang terdiri dari tipe positif (mengunci kaku) dan tipe friksi (gesek)." },
+  "12-3-4": { keywords: ["異常", "作業を優先"], explanation: "Jika saat pemeriksaan ditemukan kelainan pada mesin, mesin harus diperbaiki/dilaporkan dulu — keselamatan didahulukan, bukan pekerjaan." },
+  "12-3-5": { keywords: ["ダイ", "パンチ側", "潤滑油"], explanation: "Pada proses drawing, pelumas umumnya dioleskan pada sisi die/permukaan pelat yang bergesekan dengan die, bukan sisi punch (gesekan pada punch justru membantu menarik pelat)." },
+  "12-3-7": { keywords: ["クリアランス", "大きい場合", "破断面"], explanation: "Clearance yang terlalu besar membuat zona patah (fracture) lebih lebar dan permukaan geser menyempit, jadi 'permukaan patah kecil' itu keliru." },
+  "12-3-9": { keywords: ["ファインブランキング", "大きくした"], explanation: "Fine blanking justru memakai clearance sangat kecil (mendekati nol) agar permukaan potong halus, bukan clearance besar." },
+  "12-3-11": { keywords: ["ガイドポスト", "精度"], explanation: "Guide post menjaga posisi cetakan atas dan bawah tetap presisi saat bergerak." },
+  "12-3-13": { keywords: ["表面処理鋼板", "メッキ"], explanation: "Pelat baja perlakuan permukaan adalah pelat yang permukaannya dilapisi, misalnya plating/galvanis." },
+  "12-3-15": { keywords: ["亀裂", "伸びの小さい"], explanation: "Material dengan elongasi (kemuluran) kecil kurang mampu meregang sehingga lebih mudah retak saat ditekuk." },
+  "12-3-18": { keywords: ["標識", "たばこ"], explanation: "Tanda lingkaran dengan garis coret dan rokok berarti DILARANG MEROKOK." },
+  "12-3-19": { keywords: ["タオル", "ぶら下げて"], explanation: "Handuk yang menggantung bisa tersangkut mesin yang bergerak — berbahaya walaupun cuaca panas." },
+  "12-3-20": { keywords: ["両手操作式", "両手"], explanation: "Alat kontrol dua tangan mewajibkan kedua tangan menekan tombol sehingga tangan tidak berada di area cetakan saat slide turun." },
+  "12-4-1": { keywords: ["安全一工程運転", "止まる"], explanation: "Mode safety one-stroke justru dirancang supaya slide BISA dihentikan darurat kapan saja selama bergerak turun." },
+  "12-4-5": { keywords: ["V曲げ", "肩幅"], explanation: "Lebar bahu die tekuk (W) memang dibuat lebih lebar pada V-bending (aturan umum sekitar 6-8x tebal pelat)." },
+  "12-4-18": { keywords: ["消火器", "周り"], explanation: "Area di sekitar alat pemadam wajib bebas hambatan supaya bisa diakses cepat saat darurat." },
 };
 
 /* ============================================================
