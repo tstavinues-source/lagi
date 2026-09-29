@@ -230,7 +230,7 @@ const QUIZ_SETS = {
       { no: 4, ja: "高速の打ち抜き加工にはスクリュープレスを使います。", id: "Screw press digunakan untuk proses pukul lubang (blanking) berkecepatan tinggi.", answer: false },
       { no: 5, ja: "下の図のようなV曲げ加工するときは曲げダイの肩幅Wは板厚Tよりも大きくします。", id: "Saat melakukan penekukan V seperti pada gambar, lebar bahu die tekuk W dibuat lebih besar daripada ketebalan pelat T.", answer: true, img: "G-5.png" },
 
-      { no: 6, ja: "曲げ半径が大きいほどスプリングバックも大きくなります。", id: "Semakin besar radius tekuk, semakin besar pula springback yang terjadi.", answer: true },
+      { no: 6, ja: "曲げ半径が大きいほどスプリングバックも大きくなります。", id: "Semakin besar radius tekuk, semakin besar pula springback yang terjadi.", answer: false },
       { no: 7, ja: "下の図のAの部分は四角のパンチで抜きます。", id: "Bagian A pada gambar dilubangi menggunakan punch berbentuk persegi.", answer: false, img: "G-7.png" },
 
       { no: 8, ja: "絞りダイのRはダイラジアスとも言います。", id: "R pada die penarikan (drawing die) juga disebut die radius.", answer: true },
@@ -247,6 +247,110 @@ const QUIZ_SETS = {
       { no: 18, ja: "消火器や電源盤の前にものを置いてもよいです。", id: "Boleh meletakkan barang di depan alat pemadam kebakaran atau panel listrik.", answer: false },
       { no: 19, ja: "金属プレス作業をするときは安全靴をはきます。", id: "Saat melakukan pekerjaan metal press, wajib memakai sepatu keselamatan (safety shoes).", answer: true },
       { no: 20, ja: "フォークリフトを運転するときはパレットを目の高さより高くします。", id: "Saat mengemudikan forklift, palet harus dinaikkan lebih tinggi dari ketinggian mata.", answer: false },
+    ],
+  },
+  /* ---------- Set 12-1 s/d 12-4 (dari lembar latihan foto) ----------
+     src = soal yang sama dengan Set lama (penjelasan & kata kunci ikut dipakai).
+     img = memakai file gambar yang sudah ada, tidak perlu upload ulang. */
+  "12-1": {
+    title: "Set 12-1 — Lembar Latihan 12-1",
+    questions: [
+      { no: 1, ja: "スクリュープレスは こうそくど うちぬきかこうに つかいます", id: "Screw press digunakan untuk proses pukul lubang (piercing/blanking) berkecepatan tinggi.", answer: false, src: "A-1" },
+      { no: 2, ja: "クランクプレスの ストロークながさは クランクの はんけいと おなじです", id: "Panjang stroke pada crank press sama dengan jari-jari (radius) crank.", answer: false, src: "A-2" },
+      { no: 3, ja: "トランスファプレスは たこうていの れんぞくかこうをするための プレスです", id: "Transfer press adalah mesin press untuk melakukan proses berkelanjutan multi-tahap (multi-station).", answer: true, src: "A-3" },
+      { no: 4, ja: "ずは Cがた フレームの プレスきかいです", id: "Gambar tersebut adalah mesin press dengan rangka (frame) tipe C.", answer: true, img: "A-4.png", src: "A-4" },
+      { no: 5, ja: "フリクションクラッチつきの クランクプレスは すんどううんてんが できません", id: "Crank press yang dilengkapi friction clutch tidak dapat melakukan operasi inching (gerak sedikit demi sedikit).", answer: false, src: "A-5" },
+      { no: 6, ja: "うちぬきりょくは せんだんながさ いたあつ ざいしつを きじゅんに けいさんします", id: "Gaya pemotongan (blanking force) dihitung berdasarkan panjang geser, ketebalan pelat, dan jenis bahan.", answer: true, src: "A-6" },
+      { no: 7, ja: "プレスかこうには おもに うちぬき・まげ・せいけい・しぼりなどが あります", id: "Proses press terutama meliputi pemotongan (blanking), penekukan (bending), pembentukan (forming), dan penarikan (drawing).", answer: true, src: "A-7" },
+      { no: 8, ja: "ずの Aのぶぶんは がいけいぬきで かこうします", id: "Bagian A pada gambar diproses dengan pemotongan bentuk luar (outline blanking).", answer: false, img: "A-8.png", src: "A-8" },
+      { no: 9, ja: "うわがたは プレスきかいの スライドがわに とりつけます", id: "Cetakan atas (upper die) dipasang pada sisi slide mesin press.", answer: true, src: "D-11" },
+      { no: 10, ja: "うちぬきがたの ストリッパーはパンチから ざいりょうを ひきはなすための ものです", id: "Stripper pada cetakan pemotongan berfungsi melepaskan material dari punch.", answer: true, src: "A-10" },
+      { no: 11, ja: "ずの プレスきかいに かながたを とりつけるときは うわがたから こていします", id: "Saat memasang cetakan pada mesin press, pemasangan dimulai dari fiksasi cetakan atas (upper die) terlebih dahulu.", answer: true, src: "A-11" },
+      { no: 12, ja: "しぼりダイの Rはダイラジアスとも いいます", id: "R pada die penarikan (drawing die) juga disebut die radius.", answer: true, src: "A-12" },
+      { no: 13, ja: "ぬきかこうした せいひんの キズの げんいんのひとつに かすあがりが あります", id: "Salah satu penyebab cacat pada produk hasil pemotongan adalah naiknya sisa potongan (scrap lift-up).", answer: true, src: "A-13" },
+      { no: 14, ja: "フランジつきえんとうしぼりをおこなうときに できるしわは ノックアウトりょくを つよくすると すくなくできます", id: "Saat melakukan penarikan silinder berflensa, kerutan yang terjadi dapat dikurangi dengan memperkuat gaya knockout.", answer: false, src: "A-14" },
+      { no: 15, ja: "一般にせん断力はクリアランスを大きくすると小さくなります。", id: "Pada umumnya gaya geser (shear force) menjadi lebih kecil jika clearance diperbesar.", answer: false },
+      { no: 16, ja: "パンチとダイのクリアランスがおおきいと ずのようににじせんだんめんが できます", id: "Jika clearance antara punch dan die besar, akan terbentuk permukaan geser ganda seperti pada gambar.", answer: false, img: "A-16.png", src: "A-16" },
+      { no: 17, ja: "プレスかこうよう ざいりょうとして おおく つかわれているのは ねっかんあつえんなんこうはん（SPHC）と れいかんあつえんこうはん（SPCC）です", id: "Bahan yang paling banyak digunakan untuk proses press adalah pelat baja canai panas lunak (SPHC) dan pelat baja canai dingin (SPCC).", answer: true, src: "A-17" },
+      { no: 18, ja: "ジュラルミンはアルミニウム合金の一つです。", id: "Duralumin adalah salah satu jenis paduan aluminium.", answer: true },
+      { no: 19, ja: "かながたの とりはずしに つかう こうぐは ボルスタの うえに おいたまま さぎょうをしても よいです", id: "Alat yang digunakan untuk melepas cetakan boleh dibiarkan tergeletak di atas bolster selama bekerja.", answer: false, src: "A-19" },
+      { no: 20, ja: "てさぎょうでの プレスさぎょうは あんぜんいちこうていうんてんで します", id: "Pekerjaan press secara manual dilakukan dengan operasi satu-siklus aman (safety single stroke).", answer: true, src: "A-20" },
+    ],
+  },
+  "12-2": {
+    title: "Set 12-2 — Lembar Latihan 12-2",
+    questions: [
+      { no: 1, ja: "こうせんしきあんぜんそうちの ていしせいのうは にんげんの てが うごくはやさを きじゅんに しています", id: "Kemampuan berhenti alat pengaman tipe sinar (photoelectric) didasarkan pada standar kecepatan gerak tangan manusia.", answer: true, src: "F-1" },
+      { no: 2, ja: "クランクプレスはストロークを自由に設定できます。", id: "Crank press dapat mengatur (menyetel) panjang stroke secara bebas.", answer: false },
+      { no: 3, ja: "スクリュープレスは こうそくど うちぬきかこうに つかいます", id: "Screw press digunakan untuk proses pukul lubang (piercing/blanking) berkecepatan tinggi.", answer: false, src: "F-3" },
+      { no: 4, ja: "ずの プレスきかいの ダイハイトはA です", id: "Tinggi cetakan (die height) mesin press pada gambar ditunjukkan oleh A.", answer: true, img: "F-4.png", src: "F-4" },
+      { no: 5, ja: "プレスきかいの フリクションクラッチは ローリングキーにより どうりょくを つたえます", id: "Friction clutch pada mesin press meneruskan tenaga penggerak melalui rolling key.", answer: false, src: "F-5" },
+      { no: 6, ja: "うちぬきかこうと せんだんかこうの げんりは おなじです", id: "Prinsip proses pemotongan lubang (blanking) dan proses pemotongan geser (shearing) adalah sama.", answer: true, src: "F-6" },
+      { no: 7, ja: "ずの ぶひんの かこうは Vまげかこうが てきしています", id: "Proses pembuatan komponen pada gambar cocok menggunakan proses tekuk V.", answer: false, img: "F-7.png", src: "F-7" },
+      { no: 8, ja: "ざいりょうから せいひんをうちぬくときは のこったざいりょうの めんせきを できるだけ ちいさくなるように します", id: "Saat memotong produk dari lembaran material, luas sisa material (scrap) harus dibuat sekecil mungkin.", answer: true, src: "F-8" },
+      { no: 9, ja: "まげがたには Lまげがた Uまげがた などが あります", id: "Jenis cetakan tekuk (bending die) meliputi tipe tekuk L dan tipe tekuk U, dan lain-lain.", answer: true, src: "B-9" },
+      { no: 10, ja: "しぼりパンチのRは パンチラジアスとも いいます", id: "R pada punch penarikan juga disebut punch radius.", answer: true, src: "F-10" },
+      { no: 11, ja: "クリアランスとは パンチとダイの すきまを いいます", id: "Clearance adalah celah (jarak) antara punch dan die.", answer: true, src: "F-11" },
+      { no: 12, ja: "ずのうちぬきかじゅうは パンチにシャーかく（けいしゃかく）をつけても ちいさくなりません", id: "Beban pemotongan pada gambar tidak akan berkurang meskipun punch diberi sudut geser (shear angle).", answer: false, img: "F-12.png", src: "F-12" },
+      { no: 13, ja: "まげかこうではそざいの あつえんほうこうに きをつけます", id: "Pada proses penekukan (bending), perlu memperhatikan arah pengerolan (rolling direction) material.", answer: true, src: "F-13" },
+      { no: 14, ja: "ずの うちぬきせいひんの Aは バリです", id: "A pada produk hasil pemotongan di gambar adalah burr (sisa tajam).", answer: false, img: "F-14.png", src: "F-14" },
+      { no: 15, ja: "スプリングバックとは じかんがたって へんけいすることです", id: "Spring back adalah perubahan bentuk (deformasi) yang terjadi seiring berjalannya waktu.", answer: false, src: "F-15" },
+      { no: 16, ja: "ほそながいぶひんを Vまげかこうすると ずのような そりが でやすいです", id: "Jika komponen yang panjang dan sempit ditekuk-V, kelengkungan seperti pada gambar mudah terjadi.", answer: true, img: "F-16.png", src: "F-16" },
+      { no: 17, ja: "ステンレスこうはんは すべて じしゃくが つきません", id: "Semua pelat baja tahan karat (stainless) tidak dapat ditempeli magnet.", answer: false, src: "F-17" },
+      { no: 18, ja: "プレスかこうよう ざいりょうとして おおくつかわれているのは ねっかんあつえん なんこうはん（SPHC）と れいかんあつえんこうはん（SPCC）です", id: "Bahan yang paling banyak digunakan untuk proses press adalah pelat baja canai panas lunak (SPHC) dan pelat baja canai dingin (SPCC).", answer: true, src: "F-18" },
+      { no: 19, ja: "このひょうしきが あるところは あんぜんです", id: "Tempat yang terdapat tanda peringatan (segitiga seru) ini aman.", answer: false, img: "F-19.png", src: "F-19" },
+      { no: 20, ja: "だいしゃを おすときは にもつを めのたかさより たかくします", id: "Saat mendorong kereta dorong (trolley), muatan harus dinaikkan lebih tinggi dari ketinggian mata.", answer: false, src: "F-20" },
+    ],
+  },
+  "12-3": {
+    title: "Set 12-3 — Lembar Latihan 12-3",
+    questions: [
+      { no: 1, ja: "機械プレスのクラッチにはポジティブ式（噛動式）とフリクション式（摩擦式）があります。", id: "Clutch pada mesin press mekanis terdiri dari tipe positif (positive) dan tipe friksi (gesek).", answer: true },
+      { no: 2, ja: "ずの Aは プレスきかいの フレームです", id: "A pada gambar adalah rangka (frame) mesin press.", answer: false, img: "D-5.png", src: "D-5" },
+      { no: 3, ja: "シャンクは金型の大きさ、重さに関係なくすべての上型に付けます。", id: "Shank dipasang pada semua cetakan atas tanpa memandang ukuran dan berat cetakan.", answer: false, src: "G-10" },
+      { no: 4, ja: "作業開始前の点検で機械に異常があっても作業を優先します。", id: "Meskipun saat pemeriksaan sebelum mulai kerja ditemukan kelainan pada mesin, pekerjaan tetap didahulukan.", answer: false },
+      { no: 5, ja: "絞り加工では一般にダイよりパンチ側に潤滑油を塗ると良いです。", id: "Pada proses penarikan (drawing), umumnya lebih baik mengoleskan minyak pelumas pada sisi punch daripada sisi die.", answer: false },
+      { no: 6, ja: "絞りダイのRはダイラジアスとも言います。", id: "R pada die penarikan (drawing die) juga disebut die radius.", answer: true, src: "G-8" },
+      { no: 7, ja: "クリアランスが適正な数値よりも大きい場合、破断面は小さいです。", id: "Jika clearance lebih besar dari nilai yang tepat, permukaan patah (fracture surface) menjadi kecil.", answer: false },
+      { no: 8, ja: "機械製図で中心線は細い一点鎖線で表します。", id: "Dalam gambar teknik mesin, garis sumbu (center line) digambarkan dengan garis putus-titik tipis.", answer: true, src: "G-9" },
+      { no: 9, ja: "せん断加工でパンチとダイのクリアランスを大きくした加工をファインブランキングと言います。", id: "Proses geser yang dilakukan dengan memperbesar clearance antara punch dan die disebut fine blanking.", answer: false },
+      { no: 10, ja: "ナックルプレスは潰しを含んだ加工に適しています。", id: "Knuckle press cocok digunakan untuk proses yang melibatkan penekanan padat/coining.", answer: true, src: "G-3" },
+      { no: 11, ja: "金型のガイドポストは上型と下型の位置の精度を上げるために有ります。", id: "Guide post pada cetakan berfungsi meningkatkan ketepatan posisi antara cetakan atas dan cetakan bawah.", answer: true },
+      { no: 12, ja: "フランジ付き円筒絞りのしわはノックアウト力を強くすると少なくなります。", id: "Saat melakukan penarikan silinder berflensa, kerutan yang terjadi dapat dikurangi dengan memperkuat gaya knockout.", answer: false, src: "G-12" },
+      { no: 13, ja: "表面処理鋼板とは表面にメッキなどをした物を言います。", id: "Pelat baja perlakuan permukaan adalah pelat yang permukaannya diberi pelapisan seperti plating.", answer: true },
+      { no: 14, ja: "下の図の打ち抜き製品のAはバリです。", id: "A pada produk hasil pemotongan di gambar adalah burr (sisa tajam).", answer: false, img: "G-14.png", src: "G-14" },
+      { no: 15, ja: "曲げ加工の亀裂は伸びの小さい材料に多いです。", id: "Retakan pada proses tekuk lebih sering terjadi pada material dengan elongasi (kemuluran) kecil.", answer: true },
+      { no: 16, ja: "パンチとダイのクリアランスがおおきいと ずのようににじせんだんめんが できます", id: "Jika clearance antara punch dan die besar, akan terbentuk permukaan geser ganda seperti pada gambar.", answer: false, img: "A-16.png", src: "A-16" },
+      { no: 17, ja: "冷間圧延鋼板は熱間圧延鋼板に比べて整形性がすぐれています。", id: "Pelat baja canai dingin memiliki sifat mampu bentuk (formability) yang lebih baik dibandingkan pelat baja canai panas.", answer: true, src: "G-17" },
+      { no: 18, ja: "下の標識が有る所ではたばこを吸ってはいけません。", id: "Di tempat yang terdapat tanda di bawah, dilarang merokok.", answer: true, img: "12-3-18.png" },
+      { no: 19, ja: "暑いときは首や腰にタオルをぶら下げて作業しても良いです。", id: "Saat cuaca panas, boleh bekerja dengan menggantungkan handuk di leher atau pinggang.", answer: false },
+      { no: 20, ja: "両手操作式安全装置は押しボタンを両手で押して動かします。", id: "Alat pengaman kontrol dua tangan dioperasikan dengan menekan tombol tekan menggunakan kedua tangan.", answer: true },
+    ],
+  },
+  "12-4": {
+    title: "Set 12-4 — Prediksi Soal Ujian ★",
+    gold: true,
+    questions: [
+      { no: 1, ja: "安全一工程運転でのスライド加工中は止まることが出来ません。", id: "Pada operasi satu-siklus aman (safety single stroke), slide tidak dapat dihentikan saat sedang memproses.", answer: false },
+      { no: 2, ja: "下の図のプレス機械のダイハイトの寸法はAです。", id: "Dimensi tinggi cetakan (die height) mesin press pada gambar ditunjukkan oleh A.", answer: true, img: "G-2.png", src: "G-2" },
+      { no: 3, ja: "ナックルプレスは潰しを含んだ加工に適しています。", id: "Knuckle press cocok digunakan untuk proses yang melibatkan penekanan padat/coining.", answer: true, src: "G-3" },
+      { no: 4, ja: "高速の打ち抜き加工にはスクリュープレスを使います。", id: "Screw press digunakan untuk proses pukul lubang (blanking) berkecepatan tinggi.", answer: false, src: "G-4" },
+      { no: 5, ja: "図のようなV曲げ加工をする時、曲げダイの肩幅Wは大きくなります。", id: "Saat melakukan penekukan V seperti pada gambar, lebar bahu die tekuk (W) menjadi lebih besar.", answer: true, img: "G-5.png" },
+      { no: 6, ja: "曲げ半径が大きいほどスプリングバックは大きくなります。", id: "Semakin besar radius tekuk, semakin besar springback yang terjadi.", answer: false, src: "G-6" },
+      { no: 7, ja: "下の図のAの部分は四角のパンチで抜きます。", id: "Bagian A pada gambar dilubangi menggunakan punch berbentuk persegi.", answer: false, img: "G-7.png", src: "G-7" },
+      { no: 8, ja: "絞りダイのRはダイラジアスとも言います。", id: "R pada die penarikan (drawing die) juga disebut die radius.", answer: true, src: "G-8" },
+      { no: 9, ja: "機械製図で中心線は細い一点鎖線で表します。", id: "Dalam gambar teknik mesin, garis sumbu (center line) digambarkan dengan garis putus-titik tipis.", answer: true, src: "G-9" },
+      { no: 10, ja: "シャンクは金型の大きさ、重さに関係なくすべての上型に付けます。", id: "Shank dipasang pada semua cetakan atas tanpa memandang ukuran dan berat cetakan.", answer: false, src: "G-10" },
+      { no: 11, ja: "U曲げ型はパンチよりダイのほうが摩耗しやすいです。", id: "Pada cetakan tekuk U, bagian die lebih mudah aus dibandingkan punch.", answer: true, src: "G-11" },
+      { no: 12, ja: "フランジ付き円筒絞りのしわはノックアウト力を強くすると少なくなります。", id: "Saat melakukan penarikan silinder berflensa, kerutan yang terjadi dapat dikurangi dengan memperkuat gaya knockout.", answer: false, src: "G-12" },
+      { no: 13, ja: "精密な穴抜き加工ではパンチの摩耗が穴の寸法に影響します。", id: "Pada proses pelubangan presisi, keausan punch mempengaruhi dimensi lubang yang dihasilkan.", answer: true, src: "G-13" },
+      { no: 14, ja: "下の図の打ち抜き製品のAはバリです。", id: "A pada produk hasil pemotongan di gambar adalah burr (sisa tajam).", answer: false, img: "G-14.png", src: "G-14" },
+      { no: 15, ja: "絞り加工ではショックマーク（リングマーク）はできません。", id: "Pada proses penarikan (drawing), tanda kejut (shock mark / ring mark) tidak akan muncul.", answer: false, src: "G-15" },
+      { no: 16, ja: "アルミニウム棒金材料はすべて伸びやすい材料です。", id: "Semua bahan batang (bar) aluminium adalah bahan yang mudah mulur.", answer: false, src: "G-16" },
+      { no: 17, ja: "冷間圧延鋼板は熱間圧延鋼板に比べて整形性がすぐれています。", id: "Pelat baja canai dingin memiliki sifat mampu bentuk (formability) yang lebih baik dibandingkan pelat baja canai panas.", answer: true, src: "G-17" },
+      { no: 18, ja: "消火器の周りに物を置いても良いです。", id: "Boleh meletakkan barang di sekitar alat pemadam kebakaran.", answer: false },
+      { no: 19, ja: "作業をするときは安全靴を履きます。", id: "Saat bekerja, wajib memakai sepatu keselamatan (safety shoes).", answer: true, src: "G-19" },
+      { no: 20, ja: "フォークリフトで物を運ぶ時は目の高さより高くします。", id: "Saat mengangkut barang dengan forklift, barang dinaikkan lebih tinggi dari ketinggian mata.", answer: false, src: "G-20" },
     ],
   },
 };
@@ -530,11 +634,11 @@ function renderSetPicker() {
   Object.keys(state.allSets).forEach((key, i) => {
     const set = state.allSets[key];
     const card = document.createElement("label");
-    card.className = "set-card";
+    card.className = "set-card" + (set.gold ? " gold" : "");
     card.innerHTML = `
       <input type="checkbox" class="set-check" data-key="${key}" />
       <span class="set-card-inner" style="--set-color:${colorForIndex(i)}">
-        <span class="set-key">${key}</span>
+        <span class="set-key${key.length > 2 ? " long" : ""}">${key}</span>
         <span class="set-title">${set.title}</span>
         <span class="set-count">${set.questions.length} soal</span>
       </span>
@@ -590,6 +694,14 @@ function beginSession(items) {
   renderQuestion();
 }
 
+/** Soal salinan (punya field src, mis. "A-4") memakai penjelasan & kata kunci
+ *  milik soal aslinya — jadi tidak perlu menulis ulang di explain.js/keywordhints.js. */
+function refKey(q) {
+  if (!q.src) return [q.setKey, q.no];
+  const i = q.src.lastIndexOf("-");
+  return [q.src.slice(0, i), Number(q.src.slice(i + 1))];
+}
+
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -607,7 +719,8 @@ function renderQuestion() {
   els.progressLabel.textContent = `Soal ${state.index + 1} / ${total}`;
   els.scoreLabel.textContent = `Skor: ${state.score}`;
   els.qSetBadge.textContent = `Set ${current.setKey} · No. ${current.no}`;
-  els.qJapanese.innerHTML = highlightKeywords(annotateJapanese(current.ja), current.setKey, current.no);
+  const [refSet, refNo] = refKey(current);
+  els.qJapanese.innerHTML = highlightKeywords(annotateJapanese(current.ja), refSet, refNo);
   els.qJapanese.classList.toggle("kw-reveal", state.keywordMode);
   els.qIndonesian.textContent = current.id;
 
@@ -668,7 +781,7 @@ function answer(userSaysTrue) {
   }
 
   els.scoreLabel.textContent = `Skor: ${state.score}`;
-  showExplanation(current.setKey, current.no, current.answer);
+  showExplanation(...refKey(current), current.answer);
   els.btnNext.classList.add("show");
   els.btnNext.textContent =
     state.index + 1 < state.queue.length ? "Soal Berikutnya →" : "Lihat Hasil →";
