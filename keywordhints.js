@@ -177,6 +177,25 @@ export const KEYWORD_HINTS = {
   "G-18": { "消火器": "Area depan alat pemadam wajib bebas hambatan (salah)", "電源盤": "Panel listrik harus mudah diakses (salah)" },
   "G-19": { "安全靴": "Sepatu keselamatan wajib dipakai saat kerja press (benar)" },
   "G-20": { "目の高さ": "Muatan forklift harusnya di BAWAH mata (salah)" },
+
+  /* ================= SET 12-x (soal baru dari lembar latihan) ================= */
+  "12-1-15": { "せん断力": "Clearance besar → gaya geser kecil: salah menurut kunci lembar (salah)", "クリアランス": "Clearance mengubah bentuk permukaan geser, bukan rumus gaya (salah)" },
+  "12-1-18": { "ジュラルミン": "Duralumin = paduan aluminium (benar)", "合金": "Alloy = paduan; aluminium bisa dipadu (benar)" },
+  "12-2-2": { "ストローク": "Stroke crank press tetap ditentukan crank (salah)", "自由": "Stroke tidak bisa diatur bebas (salah)" },
+  "12-3-1": { "ポジティブ式": "Clutch positif + friksi = dua tipe (benar)", "フリクション式": "Friksi = tipe gesek, bisa berhenti di tengah (benar)" },
+  "12-3-4": { "異常": "Mesin ada kelainan, kerja tetap didahulukan (salah)", "優先": "Keselamatan didahulukan, bukan pekerjaan (salah)" },
+  "12-3-5": { "潤滑油": "Pelumas di sisi die, bukan punch (salah)", "ダイ": "Sisi die yang diberi pelumas (salah kalau punch)" },
+  "12-3-7": { "クリアランス": "Clearance besar → zona patah membesar (salah)", "破断面": "Permukaan patah membesar, bukan kecil (salah)" },
+  "12-3-9": { "ファインブランキング": "Fine blanking = clearance sangat kecil (salah)", "クリアランス": "Clearance besar bukan fine blanking (salah)" },
+  "12-3-11": { "ガイドポスト": "Guide post = pemandu posisi atas-bawah (benar)", "精度": "Tujuannya presisi posisi (benar)" },
+  "12-3-13": { "表面処理": "Perlakuan permukaan = dilapisi (benar)", "メッキ": "Plating termasuk perlakuan permukaan (benar)" },
+  "12-3-15": { "亀裂": "Retak tekuk banyak di material kurang mulur (benar)", "伸び": "Elongasi kecil → mudah retak (benar)" },
+  "12-3-18": { "標識": "Rokok dicoret = dilarang merokok (benar)", "たばこ": "Tabako = rokok (benar)" },
+  "12-3-19": { "タオル": "Handuk menggantung bisa tersangkut mesin (salah)", "ぶら下げて": "Menggantung di badan = bahaya (salah)" },
+  "12-3-20": { "両手操作式安全装置": "Dua tangan menekan tombol = aman (benar)", "両手": "Kedua tangan harus menekan (benar)" },
+  "12-4-1": { "安全一工程": "Safety one-stroke masih bisa dihentikan darurat (salah)", "止まる": "Bisa berhenti, jadi 'tidak bisa berhenti' salah (salah)" },
+  "12-4-5": { "曲げ": "Bahu die V-bend dibuat lebar (benar)", "肩幅": "Lebar bahu W besar (benar)" },
+  "12-4-18": { "消火器": "Sekitar pemadam harus kosong (salah)", "周り": "Barang di sekitar pemadam dilarang (salah)" },
 };
 
 /**
