@@ -3,9 +3,12 @@
    Kuis Latihan Metal Pressing (Jepang -> Indonesia)
    Data soal bawaan + soal tambahan dari Firebase Firestore
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 /* ---------- Kamus kosakata klik (file terpisah, lihat vocab.js) ---------- */
 import { annotateJapanese } from "./vocab.js";
+import { getFurigana } from "./furigana.js";
 import { highlightKeywords, showExplanation, hideExplanation } from "./explain.js";
 import { recordSessionResult } from "./progress.js";
 import { recordHistoryEntry } from "./history.js";
@@ -328,7 +331,7 @@ const QUIZ_SETS = {
     ],
   },
   "12-4": {
-    title: "Set 12-4 — Prediksi Soal Ujian ★",
+    title: "Set 12-4 — Prediksi Soal Ujian",
     gold: true,
     questions: [
       { no: 1, ja: "安全一工程運転でのスライド加工中は止まることが出来ません。", id: "Pada operasi satu-siklus aman (safety single stroke), slide tidak dapat dihentikan saat sedang memproses.", answer: false },
@@ -638,6 +641,7 @@ function renderSetPicker() {
     card.innerHTML = `
       <input type="checkbox" class="set-check" data-key="${key}" />
       <span class="set-card-inner" style="--set-color:${colorForIndex(i)}">
+        ${set.gold ? `<span class="set-gold-star">${icon("star")}</span>` : ""}
         <span class="set-key${key.length > 2 ? " long" : ""}">${key}</span>
         <span class="set-title">${set.title}</span>
         <span class="set-count">${set.questions.length} soal</span>
@@ -720,7 +724,7 @@ function renderQuestion() {
   els.scoreLabel.textContent = `Skor: ${state.score}`;
   els.qSetBadge.textContent = `Set ${current.setKey} · No. ${current.no}`;
   const [refSet, refNo] = refKey(current);
-  els.qJapanese.innerHTML = highlightKeywords(annotateJapanese(current.ja), refSet, refNo);
+  els.qJapanese.innerHTML = highlightKeywords(annotateJapanese(current.ja, getFurigana(current.setKey, current.no)), refSet, refNo);
   els.qJapanese.classList.toggle("kw-reveal", state.keywordMode);
   els.qIndonesian.textContent = current.id;
 
@@ -767,14 +771,14 @@ function answer(userSaysTrue) {
 
   if (isCorrect) {
     state.score += 1;
-    els.feedback.textContent = "✓ Benar! Kamu menguasai soal ini.";
+    els.feedback.innerHTML = icon("check") + " Benar! Kamu menguasai soal ini.";
     els.feedback.className = "feedback ok";
     playCorrectSound();
     spawnGlitter(true);
   } else {
     state.wrong.push(current);
     const label = current.answer ? "BENAR (Tadashii)" : "SALAH (Ayamari)";
-    els.feedback.textContent = `✗ Kurang tepat. Jawaban yang benar: ${label}.`;
+    els.feedback.innerHTML = icon("cross") + ` Kurang tepat. Jawaban yang benar: ${label}.`;
     els.feedback.className = "feedback bad";
     playIncorrectSound();
     spawnGlitter(false);
@@ -783,8 +787,8 @@ function answer(userSaysTrue) {
   els.scoreLabel.textContent = `Skor: ${state.score}`;
   showExplanation(...refKey(current), current.answer);
   els.btnNext.classList.add("show");
-  els.btnNext.textContent =
-    state.index + 1 < state.queue.length ? "Soal Berikutnya →" : "Lihat Hasil →";
+  els.btnNext.innerHTML =
+    (state.index + 1 < state.queue.length ? "Soal Berikutnya " : "Lihat Hasil ") + icon("arrowRight");
 }
 
 function nextQuestion() {
@@ -810,7 +814,7 @@ function finishQuiz() {
 
   els.wrongList.innerHTML = "";
   if (state.wrong.length === 0) {
-    els.wrongList.innerHTML = `<li class="wrong-empty">Sempurna! Tidak ada soal yang salah. 🎉</li>`;
+    els.wrongList.innerHTML = `<li class="wrong-empty">Sempurna! Tidak ada soal yang salah. ${icon("trophy")}</li>`;
     els.btnRetryWrong.classList.add("hidden");
   } else {
     els.btnRetryWrong.classList.remove("hidden");
@@ -819,7 +823,7 @@ function finishQuiz() {
       li.className = "wrong-item";
       li.innerHTML = `
         <div class="wrong-badge">Set ${q.setKey} · No. ${q.no}</div>
-        <div class="wrong-ja">${q.ja}</div>
+        <div class="wrong-ja">${getFurigana(q.setKey, q.no) ? annotateJapanese(q.ja, getFurigana(q.setKey, q.no)) : q.ja}</div>
         <div class="wrong-id">${q.id}</div>
         <div class="wrong-answer">Jawaban benar: <b>${q.answer ? "BENAR" : "SALAH"}</b></div>
       `;
