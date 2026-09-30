@@ -131,7 +131,7 @@
   <header>
     <div class="eyebrow">Admin Tool</div>
     <h1>Upload Soal Baru</h1>
-    <p>Foto soal → Gemini bikin JSON → tempel di sini → tersimpan ke Firebase</p>
+    <p>Foto soal, Gemini bikin JSON, tempel di sini, tersimpan ke Firebase</p>
   </header>
 
   <!-- STEP 1 -->
@@ -140,7 +140,7 @@
     <p class="section-desc">Unggah foto lembar soal di sini hanya untuk pratinjau lokal — foto ini <b>tidak</b> diunggah ke Firebase, hanya untuk membantu kamu saat menyalin ke Gemini.</p>
     <label class="file-drop">
       <input type="file" id="photo-input" accept="image/*" />
-      <span>📷 Klik untuk memilih foto soal</span>
+      <span class="file-drop-txt" id="file-drop-txt"></span>
       <img id="preview-img" alt="pratinjau" />
     </label>
   </div>
@@ -182,10 +182,15 @@
     <div id="status-msg" class="status-msg"></div>
   </div>
 
-  <footer class="linkfoot"><a href="index.html">← Kembali ke Kuis</a></footer>
+  <footer class="linkfoot"><a href="index.html" id="back-link">Kembali ke Kuis</a></footer>
 </div>
 
 <script type="module">
+import { icon } from "./icons.js";
+const esc = (t) => String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+document.getElementById("file-drop-txt").innerHTML = icon("camera") + " Klik untuk memilih foto soal";
+document.getElementById("back-link").insertAdjacentHTML("afterbegin", icon("arrowLeft") + " ");
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
   getFirestore, doc, setDoc,
@@ -237,9 +242,9 @@ document.getElementById("gemini-prompt").value = GEMINI_PROMPT;
 document.getElementById("btn-copy-prompt").addEventListener("click", async () => {
   await navigator.clipboard.writeText(GEMINI_PROMPT);
   const btn = document.getElementById("btn-copy-prompt");
-  const old = btn.textContent;
-  btn.textContent = "Tersalin ✓";
-  setTimeout(() => (btn.textContent = old), 1500);
+  const old = btn.innerHTML;
+  btn.innerHTML = "Tersalin " + icon("check");
+  setTimeout(() => (btn.innerHTML = old), 1500);
 });
 
 /* ---------- Preview foto lokal (tidak diupload) ---------- */
@@ -292,13 +297,13 @@ document.getElementById("btn-validate").addEventListener("click", () => {
     const withImg = attachImageFilenames(data, setKeyRaw);
     const imgCount = withImg.filter((q) => q.img).length;
     preview.style.display = "block";
-    preview.textContent =
-      `✓ Valid — ${data.length} soal terdeteksi` +
+    preview.innerHTML = icon("check") + " " + esc(
+      `Valid — ${data.length} soal terdeteksi` +
       (imgCount ? `, ${imgCount} di antaranya butuh gambar (siapkan file sejajar dengan index.html/script.js).` : ".") +
-      `\n\n` + JSON.stringify(withImg, null, 2);
+      `\n\n` + JSON.stringify(withImg, null, 2));
   } catch (e) {
     preview.style.display = "block";
-    preview.textContent = "✗ " + e.message;
+    preview.innerHTML = icon("cross") + " " + esc(e.message);
   }
 });
 
@@ -309,7 +314,7 @@ document.getElementById("btn-upload").addEventListener("click", async () => {
   const setTitle = document.getElementById("set-title").value.trim();
 
   const showStatus = (text, kind) => {
-    statusEl.textContent = text;
+    statusEl.innerHTML = text;
     statusEl.className = "status-msg show " + kind;
   };
 
@@ -321,7 +326,7 @@ document.getElementById("btn-upload").addEventListener("click", async () => {
   try {
     questions = attachImageFilenames(parseQuestions(), setKey);
   } catch (e) {
-    return showStatus("✗ " + e.message, "err");
+    return showStatus(icon("cross") + " " + esc(e.message), "err");
   }
   const imgCount = questions.filter((q) => q.img).length;
   const btn = document.getElementById("btn-upload");
@@ -337,10 +342,10 @@ document.getElementById("btn-upload").addEventListener("click", async () => {
     const imgNote = imgCount
       ? ` Jangan lupa taruh ${imgCount} file gambar (pola nama "${setKey}-<no>.png") sejajar dengan index.html/script.js.`
       : "";
-    showStatus(`✓ Berhasil! ${questions.length} soal tersimpan sebagai set "${setKey}". Buka kembali halaman kuis untuk melihatnya.${imgNote}`, "ok");
+    showStatus(icon("check") + " " + esc(`Berhasil! ${questions.length} soal tersimpan sebagai set "${setKey}". Buka kembali halaman kuis untuk melihatnya.${imgNote}`), "ok");
   } catch (e) {
     console.error(e);
-    showStatus("✗ Gagal menyimpan ke Firebase: " + e.message + " — periksa aturan keamanan (rules) Firestore.", "err");
+    showStatus(icon("cross") + " " + esc("Gagal menyimpan ke Firebase: " + e.message + " — periksa aturan keamanan (rules) Firestore."), "err");
   } finally {
     btn.disabled = false;
     btn.textContent = "Simpan ke Firebase";
