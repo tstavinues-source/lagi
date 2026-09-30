@@ -3,8 +3,7 @@
    ============================================================
    File ini BERDIRI SENDIRI (tidak menyentuh script.js sama sekali):
    - Setiap kali halaman dibuka, satu musim dipilih ACAK dari 4
-     musim Jepang: 🌸 Haru (semi), ✨ Natsu (panas), 🍁 Aki (gugur),
-     ❄️ Fuyu (dingin)
+     musim Jepang: Haru (semi), Natsu (panas), Aki (gugur), Fuyu (dingin)
    - Menampilkan badge kecil "MUSIM: ..." di header
    - Partikel musim (kelopak/kilau/daun/salju) melayang di latar
      belakang — jatuh perlahan untuk Haru/Aki/Fuyu, berkelip untuk
@@ -18,12 +17,14 @@
    Cara mengubah/menambah musim: edit array SEASONS di bawah.
    ============================================================ */
 
+import { icon } from "./icons.js";
+
 const SEASONS = [
   {
     id: "haru",
     name: "Haru (Semi)",
-    emoji: "🌸",
-    icons: ["🌸", "💮"],
+    emoji: "sakura",
+    icons: ["sakura", "petal"],
     glow: "#ffb7c5",
     badgeBg: "#FFC0C0",
     mode: "fall",
@@ -31,8 +32,8 @@ const SEASONS = [
   {
     id: "natsu",
     name: "Natsu (Panas)",
-    emoji: "✨",
-    icons: ["✨", "⭐", "✦"],
+    emoji: "sun",
+    icons: ["sparkle", "star", "sun"],
     glow: "#F4D242",
     badgeBg: "#F4D242",
     mode: "blink",
@@ -40,8 +41,8 @@ const SEASONS = [
   {
     id: "aki",
     name: "Aki (Gugur)",
-    emoji: "🍁",
-    icons: ["🍁", "🍂"],
+    emoji: "maple",
+    icons: ["maple", "leaf"],
     glow: "#E07A47",
     badgeBg: "#E07A47",
     mode: "fall",
@@ -49,8 +50,8 @@ const SEASONS = [
   {
     id: "fuyu",
     name: "Fuyu (Dingin)",
-    emoji: "❄️",
-    icons: ["❄️", "❅", "❆"],
+    emoji: "snow",
+    icons: ["snow", "dot"],
     glow: "#80B0E8",
     badgeBg: "#80B0E8",
     mode: "fall",
@@ -75,7 +76,7 @@ function renderSeasonBadge(season) {
   const badge = document.createElement("div");
   badge.className = "season-badge";
   badge.style.setProperty("--season-color", season.badgeBg);
-  badge.innerHTML = `MUSIM: <span>${season.emoji} ${escapeHtml(season.name)}</span>`;
+  badge.innerHTML = `MUSIM: <span>${icon(season.emoji)} ${escapeHtml(season.name)}</span>`;
 
   // taruh tepat setelah status Firebase kalau ada, atau di akhir header
   const fbStatus = header.querySelector(".fb-status");
@@ -112,9 +113,9 @@ function buildParticleLayer(season) {
 function makeParticle(season, index) {
   const el = document.createElement("span");
   el.className = `season-particle season-${season.mode}`;
-  el.textContent = season.icons[Math.floor(Math.random() * season.icons.length)];
+  el.innerHTML = icon(season.icons[Math.floor(Math.random() * season.icons.length)]);
   el.style.color = season.glow;
-  el.style.textShadow = `0 0 10px ${season.glow}, 0 0 18px ${season.glow}`;
+  el.style.filter = `drop-shadow(0 0 6px ${season.glow})`;
 
   if (season.mode === "blink") {
     el.style.left = `${Math.random() * 100}vw`;
