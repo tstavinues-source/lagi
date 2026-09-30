@@ -13,6 +13,8 @@
      index.html) — file ini cuma mengurus tombol & penyimpanan
      pilihannya.
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 const LS_THEME_KEY = "pressquiz_theme"; // "cyberpunk" | "default"
 
@@ -57,7 +59,7 @@ function renderThemeButton() {
   themeBtnEl = document.createElement("button");
   themeBtnEl.type = "button";
   themeBtnEl.className = "theme-btn";
-  themeBtnEl.innerHTML = "⚡";
+  themeBtnEl.innerHTML = icon("bolt");
   themeBtnEl.addEventListener("click", toggleTheme);
   ensureToolbar().appendChild(themeBtnEl);
 }
@@ -70,15 +72,14 @@ function injectStyles() {
     .theme-btn{
       width:38px;height:38px;border-radius:50%;flex-shrink:0;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);cursor:pointer;
-      display:flex;align-items:center;justify-content:center;font-size:16px;
+      display:flex;align-items:center;justify-content:center;font-size:17px;color:#8a7f6c;
       box-shadow:0 10px 22px -10px rgba(70,50,25,.3);
-      transition:transform .15s ease, box-shadow .15s ease, background .2s ease, filter .2s ease;
-      filter:grayscale(1) opacity(.65);
+      transition:transform .15s ease, box-shadow .15s ease, background .2s ease, color .2s ease;
     }
     .theme-btn:hover{transform:translateY(-1px) scale(1.05);}
     .theme-btn:active{transform:translateY(1px) scale(.94);}
     .theme-btn.active{
-      filter:none;
+      color:#04333a;
       background:radial-gradient(circle at 35% 30%, #7df6ff, #05d9e8);
       box-shadow:0 0 0 3px rgba(5,217,232,.3), 0 10px 22px -8px rgba(5,217,232,.55);
     }
