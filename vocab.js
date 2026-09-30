@@ -20,6 +20,8 @@
    - id: terjemahan Indonesia singkat
    - reading (opsional): cara baca hiragana, dipakai untuk kata berkanji
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 export const VOCAB = {
   /* ---------- Partikel (kata bantu) ---------- */
@@ -683,8 +685,54 @@ function escapeHtml(str) {
  * dibungkus <span class="vocab-word" data-key="..."> supaya bisa diklik.
  * Karakter/kata yang tidak dikenali tetap tampil apa adanya.
  */
-export function annotateJapanese(text) {
+const KANJI_RE = /[\u4e00-\u9fff々〆]+/g;
+
+/** Uraikan "高速(こうそく)の…" menjadi daftar {s,e,r} (posisi pada teks polos).
+ *  Mengembalikan null jika furi tidak cocok dengan teks (maka furigana dilewati). */
+function parseFuri(furi, text) {
+  if (!furi) return null;
+  const ranges = [];
+  let plain = "";
+  const re = /([\u4e00-\u9fff々〆]+)\(([^)]*)\)/g;
+  let last = 0, m;
+  while ((m = re.exec(furi))) {
+    plain += furi.slice(last, m.index).replace(/\([^)]*\)/g, "");
+    ranges.push({ s: plain.length, e: plain.length + m[1].length, r: m[2] });
+    plain += m[1];
+    last = m.index + m[0].length;
+  }
+  plain += furi.slice(last);
+  return plain === text ? ranges : null;
+}
+
+/** Cetak text[from,to) — sisipkan <ruby> untuk range yang berada di dalamnya. */
+function renderSlice(text, from, to, ranges) {
+  let out = "";
+  let i = from;
+  while (i < to) {
+    const rg = ranges.find((x) => x.s === i && x.e <= to);
+    if (rg) {
+      out += `<ruby>${escapeHtml(text.slice(rg.s, rg.e))}<rt>${escapeHtml(rg.r)}</rt></ruby>`;
+      i = rg.e;
+    } else {
+      out += escapeHtml(text[i]);
+      i += 1;
+    }
+  }
+  return out;
+}
+
+/**
+ * Mengubah teks Jepang menjadi HTML dengan kata-kata yang dikenali
+ * dibungkus <span class="vocab-word" data-key="..."> supaya bisa diklik.
+ * Karakter/kata yang tidak dikenali tetap tampil apa adanya.
+ * Parameter opsional `furi` (string "kanji(bacaan)"): jika ada dan cocok,
+ * kanji diberi furigana <ruby> yang selalu terlihat.
+ */
+export function annotateJapanese(text, furi) {
   if (!text) return "";
+  const ranges = parseFuri(furi, text) || [];
+  const cutsRange = (pos) => ranges.some((x) => x.s < pos && pos < x.e);
   let html = "";
   let i = 0;
   while (i < text.length) {
@@ -692,18 +740,23 @@ export function annotateJapanese(text) {
     const maxLen = Math.min(MAX_KEY_LEN, text.length - i);
     for (let len = maxLen; len >= 1; len--) {
       const candidate = text.substr(i, len);
-      if (VOCAB.hasOwnProperty(candidate)) {
+      if (VOCAB.hasOwnProperty(candidate) && !cutsRange(i + len)) {
         matched = candidate;
         break;
       }
     }
     if (matched) {
-      const safe = escapeHtml(matched);
-      html += `<span class="vocab-word" data-key="${safe}">${safe}</span>`;
+      html += `<span class="vocab-word" data-key="${escapeHtml(matched)}">${renderSlice(text, i, i + matched.length, ranges)}</span>`;
       i += matched.length;
     } else {
-      html += escapeHtml(text[i]);
-      i += 1;
+      const rg = ranges.find((x) => x.s === i);
+      if (rg) {
+        html += renderSlice(text, rg.s, rg.e, ranges);
+        i = rg.e;
+      } else {
+        html += escapeHtml(text[i]);
+        i += 1;
+      }
     }
   }
   return html;
@@ -727,6 +780,9 @@ function injectVocabStyles() {
   const style = document.createElement("style");
   style.id = "vocab-style";
   style.textContent = `
+    ruby{ruby-position:over;ruby-align:center;}
+    ruby rt{font-size:.56em;font-weight:600;letter-spacing:0;color:var(--teal, #008471);line-height:1;user-select:none;}
+    .cyberpunk-mode ruby rt{color:var(--teal);text-shadow:0 0 6px var(--teal);}
     .vocab-word{
       cursor:pointer;
       border-bottom:2px dotted color-mix(in srgb, var(--teal, #008471) 55%, transparent);
@@ -791,7 +847,7 @@ function showPopupFor(word, anchorRect) {
   const showBase = entry.base && entry.base !== word;
 
   popup.innerHTML = `
-    <span class="vp-close" data-close="1">✕</span>
+    <span class="vp-close" data-close="1">${icon("close")}</span>
     <div class="vp-word">${escapeHtml(word)}</div>
     <div class="vp-pos">${escapeHtml(posLabel)}</div>
     ${showBase ? `<div class="vp-base">Bentuk kamus: <b>${escapeHtml(entry.base)}</b></div>` : ""}
