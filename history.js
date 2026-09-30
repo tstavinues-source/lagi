@@ -26,6 +26,8 @@
    "pressquiz_uid") supaya riwayat & progres nyambung ke user yang
    sama tanpa perlu koordinasi khusus antar file.
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 import {
   doc,
@@ -234,7 +236,7 @@ function renderHistoryButton() {
   historyBtnEl.type = "button";
   historyBtnEl.className = "history-btn";
   historyBtnEl.setAttribute("aria-label", "Lihat riwayat latihan");
-  historyBtnEl.innerHTML = "📊";
+  historyBtnEl.innerHTML = icon("chart");
   historyBtnEl.addEventListener("click", openHistoryPanel);
   ensureToolbar().appendChild(historyBtnEl);
 }
@@ -254,8 +256,8 @@ function buildHistoryRows() {
       let trendHtml = "";
       const prev = lastPercentBySets[entry.sets];
       if (prev !== undefined) {
-        if (entry.percent > prev) trendHtml = `<span class="history-trend up">▲ ${entry.percent - prev}%</span>`;
-        else if (entry.percent < prev) trendHtml = `<span class="history-trend down">▼ ${prev - entry.percent}%</span>`;
+        if (entry.percent > prev) trendHtml = `<span class="history-trend up">${icon("up")} ${entry.percent - prev}%</span>`;
+        else if (entry.percent < prev) trendHtml = `<span class="history-trend down">${icon("down")} ${prev - entry.percent}%</span>`;
         else trendHtml = `<span class="history-trend flat">= sama</span>`;
       }
       lastPercentBySets[entry.sets] = entry.percent;
@@ -289,8 +291,8 @@ function renderHistoryPanelContent() {
 
   panelEl.innerHTML = `
     <div class="history-modal">
-      <button type="button" class="history-close" data-close="1">✕</button>
-      <div class="history-title">📊 Riwayat Latihan</div>
+      <button type="button" class="history-close" data-close="1">${icon("close")}</button>
+      <div class="history-title">${icon("chart")} Riwayat Latihan</div>
       <div class="history-summary">
         <div class="history-summary-item">
           <span class="history-summary-num">${totalAttempts}</span>
@@ -337,7 +339,7 @@ function injectStyles() {
     .history-btn{
       width:38px;height:38px;border-radius:50%;flex-shrink:0;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);cursor:pointer;
-      display:flex;align-items:center;justify-content:center;font-size:16px;
+      display:flex;align-items:center;justify-content:center;font-size:18px;color:#8a7f6c;
       box-shadow:0 10px 22px -10px rgba(70,50,25,.3);
       transition:transform .15s ease, box-shadow .15s ease;
     }
@@ -383,6 +385,7 @@ function injectStyles() {
     .history-row-sub{display:flex;justify-content:space-between;align-items:center;}
     .history-row-date{font-size:11px;color:#a89a82;}
     .history-trend{font-size:11px;font-weight:700;}
+    .history-trend .ico{width:.8em;height:.8em;vertical-align:-.05em;}
     .history-trend.up{color:#2FAE60;}
     .history-trend.down{color:#C45F3F;}
     .history-trend.flat{color:#a89a82;}
