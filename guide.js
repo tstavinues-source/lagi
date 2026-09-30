@@ -19,6 +19,8 @@
    Cara menambah/mengubah teks panduan: edit array GUIDE_STEPS
    di bawah, tidak perlu sentuh file lain.
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 const LS_GUIDE_SEEN_KEY = "pressquiz_guide_seen";
 
@@ -50,7 +52,7 @@ const GUIDE_STEPS = [
     screen: "screen-home",
     selector: "#toggle-order",
     placement: "top",
-    text: "Klik untuk memilih urutan soal: Berurutan (Set A → 12-4) atau Acak.",
+    text: "Klik untuk memilih urutan soal: Berurutan (Set A sampai 12-4) atau Acak.",
   },
   {
     screen: "screen-home",
@@ -250,7 +252,7 @@ function renderLightbulb() {
   lightbulbEl.type = "button";
   lightbulbEl.className = "guide-lightbulb";
   lightbulbEl.setAttribute("aria-label", "Tampilkan / sembunyikan panduan fitur");
-  lightbulbEl.innerHTML = `💡`;
+  lightbulbEl.innerHTML = icon("bulb");
   lightbulbEl.addEventListener("click", () => setGuideActive(!guideActive));
   ensureToolbar().appendChild(lightbulbEl);
 }
@@ -300,15 +302,14 @@ function injectStyles() {
     .guide-lightbulb{
       width:38px;height:38px;border-radius:50%;flex-shrink:0;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);cursor:pointer;
-      display:flex;align-items:center;justify-content:center;font-size:17px;
+      display:flex;align-items:center;justify-content:center;font-size:18px;color:#8a7f6c;
       box-shadow:0 10px 22px -10px rgba(70,50,25,.3);
       transition:transform .15s ease, box-shadow .15s ease, background .2s ease;
-      filter:grayscale(1) opacity(.6);
     }
     .guide-lightbulb:hover{transform:translateY(-1px) scale(1.05);}
     .guide-lightbulb:active{transform:translateY(1px) scale(.94);}
     .guide-lightbulb.active{
-      filter:none;
+      color:#7a5a00;
       background:radial-gradient(circle at 35% 30%, #fff6d0, var(--sun, #F4D242));
       box-shadow:0 0 0 3px rgba(244,210,66,.35), 0 10px 22px -8px rgba(244,210,66,.5);
     }
