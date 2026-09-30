@@ -26,6 +26,8 @@
    format:
      "H-1": { keywords: ["kata1","kata2"], explanation: "penjelasan singkat" }
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 import { getKeywordHint } from "./keywordhints.js";
 
@@ -379,7 +381,7 @@ export function showExplanation(setKey, no, correctAnswer) {
     .join(" ");
 
   panel.innerHTML = `
-    <div class="expl-head">💡 Kenapa jawabannya <b>${label}</b>?</div>
+    <div class="expl-head">${icon("bulb")} Kenapa jawabannya <b>${label}</b>?</div>
     ${kwList ? `<div class="expl-kws">Kata kunci: ${kwList}</div>` : ""}
     <div class="expl-body">${escapeHtml(entry.explanation)}</div>
   `;
@@ -404,8 +406,8 @@ function ensureKwWhyPopup() {
 function showKwWhyPopup(word, why, anchorRect) {
   const popup = ensureKwWhyPopup();
   popup.innerHTML = `
-    <span class="kw-why-close" data-close="1">✕</span>
-    <div class="kw-why-title">💡 Kenapa "<span>${escapeHtml(word)}</span>" jadi penanda?</div>
+    <span class="kw-why-close" data-close="1">${icon("close")}</span>
+    <div class="kw-why-title">${icon("bulb")} Kenapa "<span>${escapeHtml(word)}</span>" jadi penanda?</div>
     <div class="kw-why-body">${escapeHtml(why)}</div>
   `;
   popup.style.left = "-9999px";
