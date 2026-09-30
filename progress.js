@@ -34,6 +34,8 @@
    tetap aman. Saat data Firestore memang berhasil didapat, ia
    DIGABUNG (ambil yang tertinggi) dengan localStorage, bukan menimpa.
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 import {
   doc,
@@ -267,7 +269,7 @@ function injectProgressBadges() {
     }
     badge.querySelector(".progress-badge-fill").style.width = `${percent}%`;
     badge.querySelector(".progress-badge-text").textContent =
-      percent >= 100 ? "✓ Terkuasai 100%" : `${percent}% dikuasai`;
+      percent >= 100 ? "Terkuasai 100%" : `${percent}% dikuasai`;
     badge.classList.toggle("complete", percent >= 100);
   });
 }
@@ -320,9 +322,9 @@ function renderCornerBadge() {
   cornerBadgeEl.type = "button";
   cornerBadgeEl.className = "corner-badge";
   cornerBadgeEl.innerHTML = `
-    <span class="corner-badge-avatar">👤</span>
+    <span class="corner-badge-avatar">${icon("user")}</span>
     <span class="corner-badge-name">${escapeHtml(state.name || "Tamu")}</span>
-    <span class="corner-badge-edit">✎</span>
+    <span class="corner-badge-edit">${icon("pencil")}</span>
   `;
   cornerBadgeEl.addEventListener("click", () => openNamePopup(false));
   ensureToolbar().appendChild(cornerBadgeEl);
@@ -419,10 +421,10 @@ function injectStyles() {
     .corner-badge-avatar{
       width:22px;height:22px;border-radius:50%;
       background:linear-gradient(160deg, var(--teal-light, #4fd6bd), var(--teal, #008471));
-      display:flex;align-items:center;justify-content:center;font-size:11px;
+      display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;
     }
     .corner-badge-name{font-size:12.5px;font-weight:800;color:var(--ink, #2E2620);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .corner-badge-edit{font-size:11px;color:var(--ink-soft, #7A6F5D);}
+    .corner-badge-edit{font-size:12px;display:flex;color:var(--ink-soft, #7A6F5D);}
 
     .name-overlay{
       position:fixed;inset:0;z-index:900;
