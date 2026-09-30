@@ -14,6 +14,8 @@
    Cara mengaktifkan: tambahkan baris ini di index.html
      <script type="module" src="vocabquiz.js"></script>
    ============================================================ */
+import { icon } from "./icons.js";
+
 
 import { VOCAB } from "./vocab.js";
 import { KEYWORD_HINTS } from "./keywordhints.js";
@@ -159,7 +161,7 @@ function renderVocabButton() {
   vocabBtnEl.type = "button";
   vocabBtnEl.className = "vocabquiz-btn";
   vocabBtnEl.setAttribute("aria-label", "Kuis kosakata kata kunci");
-  vocabBtnEl.innerHTML = "📚";
+  vocabBtnEl.innerHTML = icon("book");
   vocabBtnEl.addEventListener("click", openVocabQuiz);
   ensureToolbar().appendChild(vocabBtnEl);
 }
@@ -199,7 +201,7 @@ function renderQuestionScreen() {
 
   overlayEl.innerHTML = `
     <div class="vq-modal">
-      <button type="button" class="vq-close" data-vq-close="1">✕</button>
+      <button type="button" class="vq-close" data-vq-close="1">${icon("close")}</button>
       <div class="vq-progress">Soal ${state.index + 1} / ${total} &nbsp;•&nbsp; Skor: ${state.score}</div>
       <div class="vq-pos">${escapeHtml(posLabel)}</div>
       <div class="vq-word">${escapeHtml(current.word)}</div>
@@ -214,7 +216,7 @@ function renderQuestionScreen() {
           .join("")}
       </div>
       <div class="vq-feedback"></div>
-      <button type="button" class="vq-next" style="display:none;">Lanjut →</button>
+      <button type="button" class="vq-next" style="display:none;">Lanjut ${icon("arrowRight")}</button>
     </div>
   `;
 
@@ -241,12 +243,12 @@ function handleAnswer(btnEl) {
   const feedback = overlayEl.querySelector(".vq-feedback");
   if (isCorrect) {
     state.score++;
-    feedback.textContent = "✓ Benar!";
+    feedback.innerHTML = icon("check") + " Benar!";
     feedback.className = "vq-feedback ok";
     playCorrectSound();
   } else {
     state.wrong.push(current);
-    feedback.textContent = `✗ Kurang tepat. Arti yang benar: ${current.meaning}`;
+    feedback.innerHTML = icon("cross") + ` Kurang tepat. Arti yang benar: ${escapeHtml(current.meaning)}`;
     feedback.className = "vq-feedback bad";
     playIncorrectSound();
   }
@@ -277,12 +279,12 @@ function renderResultScreen() {
         </div>`
         )
         .join("")
-    : `<div class="vq-wrong-empty">Sempurna! Semua kosakata terjawab benar. 🎉</div>`;
+    : `<div class="vq-wrong-empty">Sempurna! Semua kosakata terjawab benar. ${icon("trophy")}</div>`;
 
   overlayEl.innerHTML = `
     <div class="vq-modal">
-      <button type="button" class="vq-close" data-vq-close="1">✕</button>
-      <div class="vq-result-title">📚 Hasil Kuis Kosakata</div>
+      <button type="button" class="vq-close" data-vq-close="1">${icon("close")}</button>
+      <div class="vq-result-title">${icon("book")} Hasil Kuis Kosakata</div>
       <div class="vq-result-score">${state.score} / ${total} <span>(${percent}%)</span></div>
       <div class="vq-actions">
         <button type="button" class="vq-restart">Main Lagi</button>
@@ -310,7 +312,7 @@ function injectStyles() {
     .vocabquiz-btn{
       width:38px;height:38px;border-radius:50%;flex-shrink:0;
       background:#FFFFFF;border:1px solid rgba(70,50,25,.1);cursor:pointer;
-      display:flex;align-items:center;justify-content:center;font-size:16px;
+      display:flex;align-items:center;justify-content:center;font-size:18px;color:#8a7f6c;
       box-shadow:0 10px 22px -10px rgba(70,50,25,.3);
       transition:transform .15s ease, box-shadow .15s ease;
     }
